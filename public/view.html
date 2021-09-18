@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>IA.Investigator</title>
+
+        <link rel="shortcut icon" href="./favicon.ico" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Semantic-UI-Alert.css" />
+        <link rel="stylesheet" type="text/css" href="css/main.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <script src="js/Semantic-UI-Alert.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/view.js"></script>
+    </head>
+
+    <body>
+        <header class="ui fixed inverted menu">
+            <div class="ui container">
+                <a href="/" class="header item"> IA.Investigator </a>
+                <div class="ui inverted right menu">
+                    <a class="item" href="mypage" >
+                        <i class="user icon"></i>
+                        <p id="account-name">User Name</p>
+                    </a>
+                    <a id="account-sign-in" class="item">
+                        <i class="green sign-in icon"></i>
+                    </a>
+                    <a id="account-sign-out" class="item" style="display: none">
+                        <i class="red sign-out negative icon"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="ui main grid container" style="padding-top: 5em; padding-bottom: 5em">
+            <div class="sixteen wide column">
+                <div class="ui inverted attached segment">
+                    <div class="ui items">
+                        <div class="item">
+                            <div class="ui medium image">
+                                <img id="profile-image" class="ui image" style="background-color: transparent; margin-right: 10px; box-shadow: 0 1px 3px 0 #767676, 0 0 0 1px rgb(0 0 0 / 5%)" />
+                            </div>
+                            <div class="ui content">
+                                <h1 id="profile-name" class="ui inverted header"></h1>
+                                <div id="profile-kana" class="ui inverted meta"></div>
+                                <div id="profile-tag" class="ui basic blue tag labels"></div>
+                                <div class="ui large inverted horizontal list">
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">職業</div>
+                                            <div id="profile-job" class="description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">年齢</div>
+                                            <div id="profile-age" class="ui center aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">性別</div>
+                                            <div id="profile-gender" class="ui center aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">身長</div>
+                                            <div id="profile-height" class="ui center aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">体重</div>
+                                            <div id="profile-weight" class="ui center aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">出身</div>
+                                            <div id="profile-origin" class="ui center aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">髪の色</div>
+                                            <div id="profile-hairColor" class="ui center aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">瞳の色</div>
+                                            <div id="profile-eyeColor" class="ui center aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">肌の色</div>
+                                            <div id="profile-skinColor" class="ui center aligned description"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui divider"></div>
+                                <div class="ui large inverted horizontal list">
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">STR</div>
+                                            <div id="param-str" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">CON</div>
+                                            <div id="param-con" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">POW</div>
+                                            <div id="param-pow" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">DEX</div>
+                                            <div id="param-dex" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">APP</div>
+                                            <div id="param-app" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">SIZ</div>
+                                            <div id="param-siz" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">INT</div>
+                                            <div id="param-int" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">EDU</div>
+                                            <div id="param-edu" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">幸運</div>
+                                            <div id="param-luk" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">アイデア</div>
+                                            <div id="param-ide" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">知識</div>
+                                            <div id="param-knw" class="ui right aligned description"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui divider"></div>
+                                <div class="ui large inverted horizontal list">
+                                    <div class="item">
+                                        <div class="ui large labels">
+                                            <div id="param-hp" class="ui basic label">HP</div>
+                                            <div id="param-mp" class="ui basic label">MP</div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="ui large labels">
+                                            <div id="param-bld" class="ui basic label">BLD</div>
+                                            <div id="param-db" class="ui basic label">DB</div>
+                                            <div id="param-mov" class="ui basic label">MOV</div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="ui large labels">
+                                            <div id="param-san" class="ui basic label" style="margin-right: 0">SAN 92/72</div>
+                                            <div id="param-san-indefinite" class="ui left pointing basic red label">不定領域 58</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui divider"></div>
+                                <div id="memo" class="inverted description" style="color: white; background-color: #ffffff08; margin: 0; height: 8em; overflow-y: scroll"></div>
+                                <div id="money" class="ui inverted extra">支出レベル 現金 資産</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui divider"></div>
+                    <div class="item">
+                        <div class="ui content">
+                            <div class="ui main two column stackable grid container" style="margin-top: 0">
+                                <div class="column">
+                                    <div id="skills" class="ui huge inverted horizontal list"></div>
+                                    <div class="ui divider"></div>
+                                    <table id="weapons-table" class="ui inverted unstackable table">
+                                        <thead>
+                                            <tr>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">名前</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">成功率</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">ダメージ</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">射程</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">回数</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">装弾数</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">故障</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="weapons"></tbody>
+                                    </table>
+                                    <table id="equips-table" class="ui inverted unstackable table">
+                                        <thead>
+                                            <tr>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">名前</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">単価</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">個数</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">価格</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">備考</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="equips"></tbody>
+                                    </table>
+                                </div>
+                                <div class="column">
+                                    <div class="ui inverted list">
+                                        <div class="item">
+                                            <div class="content">
+                                                <div class="header" style="font-size: 1em">容姿の描写</div>
+                                                <div id="backstory-personalDescription" class="description"></div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="content">
+                                                <div class="header" style="font-size: 1em">イデオロギー／信念</div>
+                                                <div id="backstory-ideologyOrBeliefs" class="description"></div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="content">
+                                                <div class="header" style="font-size: 1em">重要な人々</div>
+                                                <div id="backstory-significantPeople" class="description"></div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="content">
+                                                <div class="header" style="font-size: 1em">意味のある場所</div>
+                                                <div id="backstory-meaningfulLocations" class="description"></div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="content">
+                                                <div class="header" style="font-size: 1em">秘蔵の品</div>
+                                                <div id="backstory-treasuredPossessions" class="description"></div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="content">
+                                                <div class="header" style="font-size: 1em">特徴</div>
+                                                <div id="backstory-traits" class="description"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui blurring inverted segment" style="padding-top: 0; padding-left: 0">
+                                        <div class="ui dimmer" style="background-color: transparent">
+                                            <h2 class="ui inverted header">Confidentials</h2>
+                                        </div>
+                                        <div class="ui inverted list">
+                                            <div class="item">
+                                                <div class="content">
+                                                    <div class="header" style="font-size: 1em">負傷、傷跡</div>
+                                                    <div id="backstory-injuriesAndScars" class="description"></div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="content">
+                                                    <div class="header" style="font-size: 1em">恐怖症、マニア</div>
+                                                    <div id="backstory-phobiasAndManias" class="ui description"></div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="content">
+                                                    <div class="header" style="font-size: 1em">魔導書、呪文、アーティファクト</div>
+                                                    <div id="backstory-spellsAndArtifacts" class="description"></div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="content">
+                                                    <div class="header" style="font-size: 1em">遭遇した超自然の存在</div>
+                                                    <div id="backstory-encounters" class="description"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="ui fixed inverted menu" style="top: auto; bottom: 0">
+            <div class="ui container">
+                <div class="ui inverted right menu">
+                    <div class="item">
+                        <button id="investigator-edit" class="ui button" style="display: flex">
+                            <i class="edit outline icon" style="width: 6px"></i>
+                            <div class="ui mobile hidden" style="padding-left: 10px">編集</div>
+                        </button>
+                    </div>
+                    <div class="item">
+                        <button id="investigator-export" class="ui button" style="display: flex">
+                            <i class="share icon" style="width: 3px"></i>
+                            <div class="ui mobile hidden" style="padding-left: 10px">出力</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div class="ui tiny export modal">
+            <div class="ui top inverted attached segment">
+                <p style="font-size: x-large">出力</p>
+            </div>
+            <div class="ui inverted attached segment">
+                <div class="ui inverted pointing secondary menu">
+                    <a class="item active" data-tab="chatpalette">チャットパレット</a>
+                    <a class="item" data-tab="ccfolia">CCFOLIA</a>
+                </div>
+                <div class="ui bottom attached tab inverted segment active" data-tab="chatpalette">
+                    <textarea id="investigator-export-chatpalette" class="ui textarea" rows="12" readonly></textarea>
+                    <div class="ui container">
+                        <button id="investigator-export-commands-copy" class="ui fluid primary button">クリップボードにコピー</button>
+                    </div>
+                </div>
+                <div class="ui bottom attached tab inverted segment" data-tab="ccfolia" style="border-top: 1px solid #555">
+                    <div class="ui inverted grid" style="margin-bottom: 0px">
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">幸運をステータスに追加する</div>
+                            <div class="ui right aligned four wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-luk" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">能力値をパラメータに追加する</div>
+                            <div class="ui right aligned four wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-parametor" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">ステータスを非公開にする</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-secret" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">発言時キャラ画像を表示しない</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-invisible" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">盤面キャラ一覧に表示しない</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-hideStatus" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui container">
+                        <button id="investigator-export-commands-copy-ccfolia" class="ui fluid primary button">CCFOLIA形式でコピー</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui small account modal">
+            <div class="ui middle aligned center aligned grid">
+                <div class="column">
+                    <form class="ui large form">
+                        <div class="ui inverted stacked segment">
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" name="username" placeholder="Username" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password" placeholder="Password" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon account-sign-up input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password-confirm" placeholder="Password(Confirm)" />
+                                </div>
+                            </div>
+                            <div id="account-sign-in-send" class="ui fluid large primary account-sign-in button">ログイン</div>
+                            <div id="account-sign-up-send" class="ui fluid large positive account-sign-up button">新規登録</div>
+                        </div>
+                    </form>
+                    <div class="ui inverted right aligned account-sign-in message"><a id="account-sign-up-switch" href="#">アカウントを作成</a></div>
+                    <div class="ui inverted right aligned account-sign-up message"><a id="account-sign-in-switch" href="#">代わりにログイン</a></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

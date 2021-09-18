@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>IA.Investigator</title>
+
+        <link rel="shortcut icon" href="./favicon.ico" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Semantic-UI-Alert.css" />
+        <link rel="stylesheet" type="text/css" href="css/main.css" />
+        <script src="https://kit.fontawesome.com/52ec844145.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <script src="js/Semantic-UI-Alert.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/sheet.js"></script>
+    </head>
+    <body>
+        <header class="ui fixed inverted menu">
+            <div class="ui container">
+                <a href="/" class="header item"> IA.Investigator </a>
+                <div class="ui inverted right menu">
+                    <a class="item" href="mypage">
+                        <i class="user icon"></i>
+                        <p id="account-name">User Name</p>
+                    </a>
+                    <a id="account-sign-in" class="item">
+                        <i class="green sign-in icon"></i>
+                    </a>
+                    <a id="account-sign-out" class="item" style="display: none">
+                        <i class="red sign-out negative icon"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="ui grid container" style="margin-top: 1em">
+            <div id="account-recommendation" class="sixteen wide column" style="display: none">
+                <div class="ui inverted blue message">
+                    <i id="account-recommendation-close" class="close icon"></i>
+                    <div class="header">ゲストアカウントでログインしています。</div>
+                    <p>キャラクターを保存及び管理するためには<b>アカウントを作成</b>してください。</p>
+                </div>
+            </div>
+        </div>
+        <div class="ui main two column stackable grid container" style="margin-top: 0">
+            <div class="column">
+                <div class="ui top inverted attached segment">
+                    <p style="font-size: x-large">基本情報</p>
+                </div>
+                <div class="ui inverted center aligned attached segment">
+                    <img id="profile-image" class="ui centered bordered image" style="width: auto; height: 222px; padding: 0.5em; padding: 0.5em" />
+                    <div class="ui middle aligned center aligned grid container">
+                        <div class="ui fluid inverted segment" style="padding: 0.5em">
+                            <input id="upload-profile-image" type="file" (change)="fileEvent($event)" class="inputfile" />
+                            <label for="upload-profile-image" class="ui right floated button" style="padding: 0.5em 1.5em 0.5em">
+                                <i class="ui upload icon"></i>
+                                画像を変更
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui inverted attached segment">
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">名前</div>
+                        <input id="profile-name" type="text" style="padding-left: 0.5em" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">カナ</div>
+                        <input id="profile-kana" type="text" style="padding-left: 0.5em" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">タグ</div>
+                        <input id="profile-tag" type="text" style="padding-left: 0.5em" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">職業</div>
+                        <input id="profile-job" type="text" style="padding-left: 0.5em" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">年齢</div>
+                        <input id="profile-age" type="text" style="padding-left: 0.5em" />
+                        <div class="ui basic label">性別</div>
+                        <input id="profile-gender" type="text" style="padding-left: 0.5em; border-top-left-radius: 0; border-bottom-left-radius: 0; border-left-color: transparent" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">身長</div>
+                        <input id="profile-height" type="text" style="padding-left: 0.5em" />
+                        <div class="ui basic label">体重</div>
+                        <input id="profile-weight" type="text" style="padding-left: 0.5em; border-top-left-radius: 0; border-bottom-left-radius: 0; border-left-color: transparent" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">出身</div>
+                        <input id="profile-origin" type="text" style="padding-left: 0.5em" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">髪の色</div>
+                        <input id="profile-hairColor" type="text" style="padding-left: 0.5em" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">瞳の色</div>
+                        <input id="profile-eyeColor" type="text" style="padding-left: 0.5em" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">肌の色</div>
+                        <input id="profile-skinColor" type="text" style="padding-left: 0.5em" />
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui top inverted attached segment">
+                    <div id="randam-generate-parameter" class="ui right floated primary button">
+                        <i class="random icon"></i>
+                        ランダム
+                    </div>
+                    <p style="font-size: x-large">能力値</p>
+                </div>
+                <div class="ui inverted attached segment">
+                    <table class="ui inverted striped selectable unstackable table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>基礎</th>
+                                <th>増減</th>
+                                <th>合計</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>STR</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-str" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-str-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-str-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>CON</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-con" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-con-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-con-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>POW</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-pow" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-pow-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-pow-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>DEX</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-dex" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-dex-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-dex-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>APP</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-app" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-app-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-app-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>SIZ</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-siz" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-siz-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-siz-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>INT</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-int" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-int-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-int-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>EDU</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-edu" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-edu-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-edu-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>幸運</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-luk" class="no-spin" min="0" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-luk-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-luk-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>アイデア</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-ide" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-ide-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-ide-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>知識</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-knw" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-knw-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-knw-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>HP</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-hp" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-hp-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-hp-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>MP</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-mp" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-mp-grow" class="no-spin" type="number" tabindex="-1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-mp-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ui inverted attached segment">
+                    <div class="ui fluid right labeled input container">
+                        <div for="param-san" class="ui basic label">SAN</div>
+                        <input id="param-san" class="no-spin" type="number" />
+                        <label id="param-san-limit" class="ui basic label">/99</label>
+                        <label id="param-san-indefinite" class="ui basic red label">0</label>
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">BLD</div>
+                        <input id="param-bld" type="number" disabled />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">DB</div>
+                        <input id="param-db" type="text" style="text-align: right; padding-right: 16px" disabled />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">MOV</div>
+                        <input id="param-mov" type="number" disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui mobile reversed two column stackable grid container" style="padding-bottom: 5em">
+            <div class="column">
+                <div class="ui top inverted attached segment">
+                    <p style="font-size: x-large">武器</p>
+                </div>
+                <div class="ui inverted attached segment">
+                    <table class="ui inverted striped unstackable selectable table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="width: 30%"></th>
+                                <th style="min-width: 3em; max-width: 5em">成功率</th>
+                                <th colspan="4" style="min-width: 4.2em; max-width: 5em">技能</th>
+                                <th rowspan="2" style="width: 0.2em"></th>
+                            </tr>
+                            <tr>
+                                <th>ダメージ</th>
+                                <th>射程</th>
+                                <th>回数</th>
+                                <th>装弾数</th>
+                                <th>故障</th>
+                            </tr>
+                        </thead>
+                        <tbody id="weapon-table"></tbody>
+                    </table>
+                    <button id="append-weapon" class="ui fluid inverted secondary basic button">武器追加</button>
+                </div>
+                <div class="ui top inverted attached segment" style="margin-top: 28px">
+                    <p style="font-size: x-large">装備と所持品</p>
+                </div>
+                <div class="ui inverted attached segment">
+                    <table class="ui inverted striped unstackable selectable table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%"></th>
+                                <th style="min-width: 4.2em; max-width: 5em">単価</th>
+                                <th style="min-width: 2.6em; max-width: 3.2em">個数</th>
+                                <th style="min-width: 4.2em; max-width: 5em">価格</th>
+                                <th style="width: 40%">備考</th>
+                                <th style="width: 0.2em"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="equip-table"></tbody>
+                    </table>
+                    <button id="append-equip" class="ui fluid inverted secondary basic button">所持品追加</button>
+                </div>
+                <div class="ui top inverted attached segment" style="margin-top: 28px">
+                    <p style="font-size: x-large">収入と財産</p>
+                </div>
+                <div class="ui inverted attached segment">
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">支出レベル</div>
+                        <input id="money-pocket" type="text" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">現金</div>
+                        <input id="money-cash" type="text" />
+                    </div>
+                    <div class="ui fluid labeled input container">
+                        <div class="ui basic label">資産</div>
+                        <input id="money-assets" type="text" />
+                    </div>
+                </div>
+                <div class="ui top inverted attached segment" style="margin-top: 28px">
+                    <div id="randam-generate-backstory" class="ui right floated primary button"><i class="random icon"></i>ランダム</div>
+                    <p style="font-size: x-large">バックストーリー</p>
+                </div>
+                <div class="ui inverted attached segment">
+                    <div class="ui inverted accordion">
+                        <div class="inline active title">
+                            <i class="dropdown icon"></i>
+                            容姿の描写
+                        </div>
+                        <div class="active content grid">
+                            <textarea id="backstory-personalDescription" class="ui textarea" rows="3"></textarea>
+                            <div id="randam-generate-backstory-personalDescription" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            イデオロギー／信念
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-ideologyOrBeliefs" class="ui textarea" rows="3"></textarea>
+                            <div id="randam-generate-backstory-ideologyOrBeliefs" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            重要な人々
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-significantPeople" class="ui textarea" rows="3"></textarea>
+                            <div id="randam-generate-backstory-significantPeople" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            意味のある場所
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-meaningfulLocations" class="ui textarea" rows="3"></textarea>
+                            <div id="randam-generate-backstory-meaningfulLocations" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            秘蔵の品
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-treasuredPossessions" class="ui textarea" rows="3"></textarea>
+                            <div id="randam-generate-backstory-treasuredPossessions" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            特徴
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-traits" class="ui textarea" rows="3"></textarea>
+                            <div id="randam-generate-backstory-traits" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            負傷、傷跡
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-injuriesAndScars" class="ui textarea" rows="3"></textarea>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            恐怖症、マニア
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-phobiasAndManias" class="ui textarea" rows="3"></textarea>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            魔導書、呪文、アーティファクト
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-spellsAndArtifacts" class="ui textarea" rows="3"></textarea>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            遭遇した超自然の存在
+                        </div>
+                        <div class="active content">
+                            <textarea id="backstory-encounters" class="ui textarea" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui top inverted attached segment" style="margin-top: 28px">
+                    <p style="font-size: x-large">メモ</p>
+                </div>
+                <div class="ui inverted attached segment">
+                    <textarea id="memo" class="ui textarea" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui top inverted attached segment">
+                    <p style="font-size: x-large">技能</p>
+                </div>
+                <div class="ui inverted attached segment">
+                    <div class="ui fluid labeled input">
+                        <div class="ui basic label">職業ポイント</div>
+                        <div class="ui fluid selection dropdown" style="z-index: 100">
+                            <input id="param-job-points-calculation" type="hidden" value="EDU×4" />
+                            <i class="dropdown icon"></i>
+                            <div class="default text"></div>
+                            <div class="menu">
+                                <div class="item">EDU×4</div>
+                                <div class="item">EDU×2+STR×2</div>
+                                <div class="item">EDU×2+CON×2</div>
+                                <div class="item">EDU×2+POW×2</div>
+                                <div class="item">EDU×2+DEX×2</div>
+                                <div class="item">EDU×2+SIZ×2</div>
+                                <div class="item">EDU×2+APP×2</div>
+                            </div>
+                        </div>
+                        <div id="param-job-points-calculate" class="ui fluid primary button" style="width: 3.3em">
+                            <i class="calculator icon" style="width: 6px"></i>
+                        </div>
+                    </div>
+                    <table class="ui inverted striped selectable unstackable table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>基礎</th>
+                                <th>増減</th>
+                                <th>合計</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>職業</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-job-points" class="no-spin" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-job-points-correction" class="no-spin" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-job-points-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>興味</strong></td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-interest-points" class="no-spin" min="0" type="number" disabled />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-interest-points-correction" class="no-spin" type="number" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input">
+                                        <input id="param-interest-points-present" class="no-spin" type="number" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ui inverted attached segment">
+                    <div class="ui right aligned segment" style="margin: -4px 0px 0px 0px; padding: 0.3em; background-color: transparent; position: sticky; top: 50px; z-index: 10">
+                        <label id="param-job-points-usage" class="ui large blue basic label">職業P 0/0</label>
+                        <label id="param-interest-points-usage" class="ui large blue basic label">興味P 0/0</label>
+                    </div>
+                    <div class="ui inverted accordion">
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            戦闘系技能
+                        </div>
+                        <div class="active content">
+                            <table class="ui inverted striped selectable unstackable table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%"></th>
+                                        <th style="width: 20%"></th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">初</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">職</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">興</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">成</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">他</th>
+                                        <th style="min-width: 2.6em; max-width: 5em">計</th>
+                                        <th style="width: 0.2em"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skill-combat-table"></tbody>
+                            </table>
+                            <div class="ui two buttons">
+                                <button id="append-skill-combat-malee" value="近接戦闘" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈近接戦闘〉追加</button>
+                                <button id="append-skill-combat-firearms" value="射撃" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈射撃〉追加</button>
+                            </div>
+                            <button id="append-skill-combat" class="ui fluid inverted secondary basic button">戦闘技能追加</button>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            探索系技能
+                        </div>
+                        <div class="active content">
+                            <table class="ui inverted striped selectable unstackable table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%"></th>
+                                        <th style="width: 20%"></th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">初</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">職</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">興</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">成</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">他</th>
+                                        <th style="min-width: 2.6em; max-width: 5em">計</th>
+                                        <th style="width: 0.2em"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skill-survey-table"></tbody>
+                            </table>
+                            <button id="append-skill-survey" class="ui fluid inverted secondary basic button">探索技能追加</button>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            対人系技能
+                        </div>
+                        <div class="active content">
+                            <table class="ui inverted striped selectable unstackable table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%"></th>
+                                        <th style="width: 20%"></th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">初</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">職</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">興</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">成</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">他</th>
+                                        <th style="min-width: 2.6em; max-width: 5em">計</th>
+                                        <th style="width: 0.2em"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skill-personal-table"></tbody>
+                            </table>
+                            <button id="append-skill-personal" class="ui fluid inverted secondary basic button">対人技能追加</button>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            行動系技能
+                        </div>
+                        <div class="active content">
+                            <table class="ui inverted striped selectable unstackable table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%"></th>
+                                        <th style="width: 20%"></th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">初</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">職</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">興</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">成</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">他</th>
+                                        <th style="min-width: 2.6em; max-width: 5em">計</th>
+                                        <th style="width: 0.2em"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skill-conduct-table"></tbody>
+                            </table>
+                            <div class="ui two buttons">
+                                <button id="append-skill-conduct-arts" value="製作/芸術" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈製作/芸術〉追加</button>
+                                <button id="append-skill-conduct-survival" value="サバイバル" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈サバイバル〉追加</button>
+                            </div>
+                            <button id="append-skill-conduct" class="ui fluid inverted secondary basic button">行動技能追加</button>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            移動系技能
+                        </div>
+                        <div class="active content">
+                            <table class="ui inverted striped selectable unstackable table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%"></th>
+                                        <th style="width: 20%"></th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">初</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">職</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">興</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">成</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">他</th>
+                                        <th style="min-width: 2.6em; max-width: 5em">計</th>
+                                        <th style="width: 0.2em"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skill-transfer-table"></tbody>
+                            </table>
+                            <div class="ui two buttons">
+                                <button id="append-skill-transfer-drive" value="運転" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈運転〉追加</button>
+                                <button id="append-skill-transfer-control" value="操縦" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈操縦〉追加</button>
+                            </div>
+                            <button id="append-skill-transfer" class="ui fluid inverted secondary basic button">移動技能追加</button>
+                        </div>
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            知識系技能
+                        </div>
+                        <div class="active content">
+                            <table class="ui inverted striped selectable unstackable table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%"></th>
+                                        <th style="width: 20%"></th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">初</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">職</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">興</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">成</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">他</th>
+                                        <th style="min-width: 2.6em; max-width: 5em">計</th>
+                                        <th style="width: 0.2em"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skill-knowledge-table"></tbody>
+                            </table>
+                            <div class="ui two buttons">
+                                <button id="append-skill-knowledge-folklore" value="伝承" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈伝承〉追加</button>
+                                <button id="append-skill-knowledge-science" value="科学" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈科学〉追加</button>
+                            </div>
+                            <div class="ui two buttons">
+                                <button id="append-skill-knowledge-native" value="母国語" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈母国語〉追加</button>
+                                <button id="append-skill-knowledge-language" value="言語" class="ui fluid inverted secondary basic button" style="margin-top: 0.2em">〈言語〉追加</button>
+                            </div>
+                            <button id="append-skill-knowledge" class="ui fluid inverted secondary basic button">知識技能追加</button>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            まれな技能
+                        </div>
+                        <div class="content">
+                            <table class="ui inverted striped selectable unstackable table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%"></th>
+                                        <th style="width: 20%"></th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">初</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">職</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">興</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">成</th>
+                                        <th style="min-width: 1.9em; max-width: 2.5em">他</th>
+                                        <th style="min-width: 2.6em; max-width: 5em">計</th>
+                                        <th style="width: 0.2em"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skill-uncommon-table"></tbody>
+                            </table>
+                            <button id="append-skill-uncommon" class="ui fluid inverted secondary basic button">技能追加</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="ui fixed inverted menu" style="top: auto; bottom: 0">
+            <div class="ui container">
+                <div class="ui inverted menu">
+                    <div class="ui dropdown item">
+                        <i class="fas fa-dice"></i>
+                        <div class="inverted menu" style="background: #1b1c1d">
+                            <a id="dice-roll-1x100" class="inverted item" style="background-color: #1b1c1d !important; color: whitesmoke !important">1D100</a>
+                            <a id="dice-roll-1x10" class="inverted item" style="background-color: #1b1c1d !important; color: whitesmoke !important">1D10</a>
+                            <a id="dice-roll-1x6" class="inverted item" style="background-color: #1b1c1d !important; color: whitesmoke !important">1D6</a>
+                            <a id="dice-roll-2x6" class="inverted item" style="background-color: #1b1c1d !important; color: whitesmoke !important">2D6</a>
+                            <a id="dice-roll-3x6" class="inverted item" style="background-color: #1b1c1d !important; color: whitesmoke !important">3D6</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui inverted right menu">
+                    <div class="item">
+                        <button id="investigator-view" class="ui button" style="display: flex">
+                            <i class="eye icon" style="width: 6px"></i>
+                            <div class="ui mobile hidden" style="padding-left: 10px">閲覧</div>
+                        </button>
+                    </div>
+                    <div class="item">
+                        <button id="investigator-export" class="ui button" style="display: flex">
+                            <i class="share icon" style="width: 3px"></i>
+                            <div class="ui mobile hidden" style="padding-left: 10px">出力</div>
+                        </button>
+                    </div>
+                    <div id="investigator-save-menu" class="item">
+                        <button id="investigator-save" class="ui center aligned positive button" style="display: flex">
+                            <i class="save icon" style="width: 3px"></i>
+                            <div class="ui mobile hidden" style="padding-left: 10px">保存</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div class="ui tiny export modal">
+            <div class="ui top inverted attached segment">
+                <p style="font-size: x-large">出力</p>
+            </div>
+            <div class="ui inverted attached segment">
+                <div class="ui inverted pointing secondary menu">
+                    <a class="item active" data-tab="chatpalette">チャットパレット</a>
+                    <a class="item" data-tab="ccfolia">CCFOLIA</a>
+                </div>
+                <div class="ui bottom attached tab inverted segment active" data-tab="chatpalette">
+                    <textarea id="investigator-export-chatpalette" class="ui textarea" rows="12" readonly></textarea>
+                    <div class="ui container">
+                        <button id="investigator-export-commands-copy" class="ui fluid primary button">クリップボードにコピー</button>
+                    </div>
+                </div>
+                <div class="ui bottom attached tab inverted segment" data-tab="ccfolia" style="border-top: 1px solid #555">
+                    <div class="ui inverted grid" style="margin-bottom: 0px">
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">幸運をステータスに追加する</div>
+                            <div class="ui right aligned four wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-luk" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">能力値をパラメータに追加する</div>
+                            <div class="ui right aligned four wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-parametor" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">ステータスを非公開にする</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-secret" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">発言時キャラ画像を表示しない</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-invisible" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">盤面キャラ一覧に表示しない</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-hideStatus" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui container">
+                        <button id="investigator-export-commands-copy-ccfolia" class="ui fluid primary button">CCFOLIA形式でコピー</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui small account modal">
+            <div class="ui middle aligned center aligned grid">
+                <div class="column">
+                    <form class="ui large form">
+                        <div class="ui inverted stacked segment">
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" name="username" placeholder="Username" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password" placeholder="Password" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon account-sign-up input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password-confirm" placeholder="Password(Confirm)" />
+                                </div>
+                            </div>
+                            <div id="account-sign-in-send" class="ui fluid large primary account-sign-in button">ログイン</div>
+                            <div id="account-sign-up-send" class="ui fluid large positive account-sign-up button">新規登録</div>
+                        </div>
+                    </form>
+                    <div class="ui inverted right aligned account-sign-in message"><a id="account-sign-up-switch" href="#">アカウントを作成</a></div>
+                    <div class="ui inverted right aligned account-sign-up message"><a id="account-sign-in-switch" href="#">代わりにログイン</a></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

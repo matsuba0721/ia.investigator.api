@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>IA.Investigator</title>
+
+        <link rel="shortcut icon" href="./favicon.ico" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Semantic-UI-Alert.css" />
+        <link rel="stylesheet" type="text/css" href="css/main.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <script src="js/Semantic-UI-Alert.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/mypage.js"></script>
+    </head>
+
+    <body>
+        <header class="ui fixed inverted menu">
+            <div class="ui container">
+                <a href="/" class="header item"> IA.Investigator </a>
+                <div class="ui inverted right menu">
+                    <a class="item" href="mypage" >
+                        <i class="user icon"></i>
+                        <p id="account-name">User Name</p>
+                    </a>
+                    <a id="account-sign-in" class="item">
+                        <i class="green sign-in icon"></i>
+                    </a>
+                    <a id="account-sign-out" class="item" style="display: none">
+                        <i class="red sign-out negative icon"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="ui grid container" style="padding-top: 5em;padding-bottom: 5em">
+            <div class="sixteen wide column">
+                <div class="ui inverted attached segment">
+                    キャラクター一覧
+                </div>
+                <div class="ui inverted attached segment">
+                    <div id="tags" class="ui basic large tag labels"></div>
+                    <div id="investigators" class="ui inverted cards">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui tiny export modal">
+            <div class="ui top inverted attached segment">
+                <p style="font-size: x-large">出力</p>
+            </div>
+            <div class="ui inverted attached segment">
+                <div class="ui inverted pointing secondary menu">
+                    <a class="item active" data-tab="chatpalette">チャットパレット</a>
+                    <a class="item" data-tab="ccfolia">CCFOLIA</a>
+                </div>
+                <div class="ui bottom attached tab inverted segment active" data-tab="chatpalette">
+                    <textarea id="investigator-export-chatpalette" class="ui textarea" rows="12" readonly></textarea>
+                    <div class="ui container">
+                        <button id="investigator-export-commands-copy" class="ui fluid primary button">クリップボードにコピー</button>
+                    </div>
+                </div>
+                <div class="ui bottom attached tab inverted segment" data-tab="ccfolia" style="border-top: 1px solid #555">
+                    <div class="ui inverted grid" style="margin-bottom: 0px">
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">幸運をステータスに追加する</div>
+                            <div class="ui right aligned four wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-luk" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">能力値をパラメータに追加する</div>
+                            <div class="ui right aligned four wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-parametor" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">ステータスを非公開にする</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-secret" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">発言時キャラ画像を表示しない</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-invisible" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui middle aligned twelve wide column">盤面キャラ一覧に表示しない</div>
+                            <div class="ui right alignedfour wide column">
+                                <div class="ui fitted toggle checkbox">
+                                    <input id="investigator-export-commands-copy-ccfolia-hideStatus" type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui container">
+                        <button id="investigator-export-commands-copy-ccfolia" class="ui fluid primary button">CCFOLIA形式でコピー</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui small account modal">
+            <div class="ui middle aligned center aligned grid">
+                <div class="column">
+                    <form class="ui large form">
+                        <div class="ui inverted stacked segment">
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" name="username" placeholder="Username" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password" placeholder="Password" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon account-sign-up input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password-confirm" placeholder="Password(Confirm)" />
+                                </div>
+                            </div>
+                            <div id="account-sign-in-send" class="ui fluid large primary account-sign-in button">ログイン</div>
+                            <div id="account-sign-up-send" class="ui fluid large positive account-sign-up button">新規登録</div>
+                        </div>
+                    </form>
+                    <div class="ui inverted right aligned account-sign-in message"><a id="account-sign-up-switch" href="#">アカウントを作成</a></div>
+                    <div class="ui inverted right aligned account-sign-up message"><a id="account-sign-in-switch" href="#">代わりにログイン</a></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

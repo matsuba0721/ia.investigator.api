@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>IA.Investigator</title>
+
+        <link rel="shortcut icon" href="./favicon.ico" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Semantic-UI-Alert.css" />
+        <link rel="stylesheet" type="text/css" href="css/main.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <script src="js/Semantic-UI-Alert.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/index.js"></script>
+    </head>
+
+    <body style="background: #272b30">
+        <header class="ui fixed inverted menu">
+            <div class="ui container">
+                <a href="/" class="header item"> IA.Investigator </a>
+                <div class="ui inverted right menu">
+                    <a class="item" href="mypage">
+                        <i class="user icon"></i>
+                        <p id="account-name">User Name</p>
+                    </a>
+                    <a id="account-sign-in" class="item">
+                        <i class="green sign-in icon"></i>
+                    </a>
+                    <a id="account-sign-out" class="item" style="display: none">
+                        <i class="red sign-out negative icon"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="pusher">
+            <div class="ui inverted vertical masthead center aligned segment" style="background-image: url('./images/bg.jpg'); background-size: cover; height: 300px">
+                <div class="ui text container" style="margin-top: 5em">
+                    <h1 class="ui inverted header">IA.Investigator</h1>
+                    <h2>Investigator Creation Service for Cthulhu Mythos TRPG</h2>
+                    <div id="link-sheet" class="ui huge positive button">Get Started <i class="right arrow icon"></i></div>
+                </div>
+            </div>
+            <div class="ui vertical stripe quote inverted segment">
+                <div class="ui equal width stackable internally celled grid">
+                    <div class="center aligned row">
+                        <div class="column">
+                            <h3>"What the TRPG"</h3>
+                            <p>ダイスと会話で物語を紡ぐRPG</p>
+                        </div>
+                        <div class="column">
+                            <h3>"Cthulhu Mythos"</h3>
+                            <p>『あまりにも人智を凌駕した、広大で虚無的な恐怖の前では人間の価値観など何の価値もない』</p>
+                            <p>H.P.Lovecraft</p>
+                        </div>
+                        <div class="column">
+                            <h3>"What this Service"</h3>
+                            <p>探索者の作成と管理</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui vertical inverted segment" style="background-color: transparent">
+                <div class="ui text container">
+                    <h3 class="ui inverted header">Updates</h3>
+                    <div class="ui floating icon message">
+                        <i class="upload icon"></i>
+                        <div class="content">
+                            <div class="header">Version 1.0β released!</div>
+                            <p>サービスを開始しました。</p>
+                        </div>
+                    </div>
+                    <div class="ui divider"></div>
+                    <h3 class="ui inverted header">Recently Created Investigators</h3>
+                    <div id="investigators" class="ui inverted cards"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ui small account modal">
+            <div class="ui middle aligned center aligned grid">
+                <div class="column">
+                    <form class="ui large form">
+                        <div class="ui inverted stacked segment">
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" name="username" placeholder="Username" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password" placeholder="Password" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon account-sign-up input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password-confirm" placeholder="Password(Confirm)" />
+                                </div>
+                            </div>
+                            <div id="account-sign-in-send" class="ui fluid large primary account-sign-in button">ログイン</div>
+                            <div id="account-sign-up-send" class="ui fluid large positive account-sign-up button">新規登録</div>
+                        </div>
+                    </form>
+                    <div class="ui inverted right aligned account-sign-in message"><a id="account-sign-up-switch" href="#">アカウントを作成</a></div>
+                    <div class="ui inverted right aligned account-sign-up message"><a id="account-sign-in-switch" href="#">代わりにログイン</a></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,261 @@
+.no-spin::-webkit-inner-spin-button,
+.no-spin::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield;
+}
+
+::selection {
+    background-color: #2185d0;
+    color: whitesmoke;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+body {
+    font-size: 1rem;
+    background-color: #272b30;
+}
+.header,
+.description {
+    font-family: "游ゴシック" !important;
+}
+
+div.inverted {
+    color: white;
+}
+div.ui.right.aligned {
+    text-align: right;
+}
+div.ui.center.aligned {
+    text-align: center;
+}
+.item .description {
+    margin: 5px;
+}
+
+.ui.container {
+    padding: 0.2em;
+}
+
+.ui.label {
+    min-width: 3em;
+    text-align: center;
+}
+
+.ui.basic.label {
+    background-color: #202328;
+    color: whitesmoke;
+}
+
+.ui.basic.red.label {
+    background: none #202328 !important;
+    color: #db2828 !important;
+    border-color: #db2828 !important;
+}
+.ui.basic.blue.label {
+    background: none #202328 !important;
+    color: #2185d0 !important;
+    border-color: #2185d0 !important;
+}
+
+.column {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.ui.table td,
+.ui.table thead th {
+    padding: 0.2em;
+    text-align: center;
+}
+
+.ui.input > input {
+    padding: 0.4em 1px;
+    background-color: #656d75;
+    color: whitesmoke;
+    min-width: 1.5em;
+}
+.ui.input > input[type="number"] {
+    text-align: right;
+}
+
+.ui.input > input:disabled {
+    color: whitesmoke;
+    opacity: 1 !important;
+    background-color: #383941;
+}
+
+.ui.input > input:focus {
+    border: 1px solid #2185d0;
+    background-color: #656d75;
+    color: whitesmoke;
+}
+
+.ui.input > input::selection {
+    background-color: #2185d0;
+    color: whitesmoke;
+}
+
+.ui.selection.dropdown {
+    background: #656d75;
+    color: whitesmoke;
+}
+
+.ui.selection.dropdown .menu > .item {
+    background: #656d75;
+    color: whitesmoke;
+}
+
+.ui.selection.visible.dropdown > .text:not(.default) {
+    color: whitesmoke;
+}
+
+.ui.textarea {
+    margin: 0;
+    -webkit-appearance: none;
+    padding: 0.78571429em 1em;
+    background-color: #656d75;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    outline: 0;
+    color: whitesmoke;
+    border-radius: 0.28571429rem;
+    box-shadow: 0 0 0 0 transparent inset;
+    transition: color 0.1s ease, border-color 0.1s ease;
+    font-size: 1em;
+    line-height: 1.2857;
+    resize: vertical;
+    width: 100%;
+    overflow: auto;
+    box-sizing: inherit;
+}
+.ui.textarea:focus {
+    border: 1px solid #2185d0;
+    background-color: #656d75;
+    color: whitesmoke;
+}
+
+.ui.textarea::selection {
+    background-color: #2185d0;
+    color: whitesmoke;
+}
+
+.ui.compact.icon.button {
+    padding: 0.3em;
+}
+
+.ui.inverted.blue.basic.button {
+    margin-bottom: 0.2em;
+    padding: 8px 10px;
+    color: #54c8ff !important;
+    box-shadow: 0 0 0 1px #54c8ff inset !important;
+}
+.ui.inverted.blue.basic.button:hover{
+    box-shadow: 0 0 0 1px #3ac0ff inset!important;
+}
+
+.ui.inverted.secondary.basic.button {
+    margin-bottom: 0.2em;
+    padding: 8px 10px;
+    color: #c0c0c0 !important;
+    box-shadow: 0 0 0 1px #c0c0c0 inset !important;
+}
+.ui.inverted.secondary.basic.button:hover{
+    color: #e9e9e9 !important;
+    box-shadow: 0 0 0 1px #e9e9e9 inset!important;
+}
+
+.ui.modal {
+    background-color: transparent;
+}
+
+.ui.items > .item > .content > .header {
+    color: white;
+}
+
+.ui.inverted.meta {
+    color: white !important;
+}
+
+.ui.items > .item .extra {
+    color: rgba(255, 255, 255, 0.555);
+}
+
+.ui.divider {
+    margin: 5px 0;
+}
+
+.ui.list {
+    margin: 0;
+}
+.ui.inverted.list > .item .header {
+    color: rgba(255, 255, 255, 0.555);
+    font-size: 0.8em;
+}
+.ui.inverted.list .list > .item .description,
+.ui.inverted.list > .item .description {
+    color: white;
+}
+
+.ui.horizontal.list > .item {
+    margin-left: auto;
+    margin-right: 1em;
+}
+
+.ui.dimmer {
+    z-index: 100;
+}
+.ui.card,
+.ui.cards > .card {
+    width: 334px;
+}
+
+.ui.inverted.card,
+.ui.inverted.cards > .card {
+    color: white;
+    background-color: #202328;
+    box-shadow: 0 1px 3px 0 #767676, 0 0 0 rgb(0 0 0 / 5%);
+}
+
+.ui.inverted.card > .content > .header,
+.ui.inverted.cards > .card > .content > .header {
+    display: block;
+    margin: "";
+    font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+.ui.card .meta,
+.ui.cards > .card .meta {
+    font-size: 1em;
+    color: #ffffff60;
+}
+
+.ui.card > .content > .description,
+.ui.cards > .card > .content > .description {
+    clear: both;
+    color: white;
+}
+
+.ui.table {
+    margin: 0.1em 0;
+}
+
+.ui.menu .dropdown.item .menu {
+    background: #202328!important;
+    color: #fff!important;
+    margin: 0.5em 0;
+}
+
+@media only screen and (max-width: 767px) {
+    .ui.mobile.hidden {
+        display: none;
+    }
+}
