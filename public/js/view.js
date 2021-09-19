@@ -4,6 +4,8 @@ function initInvestigator(investigator) {
     initProfile(investigator.profile);
     initParameter(investigator.parameter, cthulhuSkill);
 
+    $("#profile-image")[0].src = investigator.getProfileImagePath();
+
     for (var i = 0; i < investigator.skills.length; i++) {
         var skill = investigator.skills[i];
         if (skill.job + skill.interest + skill.grow + skill.other == 0) continue;
@@ -32,7 +34,6 @@ function initInvestigator(investigator) {
 function initProfile(profile) {
     $("#profile-name")[0].innerText = profile.name;
     $("#profile-kana")[0].innerText = profile.kana;
-    // $("#profile-tag")[0].value = profile.tag;
     $("#profile-job")[0].innerText = profile.job;
     $("#profile-age")[0].innerText = profile.age;
     $("#profile-gender")[0].innerText = profile.gender;
@@ -42,7 +43,6 @@ function initProfile(profile) {
     $("#profile-hairColor")[0].innerText = profile.hairColor;
     $("#profile-eyeColor")[0].innerText = profile.eyeColor;
     $("#profile-skinColor")[0].innerText = profile.skinColor;
-    $("#profile-image")[0].src = profile.image;
     var tagStr = profile.tag.trim();
     if (tagStr) {
         var tags = toTags(tagStr);

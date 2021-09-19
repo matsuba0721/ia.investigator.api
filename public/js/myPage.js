@@ -1,6 +1,6 @@
 function toProfileCard(id, profile) {
     var list = `<div class="ui large inverted horizontal list meta"><div class="item"><div class="content"><div class="header">職業</div><div class="description">${profile.job}</div></div></div><div class="item"><div class="content"><div class="header">年齢</div><div class="ui center aligned description">${profile.age}</div></div></div><div class="item"><div class="content"><div class="header">性別</div><div class="ui center aligned description">${profile.gender}</div></div></div></div>`;
-    var content = `<div class="content"><img class="left floated tiny ui image" src="${profile.image}" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
+    var content = `<div class="content"><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
     var extraContent = `<div class="extra content"><div class="ui three buttons"><button id="investigator-${id}-edit" class="ui button" style="display: flex"><i class="edit outline icon"></i><div>編集</div></button><button id="investigator-${id}-view" class="ui button" style="display: flex"><i class="eye icon"></i><div>閲覧</div></button><button id="investigator-${id}-export" class="ui button" style="display: flex"><i class="share icon"></i><div>出力</div></button></div></div>`;
     return `<div id="investigator-${id}" class="card">${content}${extraContent}</div>`;
 }
@@ -101,5 +101,12 @@ window.onload = function () {
                 else $(card.id).hide();
             }
         });
+
+        setTimeout(function(){
+            for (var i = 0; i < investigators.length; i++) {
+                var investigator = investigators[i];
+                $(`#profile-image-${investigator.id}`)[0].src = `img?v=${investigator.id}`;
+            }
+        }, 10);
     });
 };

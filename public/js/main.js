@@ -339,6 +339,9 @@ function override(investigator) {
     investigator.parameter.getInterestPoint = function () {
         return this.int * 2;
     };
+    investigator.getProfileImagePath = function(){
+        return `img?v=${this.id}`; 
+    }
 
     return investigator;
 }
@@ -495,6 +498,29 @@ function saveEditingInvestigator(account, investigator, func) {
     } catch (err) {
         console.log(err);
         notifyFailure("保存に失敗しました。", "exclamation triangle");
+    }
+}
+function saveInvestigatorProfileImage(account, id, image, func, ) {
+    try {
+        var request = new XMLHttpRequest();
+        request.responseType = "json";
+        request.ontimeout = function () {
+            notifyFailure("画像のアップロードに失敗しました。", "exclamation triangle");
+        };
+        request.onload = function () {
+            var data = this.response;
+            if (data.code != 0) {
+                notifyFailure("画像のアップロードに失敗しました。", "exclamation triangle");
+            }
+            func();
+        };
+
+        request.open("POST", "saveInvestigatorProfileImage/", true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify({ token: account.token, id: id, image: image }));
+    } catch (err) {
+        console.log(err);
+        notifyFailure("画像のアップロードに失敗しました。", "exclamation triangle");
     }
 }
 function getUserInvestigators(account, func) {

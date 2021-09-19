@@ -1,6 +1,6 @@
 function toProfileCard(id, profile) {
     var list = `<div class="ui large inverted horizontal list meta"><div class="item"><div class="content"><div class="header">職業</div><div class="description">${profile.job}</div></div></div><div class="item"><div class="content"><div class="header">年齢</div><div class="ui center aligned description">${profile.age}</div></div></div><div class="item"><div class="content"><div class="header">性別</div><div class="ui center aligned description">${profile.gender}</div></div></div></div>`;
-    var content = `<div class="content"><img class="left floated tiny ui image" src="${profile.image}" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
+    var content = `<div class="content"><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
     return `<div id="investigator-${id}-view" class="card" style="cursor : pointer;">${content}</div>`;
 }
 function linkView(e) {
@@ -31,12 +31,19 @@ window.onload = function () {
     }
 
     getRecentlyCreatedInvestigators(function (investigators) {
-        $("#investigators").empty()
+        $("#investigators").empty();
         for (var i = 0; i < investigators.length; i++) {
             var investigator = investigators[i];
-            $("#investigators").append(toProfileCard(investigator.id, investigator.profile));
+            $("#investigators").append(toProfileCard(investigator.id, investigator.profile, `img?v=${investigator.id}`));
             $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView);
         }
         localStorage.index_investigators = $("#investigators")[0].innerHTML;
+        
+        setTimeout(function(){
+            for (var i = 0; i < investigators.length; i++) {
+                var investigator = investigators[i];
+                $(`#profile-image-${investigator.id}`)[0].src = `img?v=${investigator.id}`;
+            }
+        }, 10);
     });
 };

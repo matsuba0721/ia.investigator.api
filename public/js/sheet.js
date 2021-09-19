@@ -24,6 +24,8 @@ function initInvestigator(investigator) {
         return max;
     };
 
+    $("#profile-image")[0].src = investigator.getProfileImagePath();
+
     $("#param-job-points-calculate")[0].addEventListener("click", function (e) {
         var jobPointsCalculation = $("#param-job-points-calculation")[0].value;
         var exp = emptyBy(jobPointsCalculation, "0")
@@ -98,7 +100,6 @@ function initProfile(profile) {
     $("#profile-hairColor")[0].value = profile.hairColor;
     $("#profile-eyeColor")[0].value = profile.eyeColor;
     $("#profile-skinColor")[0].value = profile.skinColor;
-    $("#profile-image")[0].src = profile.image;
 
     $("#profile-name")[0].addEventListener("input", updateProfile);
     $("#profile-kana")[0].addEventListener("input", updateProfile);
@@ -130,8 +131,10 @@ function initProfile(profile) {
                     canvas.height = imgHeight;
                     const ctx = canvas.getContext("2d");
                     ctx.drawImage(imgReader, 0, 0, imgWidth, imgHeight);
-                    investigator.profile.image = canvas.toDataURL(imgType);
-                    $("#profile-image")[0].src = investigator.profile.image;
+                    $("#profile-image")[0].src = "images/loading.gif";
+                    saveInvestigatorProfileImage(account, investigator.id, canvas.toDataURL(imgType), function () {
+                        $("#profile-image")[0].src = canvas.toDataURL(imgType);
+                    });
                 };
                 imgReader.src = reader.result;
             };
@@ -924,20 +927,9 @@ window.onload = function () {
     $(".ui.accordion").accordion({ exclusive: false });
     $(".ui.pointing.menu .item").tab();
     $(".ui.rating").rating();
-};
 
-account = getLoginAccount();
-investigator = {};
-var paramV = parseInt(getParam("v"));
-if (!paramV) {
-    getEmptyInvestigator(account, function (newInvestigator) {
-        investigator = newInvestigator;
-        setParam("v", investigator.id);
-    });
-} else {
     getEditingInvestigator(account, parseInt(getParam("v")), function (newInvestigator) {
         investigator = newInvestigator;
-        console.log(investigator);
         initInvestigator(investigator);
 
         for (var i = 0; i < investigator.skills.length; i++) {
@@ -955,5 +947,15 @@ if (!paramV) {
             initEquip(investigator.equips[i]);
         }
         viewUpdate();
+    });
+};
+
+account = getLoginAccount();
+investigator = {};
+var paramV = parseInt(getParam("v"));
+if (!paramV) {
+    getEmptyInvestigator(account, function (newInvestigator) {
+        investigator = newInvestigator;
+        setParam("v", investigator.id);
     });
 }
