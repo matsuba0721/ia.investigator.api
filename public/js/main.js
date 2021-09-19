@@ -172,7 +172,8 @@ function exportChatpalete(investigator, isSpendLuck) {
     commnads += "\n";
     for (var i = 0; i < investigator.skills.length; i++) {
         var skill = investigator.skills[i];
-        commnads += `\nCC<=${skill.init + skill.job + skill.interest + skill.grow + skill.other} 【${skill.name}】`;
+        var fullname = skill.subname ? `${skill.name}(${skill.subname})` : skill.name;
+        commnads += `\nCC<=${skill.init + skill.job + skill.interest + skill.grow + skill.other} 【${fullname}】`;
     }
 
     commnads += "\n";
