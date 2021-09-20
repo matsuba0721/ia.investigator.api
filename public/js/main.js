@@ -388,6 +388,15 @@ function signIn(username, password, func) {
 }
 function signUp(username, password, passwordConfirm, hashedPassword, email, func) {
     try {
+        
+        if (username.length < 8 || username.length > 16) {
+            notifyFailure("ユーザー名は8文字以上16文字以下です。", "exclamation triangle");
+            return;
+        }
+        if (!email) {
+            notifyFailure("メールアドレスが入力されていません。", "exclamation triangle");
+            return;
+        }
         if (password.length < 8 || password.length > 16) {
             notifyFailure("パスワードは8文字以上16文字以下です。", "exclamation triangle");
             return;
