@@ -1,17 +1,11 @@
 function accountChanged(account) {
     getInvestigatorEditable(account, parseInt(getParam("v")), function (editable) {
-        console.log(editable);
         if (editable) {
             $("#investigator-save-menu").show();
             $("#upload-profile-image").prop("disabled", false);
         } else {
             $("#investigator-save-menu").hide();
             $("#upload-profile-image").prop("disabled", true);
-        }
-        if (!investigator.id) {
-            getNewInvestigator(account, function (newId) {
-                setParam("v", newId);
-            });
         }
     });
 }
