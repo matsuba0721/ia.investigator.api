@@ -1,3 +1,4 @@
+function accountChanged(account) {}
 function toProfileCard(id, profile) {
     var list = `<div class="ui large inverted horizontal list meta"><div class="item"><div class="content"><div class="header">職業</div><div class="description">${profile.job}</div></div></div><div class="item"><div class="content"><div class="header">年齢</div><div class="ui center aligned description">${profile.age}</div></div></div><div class="item"><div class="content"><div class="header">性別</div><div class="ui center aligned description">${profile.gender}</div></div></div></div>`;
     var content = `<div class="content"><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
@@ -31,11 +32,23 @@ account = getLoginAccount();
 window.onload = function () {
     initSigns();
     initAccount(account);
-    if(localStorage.mypage_investigators){
+    if (localStorage.mypage_investigators) {
         $("#investigators").append(localStorage.mypage_investigators);
     }
+    
+    $("#account-recommendation-close").on('click', function() {
+        $("#account-recommendation").hide();
+    });
+    
+    $("#account-recommendation-link").on('click', function() {
+        $(".ui.account-sign-up").hide();
+        $(".ui.account-sign-in").show();
+        $(".ui.account.modal").modal({ duration: 200 }).modal("show");
+    });
 
-    $(".ui.pointing.menu .item").tab();
+    $("#link-sheet")[0].addEventListener("click", function (e) {
+        window.location.href = "sheet";
+    });
 
     $("#investigator-export-commands-copy")[0].addEventListener("click", function (e) {
         writeClipboard($("#investigator-export-chatpalette")[0].value);
@@ -45,10 +58,12 @@ window.onload = function () {
         writeClipboard(JSON.stringify(ccfoliaInvestigator));
     });
 
+    $(".ui.pointing.menu .item").tab();
+
     getUserInvestigators(account, function (newInvestigators) {
         investigators = newInvestigators;
         var tagStatistics = [];
-        $("#investigators").empty()
+        $("#investigators").empty();
         for (var i = 0; i < investigators.length; i++) {
             var investigator = investigators[i];
             $("#investigators").append(toProfileCard(investigator.id, investigator.profile));
@@ -57,7 +72,7 @@ window.onload = function () {
             $("#investigator-" + investigator.id + "-export")[0].addEventListener("click", expoetInvestigator);
         }
         localStorage.mypage_investigators = $("#investigators")[0].innerHTML;
-        
+
         for (var i = 0; i < investigators.length; i++) {
             var investigator = investigators[i];
             var tagNames = toTags(investigator.profile.tag);
@@ -69,7 +84,7 @@ window.onload = function () {
                 else tagStatistics.push({ name: tagName, value: 1 });
             }
         }
-        
+
         for (var i = 0; i < tagStatistics.length; i++) {
             $("#tags").append(`<a class="ui label"><strong>${tagStatistics[i].name}</strong> ${tagStatistics[i].value}</a>`);
         }
@@ -86,15 +101,17 @@ window.onload = function () {
                 });
             }
             var count = $("#tags a.blue.label").find("strong").length;
-            $("#tags a.blue.label").find("strong").each(function (index, element) {
-                var tag = element.innerText;
-                for (var i = 0; i < cards.length; i++) {
-                    var card = cards[i];
-                    if (card.tag.indexOf(tag) == -1) {
-                        card.isDisplay = false;
+            $("#tags a.blue.label")
+                .find("strong")
+                .each(function (index, element) {
+                    var tag = element.innerText;
+                    for (var i = 0; i < cards.length; i++) {
+                        var card = cards[i];
+                        if (card.tag.indexOf(tag) == -1) {
+                            card.isDisplay = false;
+                        }
                     }
-                }
-            });
+                });
             for (var i = 0; i < cards.length; i++) {
                 var card = cards[i];
                 if (card.isDisplay) $(card.id).show();
@@ -102,7 +119,7 @@ window.onload = function () {
             }
         });
 
-        setTimeout(function(){
+        setTimeout(function () {
             for (var i = 0; i < investigators.length; i++) {
                 var investigator = investigators[i];
                 $(`#profile-image-${investigator.id}`)[0].src = `img?v=${investigator.id}`;

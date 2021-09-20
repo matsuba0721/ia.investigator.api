@@ -1,6 +1,38 @@
+function accountChanged(account) {
+    getInvestigatorEditable(account, investigator.id, function (editable) {
+        console.log(editable);
+        if (editable) {
+            $("#investigator-save-menu").show();
+            $("#upload-profile-image").prop("disabled", false);
+        } else {
+            $("#investigator-save-menu").hide();
+            $("#upload-profile-image").prop("disabled", true);
+        }
+        if (!investigator.id) {
+            getNewInvestigator(account, function (newId) {
+                setParam("v", newId);
+            });
+        }
+    });
+}
 function initInvestigator(investigator) {
     initProfile(investigator.profile);
     initParameter(investigator.parameter);
+
+    for (var i = 0; i < investigator.skills.length; i++) {
+        investigator.skills[i].id = i;
+        initSkill(investigator.skills[i]);
+    }
+
+    for (var i = 0; i < investigator.weapons.length; i++) {
+        investigator.weapons[i].id = i;
+        initWeapon(investigator.weapons[i]);
+    }
+
+    for (var i = 0; i < investigator.equips.length; i++) {
+        investigator.equips[i].id = i;
+        initEquip(investigator.equips[i]);
+    }
 
     investigator.getMaxSkillId = function () {
         var max = 0;
@@ -880,8 +912,14 @@ window.onload = function () {
     initSigns();
     initAccount(account);
 
-    $("#account-recommendation-close")[0].addEventListener("click", function (e) {
+    $("#account-recommendation-close").on("click", function () {
         $("#account-recommendation").hide();
+    });
+
+    $("#account-recommendation-link").on("click", function () {
+        $(".ui.account-sign-up").hide();
+        $(".ui.account-sign-in").show();
+        $(".ui.account.modal").modal({ duration: 200 }).modal("show");
     });
 
     $("#investigator-view")[0].addEventListener("click", function (e) {
@@ -931,21 +969,6 @@ window.onload = function () {
     getEditingInvestigator(account, parseInt(getParam("v")), function (newInvestigator) {
         investigator = newInvestigator;
         initInvestigator(investigator);
-
-        for (var i = 0; i < investigator.skills.length; i++) {
-            investigator.skills[i].id = i;
-            initSkill(investigator.skills[i]);
-        }
-
-        for (var i = 0; i < investigator.weapons.length; i++) {
-            investigator.weapons[i].id = i;
-            initWeapon(investigator.weapons[i]);
-        }
-
-        for (var i = 0; i < investigator.equips.length; i++) {
-            investigator.equips[i].id = i;
-            initEquip(investigator.equips[i]);
-        }
         viewUpdate();
     });
 };
@@ -954,8 +977,7 @@ account = getLoginAccount();
 investigator = {};
 var paramV = parseInt(getParam("v"));
 if (!paramV) {
-    getEmptyInvestigator(account, function (newInvestigator) {
-        investigator = newInvestigator;
-        setParam("v", investigator.id);
+    getNewInvestigator(account, function (newId) {
+        setParam("v", newId);
     });
 }

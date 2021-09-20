@@ -38,8 +38,10 @@ function setParam(name, value) {
         location.href = url;
     }
 }
-function sha256(str) {
-    return str;
+async function sha256(str) {
+    const buff = new Uint8Array([].map.call(str, (c) => c.charCodeAt(0))).buffer;
+    const digest = await crypto.subtle.digest("SHA-256", buff);
+    return [].map.call(new Uint8Array(digest), (x) => ("00" + x.toString(16)).slice(-2)).join("");
 }
 function toTags(str) {
     str = emptyBy(str, "");
@@ -52,13 +54,12 @@ function initAccount(account) {
         $("#account-recommendation").show();
         $("#account-sign-out").hide();
         $("#account-sign-in").show();
-        $("#investigator-save-menu").hide();
     } else {
         $("#account-recommendation").hide();
         $("#account-sign-in").hide();
         $("#account-sign-out").show();
-        $("#investigator-save-menu").show();
     }
+    accountChanged(account);
 }
 function initSigns() {
     $("#account-sign-in")[0].addEventListener("click", function (e) {
@@ -74,20 +75,24 @@ function initSigns() {
     $("#account-sign-in-send")[0].addEventListener("click", function (e) {
         var username = $('input[name="username"]').val();
         var password = $('input[name="password"]').val();
-        signIn(username, password, function (newAccount) {
-            $(".ui.account.modal").modal({ duration: 200 }).modal("hide");
-            initAccount(newAccount);
-            account = newAccount;
+        sha256(password).then((hashedPassword) => {
+            signIn(username, hashedPassword, function (newAccount) {
+                $(".ui.account.modal").modal({ duration: 200 }).modal("hide");
+                initAccount(newAccount);
+                account = newAccount;
+            });
         });
     });
     $('input[name="password"]').keypress(function (e) {
         if (e.keyCode == 13) {
             var username = $('input[name="username"]').val();
             var password = $('input[name="password"]').val();
-            signIn(username, password, function (newAccount) {
-                $(".ui.account.modal").modal({ duration: 200 }).modal("hide");
-                initAccount(newAccount);
-                account = newAccount;
+            sha256(password).then((hashedPassword) => {
+                signIn(username, hashedPassword, function (newAccount) {
+                    $(".ui.account.modal").modal({ duration: 200 }).modal("hide");
+                    initAccount(newAccount);
+                    account = newAccount;
+                });
             });
         }
     });
@@ -95,11 +100,13 @@ function initSigns() {
         var username = $('input[name="username"]').val();
         var password = $('input[name="password"]').val();
         var passwordConfirm = $('input[name="password-confirm"]').val();
-        signUp(username, password, passwordConfirm, function (newAccount) {
-            console.log(newAccount);
-            $(".ui.account.modal").modal({ duration: 200 }).modal("hide");
-            initAccount(newAccount);
-            account = newAccount;
+        sha256(password).then((hashedPassword) => {
+            signUp(username, password, passwordConfirm, hashedPassword, function (newAccount) {
+                console.log(newAccount);
+                $(".ui.account.modal").modal({ duration: 200 }).modal("hide");
+                initAccount(newAccount);
+                account = newAccount;
+            });
         });
     });
     $("#account-sign-in-switch")[0].addEventListener("click", function (e) {
@@ -340,9 +347,9 @@ function override(investigator) {
     investigator.parameter.getInterestPoint = function () {
         return this.int * 2;
     };
-    investigator.getProfileImagePath = function(){
-        return `img?v=${this.id}`; 
-    }
+    investigator.getProfileImagePath = function () {
+        return `img?v=${this.id}`;
+    };
 
     return investigator;
 }
@@ -379,7 +386,7 @@ function signIn(username, password, func) {
     }
     return;
 }
-function signUp(username, password, passwordConfirm, func) {
+function signUp(username, password, passwordConfirm, hashedPassword, func) {
     try {
         if (password != passwordConfirm) {
             notifyFailure("パスワードが一致していません。", "exclamation triangle");
@@ -405,7 +412,7 @@ function signUp(username, password, passwordConfirm, func) {
 
         request.open("POST", "saveAccount/", true);
         request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify({ username: username, password: password }));
+        request.send(JSON.stringify({ username: username, password: hashedPassword }));
     } catch (err) {
         console.log(err);
         notifyFailure("アカウント作成に失敗しました。", "exclamation triangle");
@@ -426,7 +433,7 @@ function signOut() {
     }
     return;
 }
-function getEmptyInvestigator(account, func) {
+function getNewInvestigator(account, func) {
     try {
         var request = new XMLHttpRequest();
         request.responseType = "json";
@@ -436,18 +443,42 @@ function getEmptyInvestigator(account, func) {
         request.onload = function () {
             var data = this.response;
             if (data.code == 0) {
-                func(override(data.result));
+                func(data.result.id);
             } else {
                 notifyFailure("新規データ作成を開始できませんでした。", "exclamation triangle");
             }
         };
 
-        request.open("POST", "createInvestigator/", true);
+        request.open("POST", "getNewInvestigator/", true);
         request.setRequestHeader("Content-Type", "application/json");
         request.send(JSON.stringify({ token: account.token }));
     } catch (err) {
         console.log(err);
         notifyFailure("新規データ作成を開始できませんでした。", "exclamation triangle");
+    }
+}
+function getInvestigatorEditable(account, id, func) {
+    try {
+        var request = new XMLHttpRequest();
+        request.responseType = "json";
+        request.ontimeout = function () {
+            notifyFailure("編集権限を取得できませんでした。", "exclamation triangle");
+        };
+        request.onload = function () {
+            var data = this.response;
+            if (data.code == 0) {
+                func(data.result.editable);
+            } else {
+                notifyFailure("編集権限を取得できませんでした。", "exclamation triangle");
+            }
+        };
+
+        request.open("POST", "getInvestigatorEditable/", true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify({ token: account.token, id: id }));
+    } catch (err) {
+        console.log(err);
+        notifyFailure("編集権限を取得できませんでした。", "exclamation triangle");
     }
 }
 function getEditingInvestigator(account, investigatorId, func) {
@@ -501,7 +532,7 @@ function saveEditingInvestigator(account, investigator, func) {
         notifyFailure("保存に失敗しました。", "exclamation triangle");
     }
 }
-function saveInvestigatorProfileImage(account, id, image, func, ) {
+function saveInvestigatorProfileImage(account, id, image, func) {
     try {
         var request = new XMLHttpRequest();
         request.responseType = "json";

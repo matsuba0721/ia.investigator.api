@@ -23,7 +23,7 @@
             <div class="ui container">
                 <a href="/" class="header item"> IA.Investigator </a>
                 <div class="ui inverted right menu">
-                    <a class="item" href="mypage" >
+                    <a class="item" href="mypage">
                         <i class="user icon"></i>
                         <p id="account-name">User Name</p>
                     </a>
@@ -37,15 +37,30 @@
             </div>
         </header>
 
-        <div class="ui grid container" style="padding-top: 5em;padding-bottom: 5em">
+        <div class="ui grid container" style="margin-top: 1em">
+            <div id="account-recommendation" class="sixteen wide column" style="display: none">
+                <div class="ui inverted blue message">
+                    <i id="account-recommendation-close" class="close icon"></i>
+                    <div class="header">ゲストアカウントでログインしています。</div>
+                    <p>
+                        キャラクターを保存及び管理するためには<u><a id="account-recommendation-link" style="cursor: pointer">アカウントを作成またはログイン</a></u
+                        >してください。
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="ui grid container" style="padding-bottom: 5em">
             <div class="sixteen wide column">
                 <div class="ui inverted attached segment">
-                    キャラクター一覧
+                    <div id="link-sheet" class="ui right floated positive button">
+                        新規作成
+                        <i class="right arrow icon"></i>
+                    </div>
+                    <p style="font-size: x-large">キャラクターリスト</p>
                 </div>
                 <div class="ui inverted attached segment">
                     <div id="tags" class="ui basic large tag labels"></div>
-                    <div id="investigators" class="ui inverted cards">
-                    </div>
+                    <div id="investigators" class="ui inverted cards"></div>
                 </div>
             </div>
         </div>

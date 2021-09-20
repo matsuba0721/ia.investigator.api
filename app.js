@@ -53,7 +53,7 @@ app.get("/img", async function (request, response) {
             response.end(img.data);
         } else {
             fs.readFile("public/images/wireframe.png", (err, data) => {
-                response.type('png');
+                response.type("png");
                 response.send(data);
             });
         }
@@ -91,11 +91,25 @@ app.post("/saveAccount", async function (request, response) {
     }
 });
 
-app.post("/createInvestigator", async function (request, response) {
+app.post("/getNewInvestigator", async function (request, response) {
     var pool = getPool();
     try {
-        response.send(await createInvestigator(pool, request.body.token));
+        response.send(await getNewInvestigator(pool, request.body.token));
     } catch (error) {
+        console.log(error);
+        response.send(toResultObject(RES_ERROR, error));
+    } finally {
+        console.log("Disconnect");
+        pool.end();
+    }
+});
+
+app.post("/getInvestigatorEditable", async function (request, response) {
+    var pool = getPool();
+    try {
+        response.send(await getInvestigatorEditable(pool, request.body.token, request.body.id));
+    } catch (error) {
+        console.log(error);
         response.send(toResultObject(RES_ERROR, error));
     } finally {
         console.log("Disconnect");
@@ -349,19 +363,52 @@ function getInitInvestigator(id) {
     };
 }
 
-async function createInvestigator(pool, token) {
-    var queryString = `INSERT INTO IaInvestigators(AccountToken,IsEmpty,createtimestamp,updatetimestamp) VALUES ('${token}', 1, now(), now()) RETURNING id;`;
+async function getNewInvestigator(pool, token) {
+    if (!token) {
+        return toResultObject(RES_OK, { id: 0 });
+    }
+
+    var queryString = `SELECT Id FROM IaInvestigators WHERE AccountToken = '${token}' AND IsEmpty = 1 LIMIT 1 OFFSET 0;`;
     console.log(queryString);
     var result = await pool.query(queryString);
+    var rows = await GetRows(result);
+    if (rows.length > 0) {
+        return toResultObject(RES_OK, { id: rows[0].id });
+    }
+
+    queryString = `INSERT INTO IaInvestigators(AccountToken,IsEmpty,createtimestamp,updatetimestamp) VALUES ('${token}', 1, now(), now()) RETURNING id;`;
+    console.log(queryString);
+    result = await pool.query(queryString);
     var rows = await GetRows(result);
     if (rows.length == 0) {
         return toResultObject(RES_ERROR, {});
     }
 
-    return toResultObject(RES_OK, getInitInvestigator(rows[0].id));
+    return toResultObject(RES_OK, { id: rows[0].id });
+}
+
+async function getInvestigatorEditable(pool, token, id) {
+    console.log({token:token, id:id});
+    if (!token || !id) {
+        return toResultObject(RES_OK, { editable: false });
+    }
+
+    var queryString = `SELECT AccountToken FROM IaInvestigators WHERE id = ${id} LIMIT 1 OFFSET 0;`;
+    console.log(queryString);
+    var result = await pool.query(queryString);
+    var rows = await GetRows(result);
+    console.log(rows);
+    if (rows.length == 0) {
+        return toResultObject(RES_OK, { editable: false });
+    } else {
+        return toResultObject(RES_OK, { editable: rows[0].accounttoken ==　token });
+    }
 }
 
 async function getInvestigator(pool, id) {
+    if (id == 0) {
+        return toResultObject(RES_OK, getInitInvestigator(0));
+    }
     var queryString = `SELECT IaInvestigators.Id, IaInvestigators.AccountToken AS Token, IaInvestigators.IsEmpty, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'height',RTRIM(IaInvestigatorProfiles.Height), 'weight',RTRIM(IaInvestigatorProfiles.Weight), 'origin',RTRIM(IaInvestigatorProfiles.Origin), 'hairColor',RTRIM(IaInvestigatorProfiles.HairColor), 'eyeColor',RTRIM(IaInvestigatorProfiles.EyeColor), 'skinColor',RTRIM(IaInvestigatorProfiles.SkinColor), 'image', IaInvestigatorProfileImages.Data) AS Profile, IaInvestigatorDetails.Parameter, IaInvestigatorDetails.Skills, IaInvestigatorDetails.Weapons, IaInvestigatorDetails.Equips, IaInvestigatorDetails.Money, IaInvestigatorDetails.Backstory, IaInvestigatorDetails.Memo FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) LEFT OUTER JOIN IaInvestigatorDetails ON (IaInvestigators.Id = IaInvestigatorDetails.InvestigatorId) WHERE IaInvestigators.Id = ${id} LIMIT 1 OFFSET 0;`;
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
@@ -425,7 +472,7 @@ async function getInvestigatorProfileImage(pool, id) {
 
 async function saveInvestigatorProfileImage(pool, token, id, imgType, image) {
     var queryString;
-    var hex = `decode('${image.toString('hex')}', 'hex')`;
+    var hex = `decode('${image.toString("hex")}', 'hex')`;
     queryString = `INSERT INTO IaInvestigatorProfileImages(InvestigatorId,AccountToken,type,Data) VALUES (${id},'${token}','${imgType}',${hex}) ON CONFLICT (InvestigatorId) DO UPDATE SET type ='${imgType}', Data = ${hex} WHERE IaInvestigatorProfileImages.InvestigatorId = ${id} AND IaInvestigatorProfileImages.AccountToken = '${token}';`;
     await pool.query(queryString);
 

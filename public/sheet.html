@@ -41,7 +41,10 @@
                 <div class="ui inverted blue message">
                     <i id="account-recommendation-close" class="close icon"></i>
                     <div class="header">ゲストアカウントでログインしています。</div>
-                    <p>キャラクターを保存及び管理するためには<b>アカウントを作成</b>してください。</p>
+                    <p>
+                        キャラクターを保存及び管理するためには<u><a id="account-recommendation-link" style="cursor: pointer">アカウントを作成またはログイン</a></u
+                        >してください。
+                    </p>
                 </div>
             </div>
         </div>
@@ -832,7 +835,7 @@
                             <div class="ui mobile hidden" style="padding-left: 10px">出力</div>
                         </button>
                     </div>
-                    <div id="investigator-save-menu" class="item">
+                    <div id="investigator-save-menu" class="item" style="display: none;">
                         <button id="investigator-save" class="ui center aligned positive button" style="display: flex">
                             <i class="save icon" style="width: 3px"></i>
                             <div class="ui mobile hidden" style="padding-left: 10px">保存</div>
