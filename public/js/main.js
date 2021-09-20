@@ -100,8 +100,9 @@ function initSigns() {
         var username = $('input[name="username"]').val();
         var password = $('input[name="password"]').val();
         var passwordConfirm = $('input[name="password-confirm"]').val();
+        var email = $('input[name="email"]').val();
         sha256(password).then((hashedPassword) => {
-            signUp(username, password, passwordConfirm, hashedPassword, function (newAccount) {
+            signUp(username, password, passwordConfirm, hashedPassword, email, function (newAccount) {
                 $(".ui.account.modal").modal({ duration: 200 }).modal("hide");
                 initAccount(newAccount);
                 account = newAccount;
@@ -385,8 +386,12 @@ function signIn(username, password, func) {
     }
     return;
 }
-function signUp(username, password, passwordConfirm, hashedPassword, func) {
+function signUp(username, password, passwordConfirm, hashedPassword, email, func) {
     try {
+        if (password.length < 8 || password.length > 16) {
+            notifyFailure("パスワードは8文字以上16文字以下です。", "exclamation triangle");
+            return;
+        }
         if (password != passwordConfirm) {
             notifyFailure("パスワードが一致していません。", "exclamation triangle");
             return;
@@ -411,7 +416,7 @@ function signUp(username, password, passwordConfirm, hashedPassword, func) {
 
         request.open("POST", "saveAccount/", true);
         request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify({ username: username, password: hashedPassword }));
+        request.send(JSON.stringify({ username: username, password: hashedPassword, email: email }));
     } catch (err) {
         console.log(err);
         notifyFailure("アカウント作成に失敗しました。", "exclamation triangle");

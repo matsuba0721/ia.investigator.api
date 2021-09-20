@@ -36,7 +36,6 @@
                 </div>
             </div>
         </header>
-
         <div class="ui grid container" style="margin-top: 1em">
             <div id="account-recommendation" class="sixteen wide column" style="display: none">
                 <div class="ui inverted blue message">
@@ -64,6 +63,10 @@
                 </div>
             </div>
         </div>
+        <footer class="ui fixed inverted menu" style="top: auto; bottom: 0">
+            <div class="ui container">
+            </div>
+        </footer>
         <div class="ui tiny export modal">
             <div class="ui top inverted attached segment">
                 <p style="font-size: x-large">出力</p>
@@ -136,26 +139,33 @@
         <div class="ui small account modal">
             <div class="ui middle aligned center aligned grid">
                 <div class="column">
-                    <form class="ui large form">
+                    <form class="ui large form" autocomplete="on">
                         <div class="ui inverted stacked segment">
                             <div class="field">
                                 <div class="ui left icon input">
                                     <i class="user icon"></i>
-                                    <input type="text" name="username" placeholder="Username" />
+                                    <input type="text" name="username" placeholder="ユーザー名" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon account-sign-up input">
+                                    <i class="user icon"></i>
+                                    <input type="email" name="email" placeholder="E-Mail" />
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="ui left icon input">
                                     <i class="lock icon"></i>
-                                    <input type="password" name="password" placeholder="Password" />
+                                    <input type="password" name="password" placeholder="パスワード" />
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="ui left icon account-sign-up input">
                                     <i class="lock icon"></i>
-                                    <input type="password" name="password-confirm" placeholder="Password(Confirm)" />
+                                    <input type="password" name="password-confirm" placeholder="パスワード(確認)" />
                                 </div>
                             </div>
+                            <p  style="text-align: right">※パスワードは8文字以上16文字以下</p>
                             <div id="account-sign-in-send" class="ui fluid large primary account-sign-in button">ログイン</div>
                             <div id="account-sign-up-send" class="ui fluid large positive account-sign-up button">新規登録</div>
                         </div>

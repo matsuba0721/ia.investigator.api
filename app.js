@@ -81,7 +81,7 @@ app.post("/getAccount", async function (request, response) {
 app.post("/saveAccount", async function (request, response) {
     var pool = getPool();
     try {
-        response.send(await saveAccount(pool, request.body.username, request.body.password));
+        response.send(await saveAccount(pool, request.body.username, request.body.password, request.body.email));
     } catch (error) {
         var code = error.code == "23505" ? RES_USERNAME_DEPLICATE : RES_ERROR;
         response.send(toResultObject(code, error));
@@ -234,9 +234,9 @@ async function getAccount(pool, username, password) {
     return toResultObject(RES_OK, { id: rows[0].id, name: username, token: rows[0].token.trim() });
 }
 
-async function saveAccount(pool, username, password) {
+async function saveAccount(pool, username, password, email) {
     var token = await sha256(new Date().toUTCString());
-    var queryString = `INSERT INTO IaAccounts(name,password,token,createtimestamp,updatetimestamp) VALUES ('${username}', '${password}', '${token}', now(), now()) RETURNING id;`;
+    var queryString = `INSERT INTO IaAccounts(name,password,email,token,createtimestamp,updatetimestamp) VALUES ('${username}', '${password}','${email}' , '${token}', now(), now()) RETURNING id;`;
     console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
