@@ -102,7 +102,6 @@ function initSigns() {
         var passwordConfirm = $('input[name="password-confirm"]').val();
         sha256(password).then((hashedPassword) => {
             signUp(username, password, passwordConfirm, hashedPassword, function (newAccount) {
-                console.log(newAccount);
                 $(".ui.account.modal").modal({ duration: 200 }).modal("hide");
                 initAccount(newAccount);
                 account = newAccount;
@@ -421,7 +420,6 @@ function signUp(username, password, passwordConfirm, hashedPassword, func) {
 function signOut() {
     try {
         var account = getLoginAccount();
-        console.log(account);
         if (account.id != 0) {
             $.removeCookie("account");
             notifySucces("ログアウトしました。", "sign-out");
