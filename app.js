@@ -480,7 +480,7 @@ async function saveInvestigatorProfileImage(pool, token, id, imgType, image) {
 }
 
 async function getUserInvestigators(pool, token) {
-    var queryString = `SELECT IaInvestigators.Id, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'image', IaInvestigatorProfileImages.Data) AS Profile FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) WHERE IaInvestigators.AccountToken = '${token}' ORDER BY IaInvestigatorProfiles.UpdateTimestamp DESC LIMIT 100 OFFSET 0;`;
+    var queryString = `SELECT IaInvestigators.Id, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'image', IaInvestigatorProfileImages.Data) AS Profile FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) WHERE IaInvestigators.AccountToken = '${token}' AND IaInvestigators.IsEmpty=0 ORDER BY IaInvestigatorProfiles.UpdateTimestamp DESC LIMIT 100 OFFSET 0;`;
     console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
