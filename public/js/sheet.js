@@ -1,5 +1,5 @@
 function accountChanged(account) {
-    getInvestigatorEditable(account, investigator.id, function (editable) {
+    getInvestigatorEditable(account, parseInt(getParam("v")), function (editable) {
         console.log(editable);
         if (editable) {
             $("#investigator-save-menu").show();
