@@ -1,3 +1,4 @@
+function accountChanged(account) {}
 function initInvestigator(investigator) {
     var cthulhuSkill = investigator.skills[37];
 
