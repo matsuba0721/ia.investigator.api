@@ -65,6 +65,21 @@ app.get("/img", async function (request, response) {
         pool.end();
     }
 });
+app.get("/sns", async function (request, response) {
+    var pool = getPool();
+    try {
+        var data = await getInvestigatorSnsHtml(pool, request.query.v);
+        response.writeHead(200, { "Content-Type": "text/html" });
+        response.write(data);
+        response.end();
+    } catch (error) {
+        console.log(error);
+        response.send(error);
+    } finally {
+        console.log("Disconnect");
+        pool.end();
+    }
+});
 
 app.post("/getAccount", async function (request, response) {
     var pool = getPool();
@@ -246,6 +261,48 @@ async function saveAccount(pool, username, password, email) {
     return toResultObject(0, { id: rows[0].id, name: username, token: token });
 }
 
+async function getInvestigatorSnsHtml(pool, id) {
+    var profile = { id: id, name: "Unknown" };
+    var queryString = `SELECT RTRIM(Name) AS Name FROM IaInvestigatorProfiles WHERE InvestigatorId = ${id} LIMIT 1 OFFSET 0;`;
+    console.log(queryString);
+    var result = await pool.query(queryString);
+    var rows = await GetRows(result);
+    if (rows.length > 0) {
+        var row = rows[0];
+        profile.name = row.name ? row.name : "Unknown";
+    }
+    return `<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>${profile.name}</title>
+        <meta name="description" content="IA.Investigator">
+        <meta name="keywords" content="IA.Investigator">
+        <meta property="og:locale" content="ja_JP">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://ia-investigator.herokuapp.com/view?v=${id}">
+        <meta property="og:title" content="${profile.name}">
+        <meta property="og:site_name" content="IA.Investigator">
+        <meta property="og:description" content="${profile.name}">
+        <meta property="og:image" content="https://ia-investigator.herokuapp.com/img?v=${id}">
+        <meta property="og:image:width" content=300px>
+        <meta property="og:image:height" content=300px>
+        <meta property="fb:app_id" content="${profile.name}">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="${profile.name}">
+        <meta name="twitter:description" content="${profile.name}">
+        <meta name="twitter:image" content="https://ia-investigator.herokuapp.com/img?v=${id}">
+        <meta name="twitter:site" content="https://ia-investigator.herokuapp.com/view?v=${id}">
+        <meta name="twitter:creator" content="IA.Investigator">
+    </head>
+    <body>
+        <script>
+            location.href = '/view?v=${id}';
+        </script>
+    </body>
+</html>`;
+}
+
 function getInitInvestigator(id) {
     return {
         id: id,
@@ -388,7 +445,7 @@ async function getNewInvestigator(pool, token) {
 }
 
 async function getInvestigatorEditable(pool, token, id) {
-    console.log({token:token, id:id});
+    console.log({ token: token, id: id });
     if (!token || !id) {
         return toResultObject(RES_OK, { editable: false });
     }
@@ -401,7 +458,7 @@ async function getInvestigatorEditable(pool, token, id) {
     if (rows.length == 0) {
         return toResultObject(RES_OK, { editable: false });
     } else {
-        return toResultObject(RES_OK, { editable: rows[0].accounttoken ==　token });
+        return toResultObject(RES_OK, { editable: rows[0].accounttoken == token });
     }
 }
 
@@ -410,6 +467,7 @@ async function getInvestigator(pool, id) {
         return toResultObject(RES_OK, getInitInvestigator(0));
     }
     var queryString = `SELECT IaInvestigators.Id, IaInvestigators.AccountToken AS Token, IaInvestigators.IsEmpty, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'height',RTRIM(IaInvestigatorProfiles.Height), 'weight',RTRIM(IaInvestigatorProfiles.Weight), 'origin',RTRIM(IaInvestigatorProfiles.Origin), 'hairColor',RTRIM(IaInvestigatorProfiles.HairColor), 'eyeColor',RTRIM(IaInvestigatorProfiles.EyeColor), 'skinColor',RTRIM(IaInvestigatorProfiles.SkinColor), 'image', IaInvestigatorProfileImages.Data) AS Profile, IaInvestigatorDetails.Parameter, IaInvestigatorDetails.Skills, IaInvestigatorDetails.Weapons, IaInvestigatorDetails.Equips, IaInvestigatorDetails.Money, IaInvestigatorDetails.Backstory, IaInvestigatorDetails.Memo FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) LEFT OUTER JOIN IaInvestigatorDetails ON (IaInvestigators.Id = IaInvestigatorDetails.InvestigatorId) WHERE IaInvestigators.Id = ${id} LIMIT 1 OFFSET 0;`;
+    console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
     if (rows.length == 0) {
@@ -445,7 +503,7 @@ async function saveInvestigator(pool, token, investigator) {
 
     var queryString;
     queryString = `INSERT INTO IaInvestigatorProfiles(InvestigatorId,AccountToken,Name,Kana,Tag,Job,Age,Gender,Height,Weight,Origin,HairColor,EyeColor,SkinColor,CreateTimestamp, UpdateTimestamp) VALUES (${investigator.id},'${token}','${investigator.profile.name}','${investigator.profile.kana}','${investigator.profile.tag}','${investigator.profile.job}','${investigator.profile.age}','${investigator.profile.gender}','${investigator.profile.height}','${investigator.profile.weight}','${investigator.profile.origin}','${investigator.profile.hairColor}','${investigator.profile.eyeColor}','${investigator.profile.skinColor}',now(),now()) ON CONFLICT (InvestigatorId) DO UPDATE SET Name = '${investigator.profile.name}',Kana = '${investigator.profile.kana}',Tag = '${investigator.profile.tag}',Job = '${investigator.profile.job}',Age= '${investigator.profile.age}',Gender = '${investigator.profile.gender}',Height = '${investigator.profile.height}',Weight = '${investigator.profile.weight}',Origin = '${investigator.profile.origin}',HairColor = '${investigator.profile.hairColor}',EyeColor = '${investigator.profile.eyeColor}',SkinColor = '${investigator.profile.skinColor}',UpdateTimestamp = now() WHERE IaInvestigatorProfiles.InvestigatorId = ${investigator.id} AND IaInvestigatorProfiles.AccountToken = '${token}';`;
-    console.log(queryString);
+    console.log(queryString.slice(0, 100));
     await pool.query(queryString);
 
     queryString = `INSERT INTO IaInvestigatorDetails(InvestigatorId,AccountToken,Parameter,Skills,Weapons,Equips,Money,Backstory,Memo) VALUES (${investigator.id},'${token}','${parameter}','${skills}','${weapons}','${equips}','${money}','${backstory}','${memo}') ON CONFLICT (InvestigatorId) DO UPDATE SET Parameter = '${parameter}', Skills = '${skills}', Weapons = '${weapons}', Equips = '${equips}', Money = '${money}', Backstory = '${backstory}', Memo = '${memo}' WHERE IaInvestigatorDetails.InvestigatorId = ${investigator.id} AND IaInvestigatorDetails.AccountToken = '${token}';`;
@@ -461,6 +519,7 @@ async function saveInvestigator(pool, token, investigator) {
 
 async function getInvestigatorProfileImage(pool, id) {
     var queryString = `SELECT type, Data FROM IaInvestigatorProfileImages WHERE InvestigatorId = ${id} LIMIT 1 OFFSET 0;`;
+    console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
     if (rows.length == 0) {
@@ -474,7 +533,7 @@ async function saveInvestigatorProfileImage(pool, token, id, imgType, image) {
     var queryString;
     var hex = `decode('${image.toString("hex")}', 'hex')`;
     queryString = `INSERT INTO IaInvestigatorProfileImages(InvestigatorId,AccountToken,type,Data) VALUES (${id},'${token}','${imgType}',${hex}) ON CONFLICT (InvestigatorId) DO UPDATE SET type ='${imgType}', Data = ${hex} WHERE IaInvestigatorProfileImages.InvestigatorId = ${id} AND IaInvestigatorProfileImages.AccountToken = '${token}';`;
-    await pool.query(queryString);
+    await pool.query(queryString.slice(0, 500));
 
     return toResultObject(RES_OK, { id: id });
 }
