@@ -7,9 +7,18 @@ function initInvestigator(investigator) {
 
     $("#profile-image")[0].src = investigator.getProfileImagePath();
 
+    var skills = [];
     for (var i = 0; i < investigator.skills.length; i++) {
         var skill = investigator.skills[i];
         if (skill.job + skill.interest + skill.grow + skill.other == 0) continue;
+        skills.push({
+            fullname: skill.subname ? `${skill.name}(${skill.subname})` : skill.name,
+            value: skill.init + skill.job + skill.interest + skill.grow + skill.other
+        });
+    }
+    skills = skills.sort(function(x,y){ return y.value - x.value; });
+    for (var i = 0; i < skills.length; i++) {
+        var skill = skills[i];
         $("#skills").append(toSkillItem(skill));
     }
     var weaponCount = 0;
@@ -77,9 +86,7 @@ function initParameter(parameter, cthulhuSkill) {
     $("#param-san-indefinite")[0].innerText = `不定領域 ${parseInt(parameter.san * 0.8)}`;
 }
 function toSkillItem(skill) {
-    var fullname = skill.subname ? `${skill.name}(${skill.subname})` : skill.name;
-    var value = skill.init + skill.job + skill.interest + skill.grow + skill.other;
-    return `<tr><td>${fullname}</td><td>${value}</td><td>${Math.floor(value / 2)}</td><td>${Math.floor(value / 5)}</td></tr>`;
+    return `<tr><td>${skill.fullname}</td><td>${skill.value}</td><td>${Math.floor(skill.value / 2)}</td><td>${Math.floor(skill.value / 5)}</td></tr>`;
 }
 function toWeaponItem(weapon) {
     return `<tr><td>${weapon.name}</td><td>${weapon.rate}</td><td>${weapon.damage}</td><td>${weapon.range}</td><td>${weapon.attacks}</td><td>${weapon.elastic}</td><td>${weapon.failure}</td></tr>`;
