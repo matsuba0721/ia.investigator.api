@@ -457,7 +457,6 @@ async function getNewInvestigator(pool, token) {
 }
 
 async function getInvestigatorEditable(pool, token, id) {
-    console.log({ token: token, id: id });
     if (!token || !id) {
         return toResultObject(RES_OK, { editable: false });
     }

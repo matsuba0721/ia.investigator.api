@@ -31,9 +31,11 @@ function exportInvestigator(e) {
     var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-export/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
-    investigator = getEditingInvestigator(account, id);
-    $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
-    $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");
+    getEditingInvestigator(account, id,  function (newInvestigator) {
+        investigator = newInvestigator;
+        $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");
+        $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
+    });
 }
 function getShareUrl(e) {
     var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-share/);
