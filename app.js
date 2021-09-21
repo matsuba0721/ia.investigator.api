@@ -156,6 +156,18 @@ app.post("/saveInvestigator", async function (request, response) {
     }
 });
 
+app.post("/deleteInvestigator", async function (request, response) {
+    var pool = getPool();
+    try {
+        response.send(await deleteInvestigator(pool, request.body.token, request.body.id));
+    } catch (error) {
+        response.send(toResultObject(RES_ERROR, error));
+    } finally {
+        console.log("Disconnect");
+        pool.end();
+    }
+});
+
 app.post("/saveInvestigatorProfileImage", async function (request, response) {
     var pool = getPool();
     try {
@@ -491,8 +503,6 @@ async function getInvestigator(pool, id) {
 }
 
 async function saveInvestigator(pool, token, investigator) {
-    console.log(token);
-
     var parameter = JSON.stringify(investigator.parameter);
     var skills = JSON.stringify(investigator.skills);
     var weapons = JSON.stringify(investigator.weapons);
@@ -516,6 +526,27 @@ async function saveInvestigator(pool, token, investigator) {
 
     return toResultObject(RES_OK, { id: investigator.id });
 }
+async function deleteInvestigator(pool, token, id) {
+    var queryString;
+    queryString = `DELETE FROM IaInvestigatorProfiles WHERE InvestigatorId = ${id} AND AccountToken = '${token}';`;
+    console.log(queryString);
+    await pool.query(queryString);
+    
+    queryString = `DELETE FROM IaInvestigatorProfileImages WHERE InvestigatorId = ${id} AND AccountToken = '${token}';`;
+    console.log(queryString);
+    await pool.query(queryString);
+    
+    queryString = `DELETE FROM IaInvestigatorDetails WHERE InvestigatorId = ${id} AND AccountToken = '${token}';`;
+    console.log(queryString);
+    await pool.query(queryString);
+    
+    queryString = `DELETE FROM IaInvestigators WHERE Id = ${id} AND AccountToken = '${token}';`;
+    console.log(queryString);
+    await pool.query(queryString);
+
+    return toResultObject(RES_OK, { id: id });
+}
+
 
 async function getInvestigatorProfileImage(pool, id) {
     var queryString = `SELECT type, Data FROM IaInvestigatorProfileImages WHERE InvestigatorId = ${id} LIMIT 1 OFFSET 0;`;
@@ -533,7 +564,8 @@ async function saveInvestigatorProfileImage(pool, token, id, imgType, image) {
     var queryString;
     var hex = `decode('${image.toString("hex")}', 'hex')`;
     queryString = `INSERT INTO IaInvestigatorProfileImages(InvestigatorId,AccountToken,type,Data) VALUES (${id},'${token}','${imgType}',${hex}) ON CONFLICT (InvestigatorId) DO UPDATE SET type ='${imgType}', Data = ${hex} WHERE IaInvestigatorProfileImages.InvestigatorId = ${id} AND IaInvestigatorProfileImages.AccountToken = '${token}';`;
-    await pool.query(queryString.slice(0, 500));
+    console.log(queryString.slice(0, 500));
+    await pool.query(queryString);
 
     return toResultObject(RES_OK, { id: id });
 }

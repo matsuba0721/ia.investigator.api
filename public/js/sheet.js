@@ -916,6 +916,11 @@ window.onload = function () {
         $(".ui.account.modal").modal({ duration: 200 }).modal("show");
     });
 
+    $("#investigator-share")[0].addEventListener("click", function (e) {
+        var uri = new URL(window.location.href);
+        writeClipboard(uri.origin + "/sns?v="+getParam("v"))
+    });
+    
     $("#investigator-view")[0].addEventListener("click", function (e) {
         window.location.href = "view?v=" + investigator.id;
     });
@@ -939,6 +944,7 @@ window.onload = function () {
             setParam("v", newId);
         });
     });
+    
     $("#dice-roll-1x100")[0].addEventListener("click", function (e) {
         diceRoll(1, 100);
     });

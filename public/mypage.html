@@ -59,14 +59,25 @@
                 </div>
                 <div class="ui inverted attached segment">
                     <div id="tags" class="ui basic large tag labels"></div>
-                    <div id="investigators" class="ui inverted cards"></div>
+                    <div id="investigators" class="ui three column doubling stackable grid"></div>
                 </div>
             </div>
         </div>
         <footer class="ui fixed inverted menu" style="top: auto; bottom: 0">
-            <div class="ui container">
-            </div>
+            <div class="ui container"></div>
         </footer>
+        <div class="ui mini delete modal">
+            <div class="ui middle aligned center aligned grid">
+                <div class="ui inverted column segment">
+                    <p style="font-size: large">本当に削除しますか？</p>
+                    <div class="ui buttons">
+                        <button id="investigator-delete-cancel" class="ui button">キャンセル</button>
+                        <div class="or"></div>
+                        <button id="investigator-delete-ok" class="ui negative button">削除する</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="ui tiny export modal">
             <div class="ui top inverted attached segment">
                 <p style="font-size: x-large">出力</p>
@@ -138,7 +149,7 @@
         </div>
         <div class="ui small account modal">
             <div class="ui middle aligned center aligned grid">
-                <div class="column">
+                <div class="ui inverted column segment">
                     <form class="ui large form" autocomplete="on">
                         <div class="ui inverted stacked segment">
                             <div class="field">
@@ -165,7 +176,7 @@
                                     <input type="password" name="password-confirm" placeholder="パスワード(確認)" />
                                 </div>
                             </div>
-                            <p  style="text-align: right">※ユーザー名、パスワードは8文字以上16文字以下です。</p>
+                            <p style="text-align: right">※ユーザー名、パスワードは8文字以上16文字以下です。</p>
                             <div id="account-sign-in-send" class="ui fluid large primary account-sign-in button">ログイン</div>
                             <div id="account-sign-up-send" class="ui fluid large positive account-sign-up button">新規登録</div>
                         </div>

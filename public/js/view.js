@@ -111,10 +111,15 @@ window.onload = function () {
     initSigns();
     initAccount(account);
 
+    $("#investigator-share")[0].addEventListener("click", function (e) {
+        var uri = new URL(window.location.href);
+        writeClipboard(uri.origin + "/sns?v="+getParam("v"))
+    });
+
     $("#investigator-edit")[0].addEventListener("click", function (e) {
         window.location.href = "sheet?v=" + investigator.id;
     });
-
+    
     $("#investigator-export")[0].addEventListener("click", function (e) {
         $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
         $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");

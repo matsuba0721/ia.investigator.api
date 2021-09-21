@@ -569,6 +569,30 @@ function saveInvestigatorProfileImage(account, id, image, func) {
         notifyFailure("画像のアップロードに失敗しました。", "exclamation triangle");
     }
 }
+function deleteInvestigator(account, id, func) {
+    try {
+        var request = new XMLHttpRequest();
+        request.responseType = "json";
+        request.ontimeout = function () {
+            notifyFailure("削除に失敗しました。", "exclamation triangle");
+        };
+        request.onload = function () {
+            var data = this.response;
+            if (data.code == 0) {
+                func(data.result.id);
+            } else {
+                notifyFailure("削除に失敗しました。", "exclamation triangle");
+            }
+        };
+
+        request.open("POST", "deleteInvestigator/", true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify({ token: account.token, id: id }));
+    } catch (err) {
+        console.log(err);
+        notifyFailure("削除に失敗しました。", "exclamation triangle");
+    }
+}
 function getUserInvestigators(account, func) {
     try {
         var request = new XMLHttpRequest();
