@@ -206,7 +206,20 @@
                         <div class="ui content">
                             <div class="ui main two column stackable grid container" style="margin-top: 0">
                                 <div class="column">
-                                    <div id="skills" class="ui huge inverted horizontal list"></div>
+                                    <table id="skills-table" class="ui inverted unstackable table">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2" style="color: rgba(255, 255, 255, 0.555) !important">名前</th>
+                                                <th colspan="3" style="color: rgba(255, 255, 255, 0.555) !important">成功率</th>
+                                            </tr>
+                                            <tr>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">ノーマル</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">ハード</th>
+                                                <th style="color: rgba(255, 255, 255, 0.555) !important">エクス</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="skills"></tbody>
+                                    </table>
                                     <div class="ui divider"></div>
                                     <table id="weapons-table" class="ui inverted unstackable table">
                                         <thead>

@@ -77,9 +77,9 @@ function initParameter(parameter, cthulhuSkill) {
     $("#param-san-indefinite")[0].innerText = `不定領域 ${parseInt(parameter.san * 0.8)}`;
 }
 function toSkillItem(skill) {
+    var fullname = skill.subname ? `${skill.name}(${skill.subname})` : skill.name;
     var value = skill.init + skill.job + skill.interest + skill.grow + skill.other;
-    var skillName = skill.subname ? `${skill.name}(${skill.subname})` : skill.name;
-    return `<div class="item"><div class="center aligned content"><div class="header">${skillName}</div><div class="ui center aligned description">${value}</div></div></div>`;
+    return `<tr><td>${fullname}</td><td>${value}</td><td>${Math.floor(value / 2)}</td><td>${Math.floor(value / 5)}</td></tr>`;
 }
 function toWeaponItem(weapon) {
     return `<tr><td>${weapon.name}</td><td>${weapon.rate}</td><td>${weapon.damage}</td><td>${weapon.range}</td><td>${weapon.attacks}</td><td>${weapon.elastic}</td><td>${weapon.failure}</td></tr>`;
