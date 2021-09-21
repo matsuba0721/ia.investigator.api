@@ -290,7 +290,7 @@ function override(investigator) {
         return this.edu + this.eduGrow;
     };
     investigator.parameter.getBld = function () {
-        var v = this.str + this.siz;
+        var v = this.str + this.strGrow + this.siz + this.sizGrow;
         if (v < 65) return -2;
         else if (v < 85) return -1;
         else if (v < 125) return 0;
@@ -305,7 +305,7 @@ function override(investigator) {
         }
     };
     investigator.parameter.getDb = function () {
-        var v = this.str + this.siz;
+        var v = this.str + this.strGrow + this.siz + this.sizGrow;
         if (v < 65) return -2;
         else if (v < 85) return -1;
         else if (v < 125) return 0;
@@ -321,14 +321,17 @@ function override(investigator) {
         }
     };
     investigator.parameter.getHp = function () {
-        return Math.floor((this.con + this.siz) / 10);
+        return Math.floor((this.con + this.conGrow + this.siz + this.sizGrow) / 10);
     };
     investigator.parameter.getMp = function () {
-        return Math.floor(this.pow / 5);
+        return Math.floor((this.pow + this.powGrow) / 5);
     };
     investigator.parameter.getMov = function () {
-        if (this.dex < this.siz && this.str < this.siz) return 7;
-        else if (this.dex > this.siz && this.str > this.siz) return 9;
+        var dex = this.dex + this.dexGrow;
+        var str = this.str + this.strGrow;
+        var siz = this.siz + this.sizGrow;
+        if (dex < siz && str < siz) return 7;
+        else if (dex > siz && str > siz) return 9;
         else return 8;
     };
     investigator.parameter.getJobPoint = function (jobPointsCalculation) {
@@ -388,7 +391,6 @@ function signIn(username, password, func) {
 }
 function signUp(username, password, passwordConfirm, hashedPassword, email, func) {
     try {
-        
         if (username.length < 8 || username.length > 16) {
             notifyFailure("ユーザー名は8文字以上16文字以下です。", "exclamation triangle");
             return;
