@@ -624,7 +624,7 @@
                         <button id="initial-skill-hide" class="ui icon toggle red button" style="padding: 8px 8px">
                             <i class="eye slash icon"></i>
                         </button>
-                        <button id="initial-skill-show" class="ui icon toggle blue button" style="padding: 8px 8px; display: none;">
+                        <button id="initial-skill-show" class="ui icon toggle blue button" style="padding: 8px 8px; display: none">
                             <i class="eye icon"></i>
                         </button>
                     </div>
@@ -927,7 +927,7 @@
         </div>
         <div class="ui small account modal">
             <div class="ui middle aligned center aligned grid">
-                <div class="column">
+                <div class="ui inverted column segment" style="padding: 0px 11px">
                     <form class="ui large form" autocomplete="on">
                         <div class="ui inverted stacked segment">
                             <div class="field">
@@ -939,7 +939,7 @@
                             <div class="field">
                                 <div class="ui left icon account-sign-up input">
                                     <i class="user icon"></i>
-                                    <input type="email" name="email" placeholder="E-Mail" />
+                                    <input type="email" name="email" placeholder="E-Mail(任意)" />
                                 </div>
                             </div>
                             <div class="field">
@@ -954,7 +954,8 @@
                                     <input type="password" name="password-confirm" placeholder="パスワード(確認)" />
                                 </div>
                             </div>
-                            <p style="text-align: right">※ユーザー名、パスワードは8文字以上16文字以下です。</p>
+                            <p class="ui account-sign-up" style="text-align: right">※ユーザー名は6文字以下です。</p>
+                            <p class="ui account-sign-up" style="text-align: right">※パスワードは8文字以上16文字以下です。</p>
                             <div id="account-sign-in-send" class="ui fluid large primary account-sign-in button">ログイン</div>
                             <div id="account-sign-up-send" class="ui fluid large positive account-sign-up button">新規登録</div>
                         </div>

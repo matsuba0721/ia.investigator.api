@@ -1,4 +1,75 @@
-function accountChanged(account) {}
+function accountChanged(account) {
+    getUserInvestigators(account, initInvestigator);
+}
+function initInvestigator(newInvestigators) {
+    investigators = newInvestigators;
+    var tagStatistics = [];
+    $("#investigators").empty();
+    $("#tags").empty();
+    for (var i = 0; i < investigators.length; i++) {
+        var investigator = investigators[i];
+        $("#investigators").append(toProfileCard(investigator.id, investigator.profile));
+        $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView);
+        $("#investigator-" + investigator.id + "-edit")[0].addEventListener("click", linkEdit);
+        $("#investigator-" + investigator.id + "-export")[0].addEventListener("click", exportInvestigator);
+        $("#investigator-" + investigator.id + "-share")[0].addEventListener("click", getShareUrl);
+        $("#investigator-" + investigator.id + "-delete")[0].addEventListener("click", deletetInvestigator);
+    }
+    localStorage.mypage_investigators = $("#investigators")[0].innerHTML;
+
+    for (var i = 0; i < investigators.length; i++) {
+        var investigator = investigators[i];
+        var tagNames = toTags(investigator.profile.tag);
+        for (var j = 0; j < tagNames.length; j++) {
+            var tagName = tagNames[j];
+            if (!tagName) continue;
+            var tag = tagStatistics.find((v) => v.name == tagName);
+            if (tag) tag.value += 1;
+            else tagStatistics.push({ name: tagName, value: 1 });
+        }
+    }
+
+    for (var i = 0; i < tagStatistics.length; i++) {
+        $("#tags").append(`<a class="ui label"><strong>${tagStatistics[i].name}</strong> ${tagStatistics[i].value}</a>`);
+    }
+
+    $("#tags a.label").on("click", function () {
+        $(this).toggleClass("blue");
+        var cards = [];
+        for (var i = 0; i < investigators.length; i++) {
+            var investigator = investigators[i];
+            cards.push({
+                id: "#investigator-" + investigator.id,
+                tag: investigator.profile.tag,
+                isDisplay: true,
+            });
+        }
+        var count = $("#tags a.blue.label").find("strong").length;
+        $("#tags a.blue.label")
+            .find("strong")
+            .each(function (index, element) {
+                var tag = element.innerText;
+                for (var i = 0; i < cards.length; i++) {
+                    var card = cards[i];
+                    if (card.tag.indexOf(tag) == -1) {
+                        card.isDisplay = false;
+                    }
+                }
+            });
+        for (var i = 0; i < cards.length; i++) {
+            var card = cards[i];
+            if (card.isDisplay) $(card.id).show();
+            else $(card.id).hide();
+        }
+    });
+
+    setTimeout(function () {
+        for (var i = 0; i < investigators.length; i++) {
+            var investigator = investigators[i];
+            $(`#profile-image-${investigator.id}`)[0].src = `img?v=${investigator.id}`;
+        }
+    }, 10);
+}
 function toProfileCard(id, profile) {
     var list = `<div class="ui large inverted horizontal list meta"><div class="item"><div class="content"><div class="header">職業</div><div class="description">${profile.job}</div></div></div><div class="item"><div class="content"><div class="header">年齢</div><div class="ui center aligned description">${profile.age}</div></div></div><div class="item"><div class="content"><div class="header">性別</div><div class="ui center aligned description">${profile.gender}</div></div></div></div>`;
     var content = `<div class="content" style="padding: 5px;"><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
@@ -98,72 +169,5 @@ window.onload = function () {
 
     $(".ui.pointing.menu .item").tab();
 
-    getUserInvestigators(account, function (newInvestigators) {
-        investigators = newInvestigators;
-        var tagStatistics = [];
-        $("#investigators").empty();
-        for (var i = 0; i < investigators.length; i++) {
-            var investigator = investigators[i];
-            $("#investigators").append(toProfileCard(investigator.id, investigator.profile));
-            $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView);
-            $("#investigator-" + investigator.id + "-edit")[0].addEventListener("click", linkEdit);
-            $("#investigator-" + investigator.id + "-export")[0].addEventListener("click", exportInvestigator);
-            $("#investigator-" + investigator.id + "-share")[0].addEventListener("click", getShareUrl);
-            $("#investigator-" + investigator.id + "-delete")[0].addEventListener("click", deletetInvestigator);
-        }
-        localStorage.mypage_investigators = $("#investigators")[0].innerHTML;
-
-        for (var i = 0; i < investigators.length; i++) {
-            var investigator = investigators[i];
-            var tagNames = toTags(investigator.profile.tag);
-            for (var j = 0; j < tagNames.length; j++) {
-                var tagName = tagNames[j];
-                if (!tagName) continue;
-                var tag = tagStatistics.find((v) => v.name == tagName);
-                if (tag) tag.value += 1;
-                else tagStatistics.push({ name: tagName, value: 1 });
-            }
-        }
-
-        for (var i = 0; i < tagStatistics.length; i++) {
-            $("#tags").append(`<a class="ui label"><strong>${tagStatistics[i].name}</strong> ${tagStatistics[i].value}</a>`);
-        }
-
-        $("#tags a.label").on("click", function () {
-            $(this).toggleClass("blue");
-            var cards = [];
-            for (var i = 0; i < investigators.length; i++) {
-                var investigator = investigators[i];
-                cards.push({
-                    id: "#investigator-" + investigator.id,
-                    tag: investigator.profile.tag,
-                    isDisplay: true,
-                });
-            }
-            var count = $("#tags a.blue.label").find("strong").length;
-            $("#tags a.blue.label")
-                .find("strong")
-                .each(function (index, element) {
-                    var tag = element.innerText;
-                    for (var i = 0; i < cards.length; i++) {
-                        var card = cards[i];
-                        if (card.tag.indexOf(tag) == -1) {
-                            card.isDisplay = false;
-                        }
-                    }
-                });
-            for (var i = 0; i < cards.length; i++) {
-                var card = cards[i];
-                if (card.isDisplay) $(card.id).show();
-                else $(card.id).hide();
-            }
-        });
-
-        setTimeout(function () {
-            for (var i = 0; i < investigators.length; i++) {
-                var investigator = investigators[i];
-                $(`#profile-image-${investigator.id}`)[0].src = `img?v=${investigator.id}`;
-            }
-        }, 10);
-    });
+    getUserInvestigators(account, initInvestigator);
 };

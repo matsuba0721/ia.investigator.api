@@ -174,7 +174,6 @@ app.post("/saveInvestigatorProfileImage", async function (request, response) {
         var image = request.body.image;
         var imgType = image.substring(5, image.indexOf(";"));
         var imgbyte = Buffer.from(image.replace("data:" + imgType + ";base64,", ""), "base64");
-        console.log(typeof imgbyte);
         response.send(await saveInvestigatorProfileImage(pool, request.body.token, request.body.id, imgType, imgbyte));
     } catch (error) {
         console.log(error);
@@ -221,13 +220,6 @@ function getPool() {
         connectionString: process.env.DATABASE_URL,
         ssl: { rejectUnauthorized: false },
     });
-    pool.queryError = function (error) {
-        response.send(toResultObject(100, error));
-    };
-    pool.queryEnd = function () {
-        console.log("切断");
-        this.end();
-    };
     return pool;
 }
 
@@ -465,7 +457,6 @@ async function getInvestigatorEditable(pool, token, id) {
     console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
-    console.log(rows);
     if (rows.length == 0) {
         return toResultObject(RES_OK, { editable: false });
     } else {
