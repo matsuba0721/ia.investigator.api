@@ -120,10 +120,10 @@ function initInitialSkills() {
         $("#skill-combat-table tr").show();
         $("#skill-survey-table tr").show();
         $("#skill-personal-table tr").show();
-        $("#skill-combat-conduct tr").show();
-        $("#skill-combat-transfer tr").show();
-        $("#skill-combat-knowledge tr").show();
-        $("#skill-combat-uncommon tr").show();
+        $("#skill-conduct-table tr").show();
+        $("#skill-transfer-table tr").show();
+        $("#skill-knowledge-table tr").show();
+        $("#skill-uncommon-table tr").show();
     });
 }
 function initExport() {
