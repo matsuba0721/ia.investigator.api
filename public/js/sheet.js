@@ -9,6 +9,152 @@ function accountChanged(account) {
         }
     });
 }
+function initRandamGenerateParameter() {
+    $("#randam-generate-parameter").on("click", function () {
+        ["str", "con", "pow", "dex", "app", "siz", "int", "edu", "luk"].forEach((param) => {
+            $("#start-randam-generate-parametor").prop("disabled", false);
+            $(`#${param}-randam-roll .dice`).each(function (index, element) {
+                element.src = `/images/dice0.png`;
+            });
+            $(`#${param}-randam-result`)[0].innerText = "0";
+        });
+        $(".ui.mini.generate.modal").modal({ duration: 200 }).modal("show");
+    });
+    $("#start-randam-generate-parametor").on("click", function () {
+        $("#str-randam-result")[0].innerText = "?";
+        $("#start-randam-generate-parametor").prop("disabled", true);
+        var rollTicks = 0;
+        var intervalId = setInterval(() => {
+            rollTicks += 1;
+            ["str", "con", "pow", "dex", "app", "siz", "int", "edu", "luk"].forEach((param) => {
+                var total = 0;
+                $(`#${param}-randam-roll .dice`).each(function (index, element) {
+                    var num = dice(6);
+                    element.src = `/images/dice${num}.png`;
+                    total += num * 5;
+                });
+                $(`#${param}-randam-result`)[0].innerText = total;
+            });
+            if (rollTicks > 10) {
+                $("#start-randam-generate-parametor").prop("disabled", false);
+                clearInterval(intervalId);
+            }
+        }, 50);
+    });
+    $("#set-randam-generate-parametor").on("click", function () {
+        var parameter = investigator.parameter;
+        parameter.str = parseInt($(`#str-randam-result`)[0].innerText);
+        parameter.con = parseInt($(`#con-randam-result`)[0].innerText);
+        parameter.pow = parseInt($(`#pow-randam-result`)[0].innerText);
+        parameter.dex = parseInt($(`#dex-randam-result`)[0].innerText);
+        parameter.app = parseInt($(`#app-randam-result`)[0].innerText);
+        parameter.siz = parseInt($(`#siz-randam-result`)[0].innerText);
+        parameter.int = parseInt($(`#int-randam-result`)[0].innerText);
+        parameter.edu = parseInt($(`#edu-randam-result`)[0].innerText);
+        parameter.luk = parseInt($(`#luk-randam-result`)[0].innerText);
+        parameter.san = parameter.pow;
+
+        parameter.strGrow = 0;
+        parameter.conGrow = 0;
+        parameter.sizGrow = 0;
+        parameter.dexGrow = 0;
+        parameter.appGrow = 0;
+        parameter.intGrow = 0;
+        parameter.powGrow = 0;
+        parameter.eduGrow = 0;
+        parameter.lukGrow = 0;
+        parameter.ideGrow = 0;
+        parameter.knwGrow = 0;
+        parameter.hpGrow = 0;
+        parameter.mpGrow = 0;
+
+        $("#param-str")[0].value = parameter.str;
+        $("#param-con")[0].value = parameter.con;
+        $("#param-pow")[0].value = parameter.pow;
+        $("#param-dex")[0].value = parameter.dex;
+        $("#param-app")[0].value = parameter.app;
+        $("#param-siz")[0].value = parameter.siz;
+        $("#param-int")[0].value = parameter.int;
+        $("#param-edu")[0].value = parameter.edu;
+        $("#param-luk")[0].value = parameter.luk;
+        $("#param-san")[0].value = parameter.san;
+        $("#param-str-grow")[0].value = parameter.strGrow;
+        $("#param-con-grow")[0].value = parameter.conGrow;
+        $("#param-pow-grow")[0].value = parameter.powGrow;
+        $("#param-dex-grow")[0].value = parameter.dexGrow;
+        $("#param-app-grow")[0].value = parameter.appGrow;
+        $("#param-siz-grow")[0].value = parameter.sizGrow;
+        $("#param-int-grow")[0].value = parameter.intGrow;
+        $("#param-edu-grow")[0].value = parameter.eduGrow;
+        $("#param-luk-grow")[0].value = parameter.lukGrow;
+        $("#param-ide-grow")[0].value = parameter.ideGrow;
+        $("#param-knw-grow")[0].value = parameter.knwGrow;
+        $("#param-hp-grow")[0].value = parameter.hpGrow;
+        $("#param-mp-grow")[0].value = parameter.mpGrow;
+
+        viewUpdate();
+        $(".ui.mini.generate.modal").modal({ duration: 200 }).modal("hide");
+    });
+}
+function initInitialSkills() {
+    $("#initial-skill-hide").on("click", function () {
+        for (var i = 0; i < investigator.skills.length; i++) {
+            skill = investigator.skills[i];
+            if (skill.job + skill.interest + skill.grow + skill.other > 0) {
+                $(`#skill-${skill.id}-row`).show();
+            } else {
+                $(`#skill-${skill.id}-row`).hide();
+            }
+        }
+
+        $("#initial-skill-hide").hide();
+        $("#initial-skill-show").show();
+    });
+    $("#initial-skill-show").on("click", function () {
+        $("#initial-skill-show").hide();
+        $("#initial-skill-hide").show();
+
+        $("#skill-combat-table tr").show();
+        $("#skill-survey-table tr").show();
+        $("#skill-personal-table tr").show();
+        $("#skill-combat-conduct tr").show();
+        $("#skill-combat-transfer tr").show();
+        $("#skill-combat-knowledge tr").show();
+        $("#skill-combat-uncommon tr").show();
+    });
+}
+function initExport() {
+    $("#investigator-export")[0].addEventListener("click", function (e) {
+        $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
+        $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");
+    });
+    $("#investigator-export-commands-copy")[0].addEventListener("click", function (e) {
+        writeClipboard($("#investigator-export-chatpalette")[0].value);
+    });
+
+    $("#investigator-export-commands-copy-ccfolia")[0].addEventListener("click", function (e) {
+        var ccfoliaInvestigator = getCcfoliaClipboardInvestigator(investigator);
+        writeClipboard(JSON.stringify(ccfoliaInvestigator));
+    });
+}
+function initDiceRoll() {
+    $("#dice-roll-1x100")[0].addEventListener("click", function (e) {
+        diceRoll(1, 100);
+    });
+    $("#dice-roll-1x10")[0].addEventListener("click", function (e) {
+        diceRoll(1, 10);
+    });
+    $("#dice-roll-1x6")[0].addEventListener("click", function (e) {
+        diceRoll(1, 6);
+    });
+    $("#dice-roll-2x6")[0].addEventListener("click", function (e) {
+        diceRoll(2, 6);
+    });
+    $("#dice-roll-3x6")[0].addEventListener("click", function (e) {
+        diceRoll(3, 6);
+    });
+}
+
 function initInvestigator(investigator) {
     initProfile(investigator.profile);
     initParameter(investigator.parameter);
@@ -233,60 +379,6 @@ function initParameter(parameter) {
     $("#param-mp-grow")[0].addEventListener("input", updateParameter);
     $("#param-san")[0].addEventListener("input", function (e) {
         investigator.parameter.san = parseInt($("#param-san")[0].value);
-        viewUpdate();
-    });
-
-    $("#randam-generate-parameter").on("click", function () {
-        var parameter = investigator.parameter;
-        parameter.str = (dice(6) + dice(6) + dice(6)) * 5;
-        parameter.con = (dice(6) + dice(6) + dice(6)) * 5;
-        parameter.pow = (dice(6) + dice(6) + dice(6)) * 5;
-        parameter.dex = (dice(6) + dice(6) + dice(6)) * 5;
-        parameter.app = (dice(6) + dice(6) + dice(6)) * 5;
-        parameter.siz = (dice(6) + dice(6) + 6) * 5;
-        parameter.int = (dice(6) + dice(6) + 6) * 5;
-        parameter.edu = (dice(6) + dice(6) + 6) * 5;
-        parameter.luk = (dice(6) + dice(6) + dice(6)) * 5;
-        parameter.san = parameter.pow;
-
-        parameter.strGrow = 0;
-        parameter.conGrow = 0;
-        parameter.sizGrow = 0;
-        parameter.dexGrow = 0;
-        parameter.appGrow = 0;
-        parameter.intGrow = 0;
-        parameter.powGrow = 0;
-        parameter.eduGrow = 0;
-        parameter.lukGrow = 0;
-        parameter.ideGrow = 0;
-        parameter.knwGrow = 0;
-        parameter.hpGrow = 0;
-        parameter.mpGrow = 0;
-
-        $("#param-str")[0].value = parameter.str;
-        $("#param-str-grow")[0].value = parameter.strGrow;
-        $("#param-con")[0].value = parameter.con;
-        $("#param-con-grow")[0].value = parameter.conGrow;
-        $("#param-pow")[0].value = parameter.pow;
-        $("#param-pow-grow")[0].value = parameter.powGrow;
-        $("#param-dex")[0].value = parameter.dex;
-        $("#param-dex-grow")[0].value = parameter.dexGrow;
-        $("#param-app")[0].value = parameter.app;
-        $("#param-app-grow")[0].value = parameter.appGrow;
-        $("#param-siz")[0].value = parameter.siz;
-        $("#param-siz-grow")[0].value = parameter.sizGrow;
-        $("#param-int")[0].value = parameter.int;
-        $("#param-int-grow")[0].value = parameter.intGrow;
-        $("#param-edu")[0].value = parameter.edu;
-        $("#param-edu-grow")[0].value = parameter.eduGrow;
-        $("#param-luk")[0].value = parameter.luk;
-        $("#param-luk-grow")[0].value = parameter.lukGrow;
-        $("#param-ide-grow")[0].value = parameter.ideGrow;
-        $("#param-knw-grow")[0].value = parameter.knwGrow;
-        $("#param-hp-grow")[0].value = parameter.hpGrow;
-        $("#param-mp-grow")[0].value = parameter.mpGrow;
-        $("#param-san")[0].value = parameter.san;
-
         viewUpdate();
     });
 }
@@ -905,32 +997,12 @@ function viewUpdate() {
 window.onload = function () {
     initSigns();
     initAccount(account);
+    initModal();
 
-    $("#initial-skill-hide").on("click", function () {
-        for (var i = 0; i < investigator.skills.length; i++) {
-            skill = investigator.skills[i];
-            if (skill.job + skill.interest + skill.grow + skill.other > 0) {
-                $(`#skill-${skill.id}-row`).show();
-            } else {
-                $(`#skill-${skill.id}-row`).hide();
-            }
-        }
-
-        $("#initial-skill-hide").hide();
-        $("#initial-skill-show").show();
-    });
-    $("#initial-skill-show").on("click", function () {
-        $("#initial-skill-show").hide();
-        $("#initial-skill-hide").show();
-
-        $("#skill-combat-table tr").show();
-        $("#skill-survey-table tr").show();
-        $("#skill-personal-table tr").show();
-        $("#skill-combat-conduct tr").show();
-        $("#skill-combat-transfer tr").show();
-        $("#skill-combat-knowledge tr").show();
-        $("#skill-combat-uncommon tr").show();
-    });
+    initRandamGenerateParameter();
+    initInitialSkills();
+    initExport();
+    initDiceRoll();
 
     $("#account-recommendation-close").on("click", function () {
         $("#account-recommendation").hide();
@@ -951,19 +1023,6 @@ window.onload = function () {
         window.location.href = "view?v=" + investigator.id;
     });
 
-    $("#investigator-export")[0].addEventListener("click", function (e) {
-        $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
-        $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");
-    });
-    $("#investigator-export-commands-copy")[0].addEventListener("click", function (e) {
-        writeClipboard($("#investigator-export-chatpalette")[0].value);
-    });
-
-    $("#investigator-export-commands-copy-ccfolia")[0].addEventListener("click", function (e) {
-        var ccfoliaInvestigator = getCcfoliaClipboardInvestigator(investigator);
-        writeClipboard(JSON.stringify(ccfoliaInvestigator));
-    });
-
     $("#investigator-save")[0].addEventListener("click", function (e) {
         if (account.id == 0) return;
         saveEditingInvestigator(account, investigator, function (newId) {
@@ -971,28 +1030,11 @@ window.onload = function () {
         });
     });
 
-    $("#dice-roll-1x100")[0].addEventListener("click", function (e) {
-        diceRoll(1, 100);
-    });
-    $("#dice-roll-1x10")[0].addEventListener("click", function (e) {
-        diceRoll(1, 10);
-    });
-    $("#dice-roll-1x6")[0].addEventListener("click", function (e) {
-        diceRoll(1, 6);
-    });
-    $("#dice-roll-2x6")[0].addEventListener("click", function (e) {
-        diceRoll(2, 6);
-    });
-    $("#dice-roll-3x6")[0].addEventListener("click", function (e) {
-        diceRoll(3, 6);
-    });
-
     $(".ui.dropdown").dropdown();
     $(".ui.accordion").accordion({ exclusive: false });
     $(".ui.pointing.menu .item").tab();
     $(".ui.rating").rating();
 
-    
     var paramV = parseInt(getParam("v"));
     getEditingInvestigator(account, paramV ? paramV : 0, function (newInvestigator) {
         investigator = newInvestigator;

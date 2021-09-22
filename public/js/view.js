@@ -110,6 +110,7 @@ function initBackstory(backstory) {
 window.onload = function () {
     initSigns();
     initAccount(account);
+    initModal();
 
     $("#investigator-share")[0].addEventListener("click", function (e) {
         var uri = new URL(window.location.href);

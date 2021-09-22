@@ -856,8 +856,141 @@
                 </div>
             </div>
         </footer>
+        <div class="ui mini generate modal">
+            <div class="ui top inverted attached segment">
+                <i class="modal close icon" style="position: absolute; top: 8px; right: 4px"></i>
+                <p style="font-size: x-large">能力値生成</p>
+            </div>
+            <div class="ui inverted attached segment">
+                <div class="ui inverted pointing secondary menu">
+                    <a class="item active" data-tab="randam">ランダム</a>
+                </div>
+                <div class="ui bottom attached tab inverted segment active" data-tab="randam">
+                    <div class="ui container">
+                        <button id="start-randam-generate-parametor" class="ui fluid positive button">ダイスロール</button>
+                    </div>
+                    <table class="ui inverted unstackable table" style="background-color: transparent">
+                        <thead>
+                            <tr></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>STR</td>
+                                <td>3D6</td>
+                                <td>
+                                    <div id="str-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="str-randam-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>CON</td>
+                                <td>3D6</td>
+                                <td>
+                                    <div id="con-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="con-randam-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>POW</td>
+                                <td>3D6</td>
+                                <td>
+                                    <div id="pow-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="pow-randam-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>DEX</td>
+                                <td>3D6</td>
+                                <td>
+                                    <div id="dex-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="dex-randam-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>APP</td>
+                                <td>3D6</td>
+                                <td>
+                                    <div id="app-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="app-randam-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>SIZ</td>
+                                <td>2D6+6</td>
+                                <td>
+                                    <div id="siz-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="siz-randam-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>INT</td>
+                                <td>2D6+6</td>
+                                <td>
+                                    <div id="int-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="int-randam-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>EDU</td>
+                                <td>2D6+6</td>
+                                <td>
+                                    <div id="edu-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="edu-randam-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>幸運</td>
+                                <td>3D6</td>
+                                <td>
+                                    <div id="luk-randam-roll" class="ui mini images">
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                        <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
+                                    </div>
+                                </td>
+                                <td id="luk-randam-result">?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="ui container">
+                        <button id="set-randam-generate-parametor" class="ui fluid primary button">能力値にセット</button>
+                    </div>
+                </div>
+                <div class="ui bottom attached tab inverted segment" data-tab="ccfolia" style="border-top: 1px solid #555"></div>
+            </div>
+        </div>
         <div class="ui tiny export modal">
             <div class="ui top inverted attached segment">
+                <i class="modal close icon" style="position: absolute; top: 8px; right: 4px"></i>
                 <p style="font-size: x-large">出力</p>
             </div>
             <div class="ui inverted attached segment">

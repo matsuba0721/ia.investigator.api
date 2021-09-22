@@ -45,7 +45,7 @@ async function sha256(str) {
 }
 function toTags(str) {
     str = emptyBy(str, "");
-    return str.replaceAll("　", " ").split(" ");
+    return str.replaceAll("、", " ").replaceAll(",", " ").replaceAll("　", " ").split(" ");
 }
 
 function initAccount(account) {
@@ -116,6 +116,11 @@ function initSigns() {
     $("#account-sign-up-switch")[0].addEventListener("click", function (e) {
         $(".ui.account-sign-in").hide();
         $(".ui.account-sign-up").show();
+    });
+}
+function initModal(){
+    $(".modal.close.icon").on("click", function () {
+        $(".ui.modal").modal("hide");
     });
 }
 function getAPIDomain() {

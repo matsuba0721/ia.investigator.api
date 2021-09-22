@@ -129,6 +129,7 @@ account = getLoginAccount();
 window.onload = function () {
     initSigns();
     initAccount(account);
+    initModal();
     if (localStorage.mypage_investigators) {
         $("#investigators").append(localStorage.mypage_investigators);
     }
