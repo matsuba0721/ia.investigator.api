@@ -118,7 +118,7 @@ function initSigns() {
         $(".ui.account-sign-up").show();
     });
 }
-function initModal(){
+function initModal() {
     $(".modal.close.icon").on("click", function () {
         $(".ui.modal").modal("hide");
     });
@@ -214,6 +214,9 @@ function getCcfoliaClipboardInvestigator(investigator) {
     var isInvisible = $("#investigator-export-commands-copy-ccfolia-invisible")[0].checked;
     var isHideStatus = $("#investigator-export-commands-copy-ccfolia-hideStatus")[0].checked;
 
+    var uri = new URL(window.location.href);
+    var sns = uri.origin + "/sns?v=" + investigator.id;
+
     var name = investigator.profile.name + (investigator.profile.kana ? `(${investigator.profile.kana})` : "");
 
     var hp = investigator.parameter.getHp() + investigator.parameter.hpGrow;
@@ -244,6 +247,7 @@ function getCcfoliaClipboardInvestigator(investigator) {
             hideStatus: isHideStatus,
             name: name,
             initiative: dex,
+            externalUrl: sns,
             status: [
                 { label: "HP", value: hp, max: hp },
                 { label: "MP", value: mp, max: mp },
