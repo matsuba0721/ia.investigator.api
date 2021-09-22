@@ -27,12 +27,15 @@ function initRandamGenerateParameter() {
         var intervalId = setInterval(() => {
             rollTicks += 1;
             ["str", "con", "pow", "dex", "app", "siz", "int", "edu", "luk"].forEach((param) => {
-                var total = 0;
+                var total = 0,
+                    lastindex = 0;
                 $(`#${param}-randam-roll .dice`).each(function (index, element) {
                     var num = dice(6);
                     element.src = `/images/dice${num}.png`;
                     total += num * 5;
+                    lastindex = index;
                 });
+                if (lastindex < 2) total += 30;
                 $(`#${param}-randam-result`)[0].innerText = total;
             });
             if (rollTicks > 10) {
