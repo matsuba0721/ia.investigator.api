@@ -992,7 +992,9 @@ window.onload = function () {
     $(".ui.pointing.menu .item").tab();
     $(".ui.rating").rating();
 
-    getEditingInvestigator(account, parseInt(getParam("v")), function (newInvestigator) {
+    
+    var paramV = parseInt(getParam("v"));
+    getEditingInvestigator(account, paramV ? paramV : 0, function (newInvestigator) {
         investigator = newInvestigator;
         initInvestigator(investigator);
         viewUpdate();
