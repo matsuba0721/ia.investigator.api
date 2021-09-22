@@ -621,6 +621,12 @@
                     <div class="ui right aligned segment" style="margin: -4px 0px 0px 0px; padding: 0.3em; background-color: transparent; position: sticky; top: 50px; z-index: 10">
                         <label id="param-job-points-usage" class="ui large blue basic label">職業P 0/0</label>
                         <label id="param-interest-points-usage" class="ui large blue basic label">興味P 0/0</label>
+                        <button id="initial-skill-hide" class="ui icon toggle red button" style="padding: 8px 8px">
+                            <i class="eye slash icon"></i>
+                        </button>
+                        <button id="initial-skill-show" class="ui icon toggle blue button" style="padding: 8px 8px; display: none;">
+                            <i class="eye icon"></i>
+                        </button>
                     </div>
                     <div class="ui inverted accordion">
                         <div class="active title">
@@ -841,7 +847,7 @@
                             <div class="ui mobile hidden" style="padding-left: 10px">出力</div>
                         </button>
                     </div>
-                    <div id="investigator-save-menu" class="item" style="display: none;">
+                    <div id="investigator-save-menu" class="item" style="display: none">
                         <button id="investigator-save" class="ui center aligned positive button" style="display: flex">
                             <i class="save icon" style="width: 3px"></i>
                             <div class="ui mobile hidden" style="padding-left: 10px">保存</div>
@@ -948,7 +954,7 @@
                                     <input type="password" name="password-confirm" placeholder="パスワード(確認)" />
                                 </div>
                             </div>
-                            <p  style="text-align: right">※ユーザー名、パスワードは8文字以上16文字以下です。</p>
+                            <p style="text-align: right">※ユーザー名、パスワードは8文字以上16文字以下です。</p>
                             <div id="account-sign-in-send" class="ui fluid large primary account-sign-in button">ログイン</div>
                             <div id="account-sign-up-send" class="ui fluid large positive account-sign-up button">新規登録</div>
                         </div>

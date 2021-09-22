@@ -898,13 +898,39 @@ function viewUpdate() {
         usageInterestPointsElement.removeClass("blue");
         usageInterestPointsElement.addClass("red");
     }
-    usageJobPointsElement[0].innerText = "職業P " + usageJobPoints + "/" + jobPoints;
-    usageInterestPointsElement[0].innerText = "興味P " + usageInterestPoints + "/" + interestPoints;
+    usageJobPointsElement[0].innerText = `職P ${usageJobPoints}/${jobPoints}[${jobPoints - usageJobPoints}]`;
+    usageInterestPointsElement[0].innerText = `興P ${usageInterestPoints}/${interestPoints}[${interestPoints - usageInterestPoints}]`;
 }
 
 window.onload = function () {
     initSigns();
     initAccount(account);
+
+    $("#initial-skill-hide").on("click", function () {
+        for (var i = 0; i < investigator.skills.length; i++) {
+            skill = investigator.skills[i];
+            if (skill.job + skill.interest + skill.grow + skill.other > 0) {
+                $(`#skill-${skill.id}-row`).show();
+            } else {
+                $(`#skill-${skill.id}-row`).hide();
+            }
+        }
+
+        $("#initial-skill-hide").hide();
+        $("#initial-skill-show").show();
+    });
+    $("#initial-skill-show").on("click", function () {
+        $("#initial-skill-show").hide();
+        $("#initial-skill-hide").show();
+
+        $("#skill-combat-table tr").show();
+        $("#skill-survey-table tr").show();
+        $("#skill-personal-table tr").show();
+        $("#skill-combat-conduct tr").show();
+        $("#skill-combat-transfer tr").show();
+        $("#skill-combat-knowledge tr").show();
+        $("#skill-combat-uncommon tr").show();
+    });
 
     $("#account-recommendation-close").on("click", function () {
         $("#account-recommendation").hide();
@@ -918,9 +944,9 @@ window.onload = function () {
 
     $("#investigator-share")[0].addEventListener("click", function (e) {
         var uri = new URL(window.location.href);
-        writeClipboard(uri.origin + "/sns?v="+getParam("v"))
+        writeClipboard(uri.origin + "/sns?v=" + getParam("v"));
     });
-    
+
     $("#investigator-view")[0].addEventListener("click", function (e) {
         window.location.href = "view?v=" + investigator.id;
     });
@@ -944,7 +970,7 @@ window.onload = function () {
             setParam("v", newId);
         });
     });
-    
+
     $("#dice-roll-1x100")[0].addEventListener("click", function (e) {
         diceRoll(1, 100);
     });
