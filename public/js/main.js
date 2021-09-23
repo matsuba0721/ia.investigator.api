@@ -236,7 +236,7 @@ function getCcfoliaClipboardInvestigator(investigator) {
     var knw = investigator.parameter.getKnw() + investigator.parameter.knwGrow;
     var bld = investigator.parameter.getBld();
     var db = investigator.parameter.getDb();
-    var mov = investigator.parameter.getMov();
+    var mov = investigator.parameter.getMov(investigator.profile.age);
 
     var ccfoliaInvestigator = {
         kind: "character",
@@ -335,13 +335,14 @@ function override(investigator) {
     investigator.parameter.getMp = function () {
         return Math.floor((this.pow + this.powGrow) / 5);
     };
-    investigator.parameter.getMov = function () {
+    investigator.parameter.getMov = function (age) {
         var dex = this.dex + this.dexGrow;
         var str = this.str + this.strGrow;
         var siz = this.siz + this.sizGrow;
-        if (dex < siz && str < siz) return 7;
-        else if (dex > siz && str > siz) return 9;
-        else return 8;
+        var correction = getAgeMovCorrection(age);
+        if (dex < siz && str < siz) return 7 - correction;
+        else if (dex > siz && str > siz) return 9 - correction;
+        else return 8 - correction;
     };
     investigator.parameter.getJobPoint = function (jobPointsCalculation) {
         var exp = emptyBy(jobPointsCalculation, "EDU×4")
@@ -364,6 +365,25 @@ function override(investigator) {
     };
 
     return investigator;
+}
+function getAgeMovCorrection(age) {
+    var num = parseInt(age);
+    if (!num) {
+        return 0;
+    }
+    if (num < 40) {
+        return 0;
+    } else if (num < 50) {
+        return 1;
+    } else if (num < 60) {
+        return 2;
+    } else if (num < 70) {
+        return 3;
+    } else if (num < 80) {
+        return 4;
+    } else {
+        return 5;
+    }
 }
 
 function getLoginAccount() {

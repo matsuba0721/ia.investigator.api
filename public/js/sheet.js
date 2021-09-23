@@ -914,7 +914,7 @@ function viewUpdate() {
     $("#param-san-indefinite")[0].innerText = parseInt(investigator.parameter.san * 0.8);
     $("#param-bld")[0].value = investigator.parameter.getBld();
     $("#param-db")[0].value = investigator.parameter.getDb();
-    $("#param-mov")[0].value = investigator.parameter.getMov();
+    $("#param-mov")[0].value = investigator.parameter.getMov(investigator.profile.age);
 
     var jobPoints = investigator.parameter.jobPoints + investigator.parameter.jobPointsCorrection;
     $("#param-job-points-present")[0].value = investigator.parameter.jobPoints;

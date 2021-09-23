@@ -3,7 +3,7 @@ function initInvestigator(investigator) {
     var cthulhuSkill = investigator.skills[37];
 
     initProfile(investigator.profile);
-    initParameter(investigator.parameter, cthulhuSkill);
+    initParameter(investigator.parameter, cthulhuSkill, investigator.profile.age);
 
     $("#profile-image")[0].src = investigator.getProfileImagePath();
 
@@ -61,7 +61,7 @@ function initProfile(profile) {
         }
     }
 }
-function initParameter(parameter, cthulhuSkill) {
+function initParameter(parameter, cthulhuSkill, age) {
     $("#param-str")[0].innerText = parameter.str + parameter.strGrow;
     $("#param-con")[0].innerText = parameter.con + parameter.conGrow;
     $("#param-pow")[0].innerText = parameter.pow + parameter.powGrow;
@@ -73,14 +73,11 @@ function initParameter(parameter, cthulhuSkill) {
     $("#param-luk")[0].innerText = parameter.luk + parameter.lukGrow;
     $("#param-ide")[0].innerText = parameter.getIde() + parameter.ideGrow;
     $("#param-knw")[0].innerText = parameter.getKnw() + parameter.knwGrow;
-    $("#param-bld")[0].innerText = parameter.getBld();
-    $("#param-db")[0].innerText = parameter.getDb();
-    $("#param-mov")[0].innerText = parameter.getMov();
     $("#param-hp")[0].innerText = `HP ${parameter.getHp() + parameter.hpGrow}`;
     $("#param-mp")[0].innerText = `MP ${parameter.getMp() + parameter.mpGrow}`;
     $("#param-bld")[0].innerText = `BLD ${parameter.getBld()}`;
     $("#param-db")[0].innerText = `DB ${parameter.getDb()}`;
-    $("#param-mov")[0].innerText = `MOV ${parameter.getMov()}`;
+    $("#param-mov")[0].innerText = `MOV ${parameter.getMov(age)}`;
     var limit = 99 - (cthulhuSkill.init + cthulhuSkill.job + cthulhuSkill.interest + cthulhuSkill.grow + cthulhuSkill.other);
     $("#param-san")[0].innerText = `SAN ${parameter.san}/${limit}`;
     $("#param-san-indefinite")[0].innerText = `不定領域 ${parseInt(parameter.san * 0.8)}`;
