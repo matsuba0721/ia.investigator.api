@@ -482,7 +482,7 @@ async function getInvestigator(pool, id) {
     }
     return toResultObject(RES_OK, {
         id: row.id,
-        isHidden: row.isHidden == 0 ? false : true,
+        isHidden: (row.ishidden == 0 ? false : true),
         profile: row.profile,
         parameter: JSON.parse(row.parameter),
         skills: JSON.parse(row.skills),
@@ -572,7 +572,7 @@ async function getUserInvestigators(pool, token) {
         var row = rows[i];
         investigators.push({
             id: row.id,
-            isHidden: row.isHidden == 0 ? false : true,
+            isHidden: row.ishidden == 0 ? false : true,
             profile: row.profile,
         });
     }

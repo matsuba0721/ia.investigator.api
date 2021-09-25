@@ -8,6 +8,7 @@ function initInvestigator(newInvestigators) {
     $("#tags").empty();
     for (var i = 0; i < investigators.length; i++) {
         var investigator = investigators[i];
+        console.log(investigator.isHidden);
         $("#investigators").append(toProfileCard(investigator.id, investigator.isHidden, investigator.profile));
         $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView);
         $("#investigator-" + investigator.id + "-edit")[0].addEventListener("click", linkEdit);

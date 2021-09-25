@@ -262,9 +262,10 @@ function initInvestigator(investigator) {
         investigator.memo = $("#memo")[0].value;
     });
 
+    console.log(investigator.isHidden);
     $("#isHidden")[0].checked = investigator.isHidden;
     $("#isHidden")[0].addEventListener("change", function (e) {
-        investigator.isHedden = $("#isHidden")[0].checked ? 1 : 0;
+        investigator.isHidden = $("#isHidden")[0].checked;
     });
 }
 function initProfile(profile) {
