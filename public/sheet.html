@@ -879,11 +879,12 @@
             </div>
             <div class="ui inverted attached segment">
                 <div class="ui inverted pointing secondary menu">
-                    <a class="item active" data-tab="randam">ランダム</a>
+                    <a class="item active" data-tab="standard">基本</a>
+                    <a class="item" data-tab="custom">カスタム</a>
                 </div>
-                <div class="ui bottom attached tab inverted segment active" data-tab="randam">
+                <div class="ui top attached tab inverted segment active" data-tab="standard">
                     <div class="ui container">
-                        <button id="start-randam-generate-parametor" class="ui fluid positive button">ダイスロール</button>
+                        <button id="start-standard-generate-parametor" class="ui fluid positive button">ダイスロール</button>
                     </div>
                     <table class="ui inverted unstackable table" style="background-color: transparent">
                         <thead>
@@ -894,111 +895,250 @@
                                 <td>STR</td>
                                 <td>3D6</td>
                                 <td>
-                                    <div id="str-randam-roll" class="ui mini images">
+                                    <div id="str-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="str-randam-result">?</td>
+                                <td id="str-standard-result">?</td>
                             </tr>
                             <tr>
                                 <td>CON</td>
                                 <td>3D6</td>
                                 <td>
-                                    <div id="con-randam-roll" class="ui mini images">
+                                    <div id="con-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="con-randam-result">?</td>
+                                <td id="con-standard-result">?</td>
                             </tr>
                             <tr>
                                 <td>POW</td>
                                 <td>3D6</td>
                                 <td>
-                                    <div id="pow-randam-roll" class="ui mini images">
+                                    <div id="pow-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="pow-randam-result">?</td>
+                                <td id="pow-standard-result">?</td>
                             </tr>
                             <tr>
                                 <td>DEX</td>
                                 <td>3D6</td>
                                 <td>
-                                    <div id="dex-randam-roll" class="ui mini images">
+                                    <div id="dex-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="dex-randam-result">?</td>
+                                <td id="dex-standard-result">?</td>
                             </tr>
                             <tr>
                                 <td>APP</td>
                                 <td>3D6</td>
                                 <td>
-                                    <div id="app-randam-roll" class="ui mini images">
+                                    <div id="app-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="app-randam-result">?</td>
+                                <td id="app-standard-result">?</td>
                             </tr>
                             <tr>
                                 <td>SIZ</td>
                                 <td>2D6+6</td>
                                 <td>
-                                    <div id="siz-randam-roll" class="ui mini images">
+                                    <div id="siz-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="siz-randam-result">?</td>
+                                <td id="siz-standard-result">?</td>
                             </tr>
                             <tr>
                                 <td>INT</td>
                                 <td>2D6+6</td>
                                 <td>
-                                    <div id="int-randam-roll" class="ui mini images">
+                                    <div id="int-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="int-randam-result">?</td>
+                                <td id="int-standard-result">?</td>
                             </tr>
                             <tr>
                                 <td>EDU</td>
                                 <td>2D6+6</td>
                                 <td>
-                                    <div id="edu-randam-roll" class="ui mini images">
+                                    <div id="edu-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="edu-randam-result">?</td>
+                                <td id="edu-standard-result">?</td>
                             </tr>
                             <tr>
                                 <td>幸運</td>
                                 <td>3D6</td>
                                 <td>
-                                    <div id="luk-randam-roll" class="ui mini images">
+                                    <div id="luk-standard-roll" class="ui mini images">
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                         <img class="ui dice image" src="/images/dice0.png" style="margin: 1px" />
                                     </div>
                                 </td>
-                                <td id="luk-randam-result">?</td>
+                                <td id="luk-standard-result">?</td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="ui container">
-                        <button id="set-randam-generate-parametor" class="ui fluid primary button">能力値にセット</button>
+                        <button id="set-standard-generate-parametor" class="ui fluid primary button">能力値にセット</button>
+                    </div>
+                </div>
+                <div class="ui top attached tab inverted segment" data-tab="custom">
+                    <div class="ui container">
+                        <button id="start-custom-generate-parametor" class="ui fluid positive button">ダイスロール</button>
+                    </div>
+                    <table class="ui inverted unstackable table" style="background-color: transparent">
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td>STR</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="str-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="str-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="str-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td style="width: 30%">
+                                    <div class="ui fluid input"><input id="str-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="str-custom-result" style="width: 2em">?</td>
+                            </tr>
+                            <tr>
+                                <td>CON</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="con-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="con-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="con-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input"><input id="con-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="con-custom-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>POW</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="pow-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="pow-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="pow-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input"><input id="pow-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="pow-custom-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>DEX</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="dex-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="dex-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="dex-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input"><input id="dex-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="dex-custom-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>APP</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="app-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="app-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="app-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input"><input id="app-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="app-custom-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>SIZ</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="siz-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="siz-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="siz-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input"><input id="siz-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="siz-custom-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>INT</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="int-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="int-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="int-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input"><input id="int-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="int-custom-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>EDU</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="edu-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="edu-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="edu-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input"><input id="edu-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="edu-custom-result">?</td>
+                            </tr>
+                            <tr>
+                                <td>幸運</td>
+                                <td>
+                                    <div class="ui input" style="width: 1.4em"><input id="luk-custom-dice-count" class="no-spin" min="0" type="number" /></div>
+                                    D
+                                    <div class="ui input" style="width: 1.4em"><input id="luk-custom-dice-number" class="no-spin" min="0" type="number" /></div>
+                                    +
+                                    <div class="ui input" style="width: 1.4em"><input id="luk-custom-dice-correction" class="no-spin" min="0" type="number" /></div>
+                                </td>
+                                <td>
+                                    <div class="ui fluid input"><input id="luk-custom-dice-console" class="no-spin" min="0" type="text" disabled /></div>
+                                </td>
+                                <td id="luk-custom-result">?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="ui container">
+                        <button id="set-custom-generate-parametor" class="ui fluid primary button">能力値にセット</button>
                     </div>
                 </div>
                 <div class="ui bottom attached tab inverted segment" data-tab="ccfolia" style="border-top: 1px solid #555"></div>

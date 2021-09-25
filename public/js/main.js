@@ -127,6 +127,17 @@ function getAPIDomain() {
     return "http://localhost:5000/";
 }
 
+function notifyProcess(text, icon) {
+    $.uiAlert({
+        textHead: "Processing…",
+        text: text,
+        bgcolor: "#21ba45",
+        textcolor: "#fff",
+        position: "top-right",
+        icon: icon + " icon",
+        time: 1,
+    });
+}
 function notifySucces(text, icon) {
     $.uiAlert({
         textHead: "Succes!",
@@ -557,6 +568,7 @@ function saveEditingInvestigator(account, investigator, func) {
         request.ontimeout = function () {
             notifyFailure("保存に失敗しました。", "exclamation triangle");
         };
+        notifyProcess("保存中…", "save");
         request.onload = function () {
             var data = this.response;
             if (data.code == 0) {

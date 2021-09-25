@@ -110,6 +110,9 @@ div.ui.center.aligned {
 .ui.input > input[type="number"] {
     text-align: right;
 }
+.ui.input > .mini{
+    width: 1.8em;
+}
 
 .ui.input > input:disabled {
     color: whitesmoke;

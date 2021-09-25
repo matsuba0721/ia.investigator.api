@@ -12,92 +12,128 @@ function accountChanged(account) {
 function initRandamGenerateParameter() {
     $("#randam-generate-parameter").on("click", function () {
         ["str", "con", "pow", "dex", "app", "siz", "int", "edu", "luk"].forEach((param) => {
-            $("#start-randam-generate-parametor").prop("disabled", false);
-            $(`#${param}-randam-roll .dice`).each(function (index, element) {
+            $("#start-standard-generate-parametor").prop("disabled", false);
+            $(`#${param}-standard-roll .dice`).each(function (index, element) {
                 element.src = `/images/dice0.png`;
             });
-            $(`#${param}-randam-result`)[0].innerText = "0";
+            $(`#${param}-standard-result`)[0].innerText = "0";
+
+            $("#start-custom-generate-parametor").prop("disabled", false);
+            $(`#${param}-custom-dice-count`)[0].value = 3;
+            $(`#${param}-custom-dice-number`)[0].value = 6;
+            $(`#${param}-custom-dice-correction`)[0].value = 0;
+            $(`#${param}-custom-result`)[0].innerText = "0";
         });
         $(".ui.mini.generate.modal").modal({ duration: 200 }).modal("show");
     });
-    $("#start-randam-generate-parametor").on("click", function () {
-        $("#str-randam-result")[0].innerText = "?";
-        $("#start-randam-generate-parametor").prop("disabled", true);
+    $("#start-standard-generate-parametor").on("click", function () {
+        $("#start-standard-generate-parametor").prop("disabled", true);
         var rollTicks = 0;
         var intervalId = setInterval(() => {
             rollTicks += 1;
             ["str", "con", "pow", "dex", "app", "siz", "int", "edu", "luk"].forEach((param) => {
                 var total = 0,
                     lastindex = 0;
-                $(`#${param}-randam-roll .dice`).each(function (index, element) {
+                $(`#${param}-standard-roll .dice`).each(function (index, element) {
                     var num = dice(6);
                     element.src = `/images/dice${num}.png`;
                     total += num * 5;
                     lastindex = index;
                 });
                 if (lastindex < 2) total += 30;
-                $(`#${param}-randam-result`)[0].innerText = total;
+                $(`#${param}-standard-result`)[0].innerText = total;
             });
             if (rollTicks > 10) {
-                $("#start-randam-generate-parametor").prop("disabled", false);
+                $("#start-standard-generate-parametor").prop("disabled", false);
                 clearInterval(intervalId);
             }
         }, 50);
     });
-    $("#set-randam-generate-parametor").on("click", function () {
-        var parameter = investigator.parameter;
-        parameter.str = parseInt($(`#str-randam-result`)[0].innerText);
-        parameter.con = parseInt($(`#con-randam-result`)[0].innerText);
-        parameter.pow = parseInt($(`#pow-randam-result`)[0].innerText);
-        parameter.dex = parseInt($(`#dex-randam-result`)[0].innerText);
-        parameter.app = parseInt($(`#app-randam-result`)[0].innerText);
-        parameter.siz = parseInt($(`#siz-randam-result`)[0].innerText);
-        parameter.int = parseInt($(`#int-randam-result`)[0].innerText);
-        parameter.edu = parseInt($(`#edu-randam-result`)[0].innerText);
-        parameter.luk = parseInt($(`#luk-randam-result`)[0].innerText);
-        parameter.san = parameter.pow;
-
-        parameter.strGrow = 0;
-        parameter.conGrow = 0;
-        parameter.sizGrow = 0;
-        parameter.dexGrow = 0;
-        parameter.appGrow = 0;
-        parameter.intGrow = 0;
-        parameter.powGrow = 0;
-        parameter.eduGrow = 0;
-        parameter.lukGrow = 0;
-        parameter.ideGrow = 0;
-        parameter.knwGrow = 0;
-        parameter.hpGrow = 0;
-        parameter.mpGrow = 0;
-
-        $("#param-str")[0].value = parameter.str;
-        $("#param-con")[0].value = parameter.con;
-        $("#param-pow")[0].value = parameter.pow;
-        $("#param-dex")[0].value = parameter.dex;
-        $("#param-app")[0].value = parameter.app;
-        $("#param-siz")[0].value = parameter.siz;
-        $("#param-int")[0].value = parameter.int;
-        $("#param-edu")[0].value = parameter.edu;
-        $("#param-luk")[0].value = parameter.luk;
-        $("#param-san")[0].value = parameter.san;
-        $("#param-str-grow")[0].value = parameter.strGrow;
-        $("#param-con-grow")[0].value = parameter.conGrow;
-        $("#param-pow-grow")[0].value = parameter.powGrow;
-        $("#param-dex-grow")[0].value = parameter.dexGrow;
-        $("#param-app-grow")[0].value = parameter.appGrow;
-        $("#param-siz-grow")[0].value = parameter.sizGrow;
-        $("#param-int-grow")[0].value = parameter.intGrow;
-        $("#param-edu-grow")[0].value = parameter.eduGrow;
-        $("#param-luk-grow")[0].value = parameter.lukGrow;
-        $("#param-ide-grow")[0].value = parameter.ideGrow;
-        $("#param-knw-grow")[0].value = parameter.knwGrow;
-        $("#param-hp-grow")[0].value = parameter.hpGrow;
-        $("#param-mp-grow")[0].value = parameter.mpGrow;
-
-        viewUpdate();
-        $(".ui.mini.generate.modal").modal({ duration: 200 }).modal("hide");
+    $("#set-standard-generate-parametor").on("click", function () {
+        setRandamGeneratedParameter("standard");
     });
+    $("#start-custom-generate-parametor").on("click", function () {
+        $("#start-custom-generate-parametor").prop("disabled", true);
+        var rollTicks = 0;
+        var intervalId = setInterval(() => {
+            rollTicks += 1;
+            ["str", "con", "pow", "dex", "app", "siz", "int", "edu", "luk"].forEach((param) => {
+                var diceCount = parseInt($(`#${param}-custom-dice-count`)[0].value);
+                var diceNumber = parseInt($(`#${param}-custom-dice-number`)[0].value);
+                var diceCorrection = parseInt($(`#${param}-custom-dice-correction`)[0].value);
+                var total = diceCorrection * 5;
+                var results = [];
+                for (var i = 0; i < diceCount; i++) {
+                    var num = dice(diceNumber);
+                    results.push(num);
+                    total += num * 5;
+                }
+                $(`#${param}-custom-dice-console`)[0].value = `[${results.join(",")}]+${diceCorrection}`;
+                $(`#${param}-custom-result`)[0].innerText = total;
+            });
+            if (rollTicks > 10) {
+                $("#start-custom-generate-parametor").prop("disabled", false);
+                clearInterval(intervalId);
+            }
+        }, 50);
+    });
+    $("#set-custom-generate-parametor").on("click", function () {
+        setRandamGeneratedParameter("custom");
+    });
+}
+function setRandamGeneratedParameter(tabName) {
+    var parameter = investigator.parameter;
+    parameter.str = parseInt($(`#str-${tabName}-result`)[0].innerText);
+    parameter.con = parseInt($(`#con-${tabName}-result`)[0].innerText);
+    parameter.pow = parseInt($(`#pow-${tabName}-result`)[0].innerText);
+    parameter.dex = parseInt($(`#dex-${tabName}-result`)[0].innerText);
+    parameter.app = parseInt($(`#app-${tabName}-result`)[0].innerText);
+    parameter.siz = parseInt($(`#siz-${tabName}-result`)[0].innerText);
+    parameter.int = parseInt($(`#int-${tabName}-result`)[0].innerText);
+    parameter.edu = parseInt($(`#edu-${tabName}-result`)[0].innerText);
+    parameter.luk = parseInt($(`#luk-${tabName}-result`)[0].innerText);
+    parameter.san = parameter.pow;
+
+    parameter.strGrow = 0;
+    parameter.conGrow = 0;
+    parameter.sizGrow = 0;
+    parameter.dexGrow = 0;
+    parameter.appGrow = 0;
+    parameter.intGrow = 0;
+    parameter.powGrow = 0;
+    parameter.eduGrow = 0;
+    parameter.lukGrow = 0;
+    parameter.ideGrow = 0;
+    parameter.knwGrow = 0;
+    parameter.hpGrow = 0;
+    parameter.mpGrow = 0;
+
+    $("#param-str")[0].value = parameter.str;
+    $("#param-con")[0].value = parameter.con;
+    $("#param-pow")[0].value = parameter.pow;
+    $("#param-dex")[0].value = parameter.dex;
+    $("#param-app")[0].value = parameter.app;
+    $("#param-siz")[0].value = parameter.siz;
+    $("#param-int")[0].value = parameter.int;
+    $("#param-edu")[0].value = parameter.edu;
+    $("#param-luk")[0].value = parameter.luk;
+    $("#param-san")[0].value = parameter.san;
+    $("#param-str-grow")[0].value = parameter.strGrow;
+    $("#param-con-grow")[0].value = parameter.conGrow;
+    $("#param-pow-grow")[0].value = parameter.powGrow;
+    $("#param-dex-grow")[0].value = parameter.dexGrow;
+    $("#param-app-grow")[0].value = parameter.appGrow;
+    $("#param-siz-grow")[0].value = parameter.sizGrow;
+    $("#param-int-grow")[0].value = parameter.intGrow;
+    $("#param-edu-grow")[0].value = parameter.eduGrow;
+    $("#param-luk-grow")[0].value = parameter.lukGrow;
+    $("#param-ide-grow")[0].value = parameter.ideGrow;
+    $("#param-knw-grow")[0].value = parameter.knwGrow;
+    $("#param-hp-grow")[0].value = parameter.hpGrow;
+    $("#param-mp-grow")[0].value = parameter.mpGrow;
+
+    viewUpdate();
+    $(".ui.mini.generate.modal").modal({ duration: 200 }).modal("hide");
 }
 function initInitialSkills() {
     $("#initial-skill-hide").on("click", function () {
@@ -262,7 +298,6 @@ function initInvestigator(investigator) {
         investigator.memo = $("#memo")[0].value;
     });
 
-    console.log(investigator.isHidden);
     $("#isHidden")[0].checked = investigator.isHidden;
     $("#isHidden")[0].addEventListener("change", function (e) {
         investigator.isHidden = $("#isHidden")[0].checked;
@@ -885,10 +920,10 @@ function gatRandomTreasuredPossessions() {
 }
 function getRandomTraits() {
     var traits = [
-        "関大(チップをはずむ、困っている人をいつも助い",
-        "動物に懐かれやすい(猫好き、農場育ち、馬に性 慈善家など)。",
+        "寛大(チップをはずむ、困っている人をいつも助ける、慈善家など)。",
+        "動物に懐かれやすい(猫好き、農場育ち、馬に懐かれやすいなど)。",
         "夢見る人(想像が飛躍しがち、空想家、非常に創造的など）。",
-        "快楽主義者(パーティーが生きがい、陽気に酔う行き急ぐなど)。",
+        "快楽主義者(パーティーが生きがい、陽気に酔う生き急ぐなど)。",
         "ギャンプラーおよび冒険家(ポーカーフェイス、何でも一度試してみる、危険と隣り合わせの人生など)。",
         "料理が上手(素晴らしいケーキを焼く、ほとんど何もないところから食事を作る、舌が肥えているなど)。",
         "色男/男たらし(人当たりが良い、魅力的な声、魅惑的な目など)。",
