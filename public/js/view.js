@@ -8,15 +8,31 @@ function initInvestigator(investigator) {
     $("#profile-image")[0].src = investigator.getProfileImagePath();
 
     var skills = [];
+    var usageJobPoints = 0;
+    var usageInterestPoints = 0;
+    var jobPoints = investigator.parameter.jobPoints + investigator.parameter.jobPointsCorrection;
+    var interestPoints = investigator.parameter.getInterestPoint() + investigator.parameter.interestPointsCorrection;
     for (var i = 0; i < investigator.skills.length; i++) {
         var skill = investigator.skills[i];
         if (skill.job + skill.interest + skill.grow + skill.other == 0) continue;
+        usageJobPoints += skill.job;
+        usageInterestPoints += skill.interest;
+        var value = skill.init + skill.job + skill.interest + skill.grow + skill.other;
+        var key = value * (skill.job ? 100 : 1);
         skills.push({
             fullname: skill.subname ? `${skill.name}(${skill.subname})` : skill.name,
-            value: skill.init + skill.job + skill.interest + skill.grow + skill.other
+            value: value,
+            job: skill.job,
+            interest: skill.interest,
+            grow: skill.grow,
+            key: key,
         });
     }
-    skills = skills.sort(function(x,y){ return y.value - x.value; });
+    skills = skills.sort(function (x, y) {
+        return y.key- x.key;
+    });
+    $("#job-points-usage")[0].innerText = `職業 ${usageJobPoints}/${jobPoints}`;
+    $("#interest-points-usage")[0].innerText = `興味 ${usageInterestPoints}/${interestPoints}`;
     for (var i = 0; i < skills.length; i++) {
         var skill = skills[i];
         $("#skills").append(toSkillItem(skill));
@@ -83,7 +99,11 @@ function initParameter(parameter, cthulhuSkill, age) {
     $("#param-san-indefinite")[0].innerText = `不定領域 ${parseInt(parameter.san * 0.8)}`;
 }
 function toSkillItem(skill) {
-    return `<tr><td>${skill.fullname}</td><td>${skill.value}</td><td>${Math.floor(skill.value / 2)}</td><td>${Math.floor(skill.value / 5)}</td></tr>`;
+    var job = skill.job ? `<div class="ui basic blue pinned label">職</div>` : "";
+    var interest = skill.interest ? `<div class="ui basic yellow pinned label">興</div>` : "";
+    var grow = skill.grow ? `<div class="ui basic green pinned label">成</div>` : "";
+    var labels = `<div class="ui labels" style="text-align: left;">${job}${interest}${grow}</div>`;
+    return `<tr><td>${skill.fullname}</td><td>${skill.value}</td><td>${Math.floor(skill.value / 2)}</td><td>${Math.floor(skill.value / 5)}</td><td>${labels}</td></tr>`;
 }
 function toWeaponItem(weapon) {
     return `<tr><td>${weapon.name}</td><td>${weapon.rate}</td><td>${weapon.damage}</td><td>${weapon.range}</td><td>${weapon.attacks}</td><td>${weapon.elastic}</td><td>${weapon.failure}</td></tr>`;
@@ -111,13 +131,13 @@ window.onload = function () {
 
     $("#investigator-share")[0].addEventListener("click", function (e) {
         var uri = new URL(window.location.href);
-        writeClipboard(uri.origin + "/sns?v="+getParam("v"))
+        writeClipboard(uri.origin + "/sns?v=" + getParam("v"));
     });
 
     $("#investigator-edit")[0].addEventListener("click", function (e) {
         window.location.href = "sheet?v=" + investigator.id;
     });
-    
+
     $("#investigator-export")[0].addEventListener("click", function (e) {
         $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
         $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");
