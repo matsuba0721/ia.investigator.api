@@ -261,6 +261,11 @@ function initInvestigator(investigator) {
     $("#memo")[0].addEventListener("input", function (e) {
         investigator.memo = $("#memo")[0].value;
     });
+
+    $("#isHidden")[0].checked = investigator.isHidden;
+    $("#isHidden")[0].addEventListener("change", function (e) {
+        investigator.isHedden = $("#isHidden")[0].checked ? 1 : 0;
+    });
 }
 function initProfile(profile) {
     $("#profile-name")[0].value = profile.name;

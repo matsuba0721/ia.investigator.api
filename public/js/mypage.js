@@ -8,7 +8,7 @@ function initInvestigator(newInvestigators) {
     $("#tags").empty();
     for (var i = 0; i < investigators.length; i++) {
         var investigator = investigators[i];
-        $("#investigators").append(toProfileCard(investigator.id, investigator.profile));
+        $("#investigators").append(toProfileCard(investigator.id, investigator.isHidden, investigator.profile));
         $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView);
         $("#investigator-" + investigator.id + "-edit")[0].addEventListener("click", linkEdit);
         $("#investigator-" + investigator.id + "-export")[0].addEventListener("click", exportInvestigator);
@@ -70,9 +70,10 @@ function initInvestigator(newInvestigators) {
         }
     }, 10);
 }
-function toProfileCard(id, profile) {
+function toProfileCard(id, isHidden, profile) {
     var list = `<div class="ui large inverted horizontal list meta"><div class="item"><div class="content"><div class="header">職業</div><div class="description">${profile.job}</div></div></div><div class="item"><div class="content"><div class="header">年齢</div><div class="ui center aligned description">${profile.age}</div></div></div><div class="item"><div class="content"><div class="header">性別</div><div class="ui center aligned description">${profile.gender}</div></div></div></div>`;
-    var content = `<div class="content" style="padding: 5px;"><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
+    var hiddenlabel = isHidden ? `<div class="ui right floated basic red label">非公開</div>` : "";
+    var content = `<div class="content" style="padding: 5px;"><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" />${hiddenlabel}<div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
     var extraContent = `
     <div class="ui right aligned　extra content" style="padding: 5px;">
     <div class="ui buttons">
@@ -102,7 +103,7 @@ function exportInvestigator(e) {
     var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-export/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
-    getEditingInvestigator(account, id,  function (newInvestigator) {
+    getEditingInvestigator(account, id, function (newInvestigator) {
         investigator = newInvestigator;
         $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");
         $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
@@ -119,9 +120,8 @@ function deletetInvestigator(e) {
     var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-delete/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
-    deleteTargetInvestigatorId=id
+    deleteTargetInvestigatorId = id;
     $(".ui.mini.delete.modal").modal({ duration: 200 }).modal("show");
-    
 }
 
 account = getLoginAccount();
@@ -156,10 +156,9 @@ window.onload = function () {
         writeClipboard(JSON.stringify(ccfoliaInvestigator));
     });
 
-    
     $("#investigator-delete-ok")[0].addEventListener("click", function (e) {
-        deleteInvestigator(account,deleteTargetInvestigatorId,function(deletedId){
-            console.log("#investigator-" + deletedId)
+        deleteInvestigator(account, deleteTargetInvestigatorId, function (deletedId) {
+            console.log("#investigator-" + deletedId);
             $("#investigator-" + deletedId).remove();
             $(".ui.mini.delete.modal").modal({ duration: 200 }).modal("hide");
         });
