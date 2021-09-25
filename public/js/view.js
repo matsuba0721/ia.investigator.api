@@ -112,17 +112,17 @@ function toEquipItem(equip) {
     return `<tr><td>${equip.name}</td><td>${equip.price}</td><td>${equip.quantity}</td><td>${equip.price * equip.quantity}</td><td>${equip.description}</td></tr>`;
 }
 function initBackstory(backstory) {
-    if(!backstory.personalDescriptionkeyed) $("#backstory-key-personalDescription").hide();
+    if(backstory.personalDescriptionkeyed) $("#backstory-key-personalDescription").show();
     $("#backstory-personalDescription")[0].innerText = backstory.personalDescription;
-    if(!backstory.ideologyOrBeliefskeyed) $("#backstory-key-ideologyOrBeliefs").hide();
+    if(backstory.ideologyOrBeliefskeyed) $("#backstory-key-ideologyOrBeliefs").show();
     $("#backstory-ideologyOrBeliefs")[0].innerText = backstory.ideologyOrBeliefs;
-    if(!backstory.significantPeoplekeyed) $("#backstory-key-significantPeople").hide();
+    if(backstory.significantPeoplekeyed) $("#backstory-key-significantPeople").show();
     $("#backstory-significantPeople")[0].innerText = backstory.significantPeople;
-    if(!backstory.meaningfulLocationskeyed) $("#backstory-key-meaningfulLocations").hide();
+    if(backstory.meaningfulLocationskeyed) $("#backstory-key-meaningfulLocations").show();
     $("#backstory-meaningfulLocations")[0].innerText = backstory.meaningfulLocations;
-    if(!backstory.treasuredPossessionskeyed) $("#backstory-key-treasuredPossessions").hide();
+    if(backstory.treasuredPossessionskeyed) $("#backstory-key-treasuredPossessions").show();
     $("#backstory-treasuredPossessions")[0].innerText = backstory.treasuredPossessions;
-    if(!backstory.traitskeyed) $("#backstory-key-traits").hide();
+    if(backstory.traitskeyed) $("#backstory-key-traits").show();
     $("#backstory-traits")[0].innerText = backstory.traits;
     $("#backstory-injuriesAndScars")[0].innerText = backstory.injuriesAndScars;
     $("#backstory-phobiasAndManias")[0].innerText = backstory.phobiasAndManias;
