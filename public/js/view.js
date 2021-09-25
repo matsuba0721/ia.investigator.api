@@ -112,11 +112,17 @@ function toEquipItem(equip) {
     return `<tr><td>${equip.name}</td><td>${equip.price}</td><td>${equip.quantity}</td><td>${equip.price * equip.quantity}</td><td>${equip.description}</td></tr>`;
 }
 function initBackstory(backstory) {
+    if(!backstory.personalDescriptionkeyed) $("#backstory-key-personalDescription").hide();
     $("#backstory-personalDescription")[0].innerText = backstory.personalDescription;
+    if(!backstory.ideologyOrBeliefskeyed) $("#backstory-key-ideologyOrBeliefs").hide();
     $("#backstory-ideologyOrBeliefs")[0].innerText = backstory.ideologyOrBeliefs;
+    if(!backstory.significantPeoplekeyed) $("#backstory-key-significantPeople").hide();
     $("#backstory-significantPeople")[0].innerText = backstory.significantPeople;
+    if(!backstory.meaningfulLocationskeyed) $("#backstory-key-meaningfulLocations").hide();
     $("#backstory-meaningfulLocations")[0].innerText = backstory.meaningfulLocations;
+    if(!backstory.treasuredPossessionskeyed) $("#backstory-key-treasuredPossessions").hide();
     $("#backstory-treasuredPossessions")[0].innerText = backstory.treasuredPossessions;
+    if(!backstory.traitskeyed) $("#backstory-key-traits").hide();
     $("#backstory-traits")[0].innerText = backstory.traits;
     $("#backstory-injuriesAndScars")[0].innerText = backstory.injuriesAndScars;
     $("#backstory-phobiasAndManias")[0].innerText = backstory.phobiasAndManias;

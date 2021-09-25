@@ -456,79 +456,92 @@
                     <div id="randam-generate-backstory" class="ui right floated primary button"><i class="random icon"></i>ランダム</div>
                     <p style="font-size: x-large">バックストーリー</p>
                 </div>
+                <div class="ui inverted attached segment"></div>
                 <div class="ui inverted attached segment">
                     <div class="ui inverted accordion">
                         <div class="inline active title">
-                            <i class="dropdown icon"></i>
-                            容姿の描写
+                            <div class="ui checkbox" style="width: 100%;">
+                                <input type="checkbox" id="backstory-key-personalDescription" />
+                                <label for="backstory-key-personalDescription" style="color: white;">容姿の描写</label>
+                            </div>
                         </div>
-                        <div class="active content grid">
+                        <div class="active content">
                             <textarea id="backstory-personalDescription" class="ui textarea" rows="3"></textarea>
                             <div id="randam-generate-backstory-personalDescription" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
-                            イデオロギー／信念
+                            <div class="ui checkbox" style="width: 100%;">
+                                <input type="checkbox" id="backstory-key-ideologyOrBeliefs" />
+                                <label for="backstory-key-ideologyOrBeliefs" style="color: white;">イデオロギー／信念</label>
+                            </div>
                         </div>
                         <div class="active content">
                             <textarea id="backstory-ideologyOrBeliefs" class="ui textarea" rows="3"></textarea>
                             <div id="randam-generate-backstory-ideologyOrBeliefs" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
-                            重要な人々
+                            <div class="ui checkbox" style="width: 100%;">
+                                <input type="checkbox" id="backstory-key-significantPeople" />
+                                <label for="backstory-key-significantPeople" style="color: white;">重要な人々</label>
+                            </div>
                         </div>
                         <div class="active content">
                             <textarea id="backstory-significantPeople" class="ui textarea" rows="3"></textarea>
                             <div id="randam-generate-backstory-significantPeople" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
-                            意味のある場所
+                            <div class="ui checkbox" style="width: 100%;">
+                                <input type="checkbox" id="backstory-key-meaningfulLocations" />
+                                <label for="backstory-key-meaningfulLocations" style="color: white;">意味のある場所</label>
+                            </div>
                         </div>
                         <div class="active content">
                             <textarea id="backstory-meaningfulLocations" class="ui textarea" rows="3"></textarea>
                             <div id="randam-generate-backstory-meaningfulLocations" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
-                            秘蔵の品
+                            <div class="ui checkbox" style="width: 100%;">
+                                <input type="checkbox" id="backstory-key-treasuredPossessions" />
+                                <label for="backstory-key-treasuredPossessions" style="color: white;">秘蔵の品</label>
+                            </div>
                         </div>
                         <div class="active content">
                             <textarea id="backstory-treasuredPossessions" class="ui textarea" rows="3"></textarea>
                             <div id="randam-generate-backstory-treasuredPossessions" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
-                            特徴
+                            <div class="ui checkbox" style="width: 100%;">
+                                <input type="checkbox" id="backstory-key-traits" />
+                                <label for="backstory-key-traits" style="color: white;">特徴</label>
+                            </div>
                         </div>
                         <div class="active content">
                             <textarea id="backstory-traits" class="ui textarea" rows="3"></textarea>
                             <div id="randam-generate-backstory-traits" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
+                            <i class="bookmark outline icon"></i>
                             負傷、傷跡
                         </div>
                         <div class="active content">
                             <textarea id="backstory-injuriesAndScars" class="ui textarea" rows="3"></textarea>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
+                            <i class="bookmark outline icon"></i>
                             恐怖症、マニア
                         </div>
                         <div class="active content">
                             <textarea id="backstory-phobiasAndManias" class="ui textarea" rows="3"></textarea>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
+                            <i class="bookmark outline icon"></i>
                             魔導書、呪文、アーティファクト
                         </div>
                         <div class="active content">
                             <textarea id="backstory-spellsAndArtifacts" class="ui textarea" rows="3"></textarea>
                         </div>
                         <div class="active title">
-                            <i class="dropdown icon"></i>
+                            <i class="bookmark outline icon"></i>
                             遭遇した超自然の存在
                         </div>
                         <div class="active content">
@@ -872,7 +885,7 @@
                 </div>
             </div>
         </footer>
-        <div class="ui mini generate modal" style="min-width: 356px;">
+        <div class="ui mini generate modal" style="min-width: 356px">
             <div class="ui top inverted attached segment">
                 <i class="modal close icon" style="position: absolute; top: 8px; right: 4px"></i>
                 <p style="font-size: x-large">能力値生成</p>

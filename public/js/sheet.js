@@ -801,6 +801,37 @@ function initBackstory(backstory) {
     $("#backstory-spellsAndArtifacts")[0].addEventListener("input", updateBackstory);
     $("#backstory-encounters")[0].addEventListener("input", updateBackstory);
 
+    if (!backstory.personalDescriptionkeyed) backstory.personalDescriptionkeyed = false;
+    $("#backstory-key-personalDescription")[0].checked = backstory.personalDescriptionkeyed;
+    $("#backstory-key-personalDescription")[0].addEventListener("change", function (e) {
+        investigator.backstory.personalDescriptionkeyed = $("#backstory-key-personalDescription")[0].checked;
+    });
+    if (!backstory.ideologyOrBeliefskeyed) backstory.ideologyOrBeliefskeyed = false;
+    $("#backstory-key-ideologyOrBeliefs")[0].checked = backstory.ideologyOrBeliefskeyed;
+    $("#backstory-key-ideologyOrBeliefs")[0].addEventListener("change", function (e) {
+        investigator.backstory.ideologyOrBeliefskeyed = $("#backstory-key-ideologyOrBeliefs")[0].checked;
+    });
+    if (!backstory.significantPeoplekeyed) backstory.significantPeoplekeyed = false;
+    $("#backstory-key-significantPeople")[0].checked = backstory.significantPeoplekeyed;
+    $("#backstory-key-significantPeople")[0].addEventListener("change", function (e) {
+        investigator.backstory.significantPeoplekeyed = $("#backstory-key-significantPeople")[0].checked;
+    });
+    if (!backstory.meaningfulLocationskeyed) backstory.meaningfulLocationskeyed = false;
+    $("#backstory-key-meaningfulLocations")[0].checked = backstory.meaningfulLocationskeyed;
+    $("#backstory-key-meaningfulLocations")[0].addEventListener("change", function (e) {
+        investigator.backstory.meaningfulLocationskeyed = $("#backstory-key-meaningfulLocations")[0].checked;
+    });
+    if (!backstory.treasuredPossessionskeyed) backstory.treasuredPossessionskeyed = false;
+    $("#backstory-key-treasuredPossessions")[0].checked = backstory.treasuredPossessionskeyed;
+    $("#backstory-key-treasuredPossessions")[0].addEventListener("change", function (e) {
+        investigator.backstory.treasuredPossessionskeyed = $("#backstory-key-treasuredPossessions")[0].checked;
+    });
+    if (!backstory.traitskeyed) backstory.traitskeyed = false;
+    $("#backstory-key-traits")[0].checked = backstory.traitskeyed;
+    $("#backstory-key-traits")[0].addEventListener("change", function (e) {
+        investigator.backstory.traitskeyed = $("#backstory-key-traits")[0].checked;
+    });
+
     $("#randam-generate-backstory").on("click", function () {
         getRandomRandomPersonalDescription();
         getRandomIdeologyOrBeliefs();
@@ -1075,7 +1106,7 @@ window.onload = function () {
     });
 
     $(".ui.dropdown").dropdown();
-    $(".ui.accordion").accordion({ exclusive: false });
+    $(".ui.skill.accordion").accordion({ exclusive: false });
     $(".ui.pointing.menu .item").tab();
     $(".ui.rating").rating();
 
