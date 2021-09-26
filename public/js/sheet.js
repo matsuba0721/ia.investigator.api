@@ -80,6 +80,25 @@ function initRandamGenerateParameter() {
     $("#set-custom-generate-parametor").on("click", function () {
         setRandamGeneratedParameter("custom");
     });
+    $("#set-from6-generate-parametor").on("click", function () {
+        setRandamGeneratedParameter("from6");
+    });
+
+    ["str", "con", "pow", "dex", "app", "siz", "int", "edu", "luk"].forEach((param) => {
+        $(`#${param}-from6-param`)[0].addEventListener("input", function (e) {
+            var prop = e.path[0].id.replace("-from6-param", "");
+            var value = e.path[0].value;
+            if (prop == "edu") {
+                if (value < 18) $(`#${prop}-from6-result`)[0].innerText = value * 5;
+                else if (value < 27) $(`#${prop}-from6-result`)[0].innerText = 90 + (value - 18);
+                else $(`#${prop}-from6-result`)[0].innerText = 99;
+            } else if (prop == "luk") {
+                $(`#${prop}-from6-result`)[0].innerText = value;
+            } else {
+                $(`#${prop}-from6-result`)[0].innerText = value * 5;
+            }
+        });
+    });
 }
 function setRandamGeneratedParameter(tabName) {
     var parameter = investigator.parameter;
@@ -107,6 +126,10 @@ function setRandamGeneratedParameter(tabName) {
     parameter.knwGrow = 0;
     parameter.hpGrow = 0;
     parameter.mpGrow = 0;
+
+    if (tabName == "from6") {
+        parameter.hpGrow = Math.ceil((parameter.con + parameter.siz) / 10) - parameter.getHp();
+    }
 
     $("#param-str")[0].value = parameter.str;
     $("#param-con")[0].value = parameter.con;
