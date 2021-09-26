@@ -22,6 +22,7 @@ function linkView(e) {
     var id = parseInt(matches[1]);
     window.location.href = "view?v=" + id;
 }
+started = false;
 account = getLoginAccount();
 
 window.onload = function () {
