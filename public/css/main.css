@@ -65,6 +65,11 @@ div.ui.center.aligned {
     color: #2185d0 !important;
     border-color: #2185d0 !important;
 }
+.ui.basic.yellow.label {
+    background: none #202328 !important;
+    color: #fbbd08 !important;
+    border-color: #fbbd08 !important;
+}
 .ui.basic.blue.pinned.label{
     background: none #202328 !important;
     color: #2185d0 !important;

@@ -302,6 +302,10 @@ function initInvestigator(investigator) {
     $("#isHidden")[0].addEventListener("change", function (e) {
         investigator.isHidden = $("#isHidden")[0].checked;
     });
+    $("#isNPC")[0].checked = investigator.isNPC;
+    $("#isNPC")[0].addEventListener("change", function (e) {
+        investigator.isNPC = $("#isNPC")[0].checked;
+    });
 }
 function initProfile(profile) {
     $("#profile-name")[0].value = profile.name;

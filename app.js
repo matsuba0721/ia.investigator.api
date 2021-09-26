@@ -311,6 +311,7 @@ function getInitInvestigator(id) {
     return {
         id: id,
         isHidden: false,
+        isNPC: false,
         profile: {
             name: "",
             kana: "",
@@ -469,7 +470,7 @@ async function getInvestigator(pool, id) {
     if (id == 0) {
         return toResultObject(RES_OK, getInitInvestigator(0));
     }
-    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, IaInvestigators.AccountToken AS Token, IaInvestigators.IsEmpty, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'height',RTRIM(IaInvestigatorProfiles.Height), 'weight',RTRIM(IaInvestigatorProfiles.Weight), 'origin',RTRIM(IaInvestigatorProfiles.Origin), 'hairColor',RTRIM(IaInvestigatorProfiles.HairColor), 'eyeColor',RTRIM(IaInvestigatorProfiles.EyeColor), 'skinColor',RTRIM(IaInvestigatorProfiles.SkinColor), 'image', IaInvestigatorProfileImages.Data) AS Profile, IaInvestigatorDetails.Parameter, IaInvestigatorDetails.Skills, IaInvestigatorDetails.Weapons, IaInvestigatorDetails.Equips, IaInvestigatorDetails.Money, IaInvestigatorDetails.Backstory, IaInvestigatorDetails.Memo FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) LEFT OUTER JOIN IaInvestigatorDetails ON (IaInvestigators.Id = IaInvestigatorDetails.InvestigatorId) WHERE IaInvestigators.Id = ${id} LIMIT 1 OFFSET 0;`;
+    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, IaInvestigators.IsNPC, IaInvestigators.AccountToken AS Token, IaInvestigators.IsEmpty, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'height',RTRIM(IaInvestigatorProfiles.Height), 'weight',RTRIM(IaInvestigatorProfiles.Weight), 'origin',RTRIM(IaInvestigatorProfiles.Origin), 'hairColor',RTRIM(IaInvestigatorProfiles.HairColor), 'eyeColor',RTRIM(IaInvestigatorProfiles.EyeColor), 'skinColor',RTRIM(IaInvestigatorProfiles.SkinColor), 'image', IaInvestigatorProfileImages.Data) AS Profile, IaInvestigatorDetails.Parameter, IaInvestigatorDetails.Skills, IaInvestigatorDetails.Weapons, IaInvestigatorDetails.Equips, IaInvestigatorDetails.Money, IaInvestigatorDetails.Backstory, IaInvestigatorDetails.Memo FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) LEFT OUTER JOIN IaInvestigatorDetails ON (IaInvestigators.Id = IaInvestigatorDetails.InvestigatorId) WHERE IaInvestigators.Id = ${id} LIMIT 1 OFFSET 0;`;
     console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
@@ -483,6 +484,7 @@ async function getInvestigator(pool, id) {
     return toResultObject(RES_OK, {
         id: row.id,
         isHidden: (row.ishidden == 0 ? false : true),
+        isNPC: (row.isnpc == 0 ? false : true),
         profile: row.profile,
         parameter: JSON.parse(row.parameter),
         skills: JSON.parse(row.skills),
@@ -512,7 +514,7 @@ async function saveInvestigator(pool, token, investigator) {
     console.log(queryString.slice(0, 100));
     await pool.query(queryString);
 
-    queryString = `UPDATE IaInvestigators SET IsEmpty = 0, IsHidden = ${investigator.isHidden ? 1 : 0} WHERE IaInvestigators.Id = ${investigator.id} AND IaInvestigators.AccountToken = '${token}'`;
+    queryString = `UPDATE IaInvestigators SET IsEmpty = 0, IsHidden = ${investigator.isHidden ? 1 : 0}, IsNPC = ${investigator.isNPC ? 1 : 0} WHERE IaInvestigators.Id = ${investigator.id} AND IaInvestigators.AccountToken = '${token}'`;
     console.log(queryString.slice(0, 100));
     await pool.query(queryString);
 
@@ -562,7 +564,7 @@ async function saveInvestigatorProfileImage(pool, token, id, imgType, image) {
 }
 
 async function getUserInvestigators(pool, token) {
-    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'image', IaInvestigatorProfileImages.Data) AS Profile FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) WHERE IaInvestigators.AccountToken = '${token}' AND IaInvestigators.IsEmpty=0 ORDER BY IaInvestigatorProfiles.UpdateTimestamp DESC LIMIT 100 OFFSET 0;`;
+    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, IaInvestigators.IsNPC, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'image', IaInvestigatorProfileImages.Data) AS Profile FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) WHERE IaInvestigators.AccountToken = '${token}' AND IaInvestigators.IsEmpty=0 ORDER BY IaInvestigatorProfiles.UpdateTimestamp DESC LIMIT 100 OFFSET 0;`;
     console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
@@ -573,6 +575,7 @@ async function getUserInvestigators(pool, token) {
         investigators.push({
             id: row.id,
             isHidden: row.ishidden == 0 ? false : true,
+            isNPC: row.isnpc == 0 ? false : true,
             profile: row.profile,
         });
     }
@@ -581,7 +584,7 @@ async function getUserInvestigators(pool, token) {
 }
 
 async function getRecentlyCreatedInvestigators(pool) {
-    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'image', IaInvestigatorProfileImages.Data) AS Profile FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) WHERE IaInvestigators.IsEmpty = 0 AND IaInvestigators.IsHidden = 0 ORDER BY IaInvestigatorProfiles.CreateTimestamp DESC LIMIT 10 OFFSET 0;`;
+    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, IaInvestigators.IsNPC, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'image', IaInvestigatorProfileImages.Data) AS Profile FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) WHERE IaInvestigators.IsEmpty = 0 AND IaInvestigators.IsHidden = 0 AND IaInvestigators.IsNPC = 0 ORDER BY IaInvestigatorProfiles.CreateTimestamp DESC LIMIT 10 OFFSET 0;`;
     console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
@@ -591,6 +594,7 @@ async function getRecentlyCreatedInvestigators(pool) {
         var row = rows[i];
         investigators.push({
             id: row.id,
+            isNPC: row.isnpc == 0 ? false : true,
             isHidden: row.isHidden == 0 ? false : true,
             profile: row.profile,
         });

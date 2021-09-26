@@ -8,8 +8,7 @@ function initInvestigator(newInvestigators) {
     $("#tags").empty();
     for (var i = 0; i < investigators.length; i++) {
         var investigator = investigators[i];
-        console.log(investigator.isHidden);
-        $("#investigators").append(toProfileCard(investigator.id, investigator.isHidden, investigator.profile));
+        $("#investigators").append(toProfileCard(investigator.id, investigator.isHidden, investigator.isNPC, investigator.profile));
         $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView);
         $("#investigator-" + investigator.id + "-edit")[0].addEventListener("click", linkEdit);
         $("#investigator-" + investigator.id + "-export")[0].addEventListener("click", exportInvestigator);
@@ -36,32 +35,7 @@ function initInvestigator(newInvestigators) {
 
     $("#tags a.label").on("click", function () {
         $(this).toggleClass("blue");
-        var cards = [];
-        for (var i = 0; i < investigators.length; i++) {
-            var investigator = investigators[i];
-            cards.push({
-                id: "#investigator-" + investigator.id,
-                tag: investigator.profile.tag,
-                isDisplay: true,
-            });
-        }
-        var count = $("#tags a.blue.label").find("strong").length;
-        $("#tags a.blue.label")
-            .find("strong")
-            .each(function (index, element) {
-                var tag = element.innerText;
-                for (var i = 0; i < cards.length; i++) {
-                    var card = cards[i];
-                    if (card.tag.indexOf(tag) == -1) {
-                        card.isDisplay = false;
-                    }
-                }
-            });
-        for (var i = 0; i < cards.length; i++) {
-            var card = cards[i];
-            if (card.isDisplay) $(card.id).show();
-            else $(card.id).hide();
-        }
+        filterProfileCard();
     });
 
     setTimeout(function () {
@@ -71,24 +45,54 @@ function initInvestigator(newInvestigators) {
         }
     }, 10);
 }
-function toProfileCard(id, isHidden, profile) {
+function filterProfileCard() {
+    var cards = [];
+    for (var i = 0; i < investigators.length; i++) {
+        var investigator = investigators[i];
+        cards.push({
+            id: "#investigator-" + investigator.id,
+            tag: investigator.profile.tag,
+            text: investigator.profile.name + investigator.profile.job + investigator.profile.age + investigator.profile.gender + investigator.profile.tag,
+            isDisplay: true,
+        });
+    }
+    var count = $("#tags a.blue.label").find("strong").length;
+    $("#tags a.blue.label")
+        .find("strong")
+        .each(function (index, element) {
+            var tag = element.innerText;
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+                if (card.tag.indexOf(tag) == -1) {
+                    card.isDisplay = false;
+                }
+            }
+        });
+
+    var word = $("#filter")[0].value;
+    if (word) {
+        for (var i = 0; i < cards.length; i++) {
+            var card = cards[i];
+            if (card.text.indexOf(word) == -1) {
+                card.isDisplay = false;
+            }
+        }
+    }
+    for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        if (card.isDisplay) $(card.id).show();
+        else $(card.id).hide();
+    }
+}
+function toProfileCard(id, isHidden, isNPC, profile) {
     var list = `<div class="ui large inverted horizontal list meta"><div class="item"><div class="content"><div class="header">職業</div><div class="description">${profile.job}</div></div></div><div class="item"><div class="content"><div class="header">年齢</div><div class="ui center aligned description">${profile.age}</div></div></div><div class="item"><div class="content"><div class="header">性別</div><div class="ui center aligned description">${profile.gender}</div></div></div></div>`;
-    var hiddenlabel = isHidden ? `<div class="ui right floated basic red label">非公開</div>` : "";
-    var content = `<div class="content" style="padding: 5px;"><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" />${hiddenlabel}<div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
-    var extraContent = `
-    <div class="ui right aligned　extra content" style="padding: 5px;">
-    <div class="ui buttons">
-    <button id="investigator-${id}-edit" class="ui icon button" style="padding: 10px 5px;"><i class="edit outline icon"></i>編集</button>
-    <button id="investigator-${id}-view" class="ui icon button" style="padding: 10px 5px;"><i class="eye icon"></i>閲覧</button>
-    <button id="investigator-${id}-share" class="ui icon button" style="padding: 10px 5px;"><i class="share alternate icon"></i>共有</button>
-    <button id="investigator-${id}-export" class="ui icon button" style="padding: 10px 5px;"><i class="share icon"></i>出力</button>
-    <button id="investigator-${id}-delete" class="ui icon button" style="padding: 10px 5px;"><i class="trash alternate icon"></i>削除</button>
-    </div>
-    </div>`;
-    return `<div id="investigator-${id}" class="ui left aligned column" style="margin-left: 0!important;"><div class="ui fluid inverted card" style="min-width: 285px;">${content}${extraContent}</div></div>`;
+    var hiddenlabel = isHidden ? `<div class="ui basic red label" style="width: 50px;padding: 0.5em;">非公開</div>` : "";
+    var npclabel = isNPC ? `<div class="ui basic yellow label" style="width: 50px;padding: 0.5em;">NPC</div>` : "";
+    var content = `<div class="content" style="padding: 5px;"><div class="ui right floated labels" style="width: 50px;padding: 0;">${hiddenlabel}${npclabel}</div><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
+    var extraContent = `<div class="ui right aligned　extra content" style="padding: 5px;"><div class="ui buttons"><button id="investigator-${id}-edit" class="ui icon button" style="padding: 10px 5px;"><i class="edit outline icon"></i>編集</button><button id="investigator-${id}-view" class="ui icon button" style="padding: 10px 5px;"><i class="eye icon"></i>閲覧</button><button id="investigator-${id}-share" class="ui icon button" style="padding: 10px 5px;"><i class="share alternate icon"></i>共有</button><button id="investigator-${id}-export" class="ui icon button" style="padding: 10px 5px;"><i class="share icon"></i>出力</button><button id="investigator-${id}-delete" class="ui icon button" style="padding: 10px 5px;"><i class="trash alternate icon"></i>削除</button></div></div>`;
+    return `<div id="investigator-${id}" class="ui left aligned column" style="margin: 0!important;"><div class="ui fluid inverted card" style="min-width: 285px;">${content}${extraContent}</div></div>`;
 }
 function linkEdit(e) {
-    console.log(e);
     var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-edit/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
@@ -144,6 +148,9 @@ window.onload = function () {
         $(".ui.account-sign-in").show();
         $(".ui.account.modal").modal({ duration: 200 }).modal("show");
     });
+    $("#filter")[0].addEventListener("input", function (e) {
+        filterProfileCard();
+    });
 
     $("#link-sheet")[0].addEventListener("click", function (e) {
         window.location.href = "sheet";
@@ -159,7 +166,6 @@ window.onload = function () {
 
     $("#investigator-delete-ok")[0].addEventListener("click", function (e) {
         deleteInvestigator(account, deleteTargetInvestigatorId, function (deletedId) {
-            console.log("#investigator-" + deletedId);
             $("#investigator-" + deletedId).remove();
             $(".ui.mini.delete.modal").modal({ duration: 200 }).modal("hide");
         });
