@@ -267,7 +267,7 @@ async function saveAccount(pool, username, password, email) {
 
 async function getInvestigatorSnsHtml(pool, id) {
     var profile = { id: id, name: "Unknown" };
-    var queryString = `SELECT RTRIM(Name) AS Name FROM IaInvestigatorProfiles WHERE InvestigatorId = ${id} LIMIT 1 OFFSET 0;`;
+    var queryString = `SELECT RTRIM(Name) AS Name, RTRIM(Kana) AS Kana FROM IaInvestigatorProfiles WHERE InvestigatorId = ${id} LIMIT 1 OFFSET 0;`;
     console.log(queryString);
     var result = await pool.query(queryString);
     var rows = await GetRows(result);
@@ -280,24 +280,24 @@ async function getInvestigatorSnsHtml(pool, id) {
     <head>
         <meta charset="utf-8">
         <title>${profile.name}</title>
-        <meta name="description" content="IA.Investigator">
-        <meta name="keywords" content="IA.Investigator">
+        <meta name="description" content="R'lyeh House">
+        <meta name="keywords" content="R'lyeh House">
         <meta property="og:locale" content="ja_JP">
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://ia-investigator.herokuapp.com/view?v=${id}">
         <meta property="og:title" content="${profile.name}">
-        <meta property="og:site_name" content="IA.Investigator">
-        <meta property="og:description" content="${profile.name}">
+        <meta property="og:site_name" content="R'lyeh House">
+        <meta property="og:description" content="${profile.kana}">
         <meta property="og:image" content="https://ia-investigator.herokuapp.com/img?v=${id}">
         <meta property="og:image:width" content=300px>
         <meta property="og:image:height" content=300px>
         <meta property="fb:app_id" content="${profile.name}">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="${profile.name}">
-        <meta name="twitter:description" content="${profile.name}">
+        <meta name="twitter:description" content="${profile.kana}">
         <meta name="twitter:image" content="https://ia-investigator.herokuapp.com/img?v=${id}">
         <meta name="twitter:site" content="https://ia-investigator.herokuapp.com/view?v=${id}">
-        <meta name="twitter:creator" content="IA.Investigator">
+        <meta name="twitter:creator" content="R'lyeh House">
     </head>
     <body>
         <script>
