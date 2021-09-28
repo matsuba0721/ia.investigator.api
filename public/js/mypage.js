@@ -140,16 +140,19 @@ function deletetInvestigator(e) {
 
 account = getLoginAccount();
 
-window.onload = function () {
-    initSigns();
-    initAccount(account);
-    initModal();
+document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.mypage_tags) {
         $("#tags").append(localStorage.mypage_tags);
     }
     if (localStorage.mypage_investigators) {
         $("#investigators").append(localStorage.mypage_investigators);
     }
+});
+
+window.onload = function () {
+    initSigns();
+    initAccount(account);
+    initModal();
 
     $("#account-recommendation-close").on("click", function () {
         $("#account-recommendation").hide();
