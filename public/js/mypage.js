@@ -5,7 +5,7 @@ function initInvestigator(newInvestigators) {
     investigators = newInvestigators;
     var tagStatistics = [];
     $("#investigators").empty();
-    $("#tags").empty();
+
     for (var i = 0; i < investigators.length; i++) {
         var investigator = investigators[i];
         $("#investigators").append(toProfileCard(investigator.id, investigator.isHidden, investigator.isNPC, investigator.profile));
@@ -29,9 +29,14 @@ function initInvestigator(newInvestigators) {
         }
     }
 
+    $("#tags").empty();
+    tagStatistics = tagStatistics.sort(function (x, y) {
+        return y.value - x.value;
+    });
     for (var i = 0; i < tagStatistics.length; i++) {
         $("#tags").append(`<a class="ui label"><strong>${tagStatistics[i].name}</strong> ${tagStatistics[i].value}</a>`);
     }
+    localStorage.mypage_tags = $("#tags")[0].innerHTML;
 
     $("#tags a.label").on("click", function () {
         $(this).toggleClass("blue");
@@ -52,7 +57,8 @@ function filterProfileCard() {
         cards.push({
             id: "#investigator-" + investigator.id,
             tag: investigator.profile.tag,
-            text: investigator.profile.name + investigator.profile.job + investigator.profile.age + investigator.profile.gender + investigator.profile.tag,
+            isHidden: investigator.isHidden,
+            isNPC: investigator.isNPC,
             isDisplay: true,
         });
     }
@@ -69,13 +75,15 @@ function filterProfileCard() {
             }
         });
 
-    var word = $("#filter")[0].value;
-    if (word) {
-        for (var i = 0; i < cards.length; i++) {
-            var card = cards[i];
-            if (card.text.indexOf(word) == -1) {
-                card.isDisplay = false;
-            }
+    var tab = $("#tab-filter a.active")[0].text;
+    for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        if (tab == "PC" && card.isNPC) {
+            card.isDisplay = false;
+        } else if (tab == "NPC" && !card.isNPC) {
+            card.isDisplay = false;
+        } else if (tab == "非公開" && !card.isHidden) {
+            card.isDisplay = false;
         }
     }
     for (var i = 0; i < cards.length; i++) {
@@ -88,7 +96,8 @@ function toProfileCard(id, isHidden, isNPC, profile) {
     var list = `<div class="ui large inverted horizontal list meta"><div class="item"><div class="content"><div class="header">職業</div><div class="description">${profile.job}</div></div></div><div class="item"><div class="content"><div class="header">年齢</div><div class="ui center aligned description">${profile.age}</div></div></div><div class="item"><div class="content"><div class="header">性別</div><div class="ui center aligned description">${profile.gender}</div></div></div></div>`;
     var hiddenlabel = isHidden ? `<div class="ui basic red label" style="width: 50px;padding: 0.5em;">非公開</div>` : "";
     var npclabel = isNPC ? `<div class="ui basic yellow label" style="width: 50px;padding: 0.5em;">NPC</div>` : "";
-    var content = `<div class="content" style="padding: 5px;"><div class="ui right floated labels" style="width: 50px;padding: 0;">${hiddenlabel}${npclabel}</div><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
+    var w = isHidden || isNPC ? 50 : 0;
+    var content = `<div class="content" style="padding: 5px;"><div class="ui right floated labels" style="width: ${w}px;padding: 0;">${hiddenlabel}${npclabel}</div><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
     var extraContent = `<div class="ui right aligned　extra content" style="padding: 5px;"><div class="ui buttons"><button id="investigator-${id}-edit" class="ui icon button" style="padding: 10px 5px;"><i class="edit outline icon"></i>編集</button><button id="investigator-${id}-view" class="ui icon button" style="padding: 10px 5px;"><i class="eye icon"></i>閲覧</button><button id="investigator-${id}-share" class="ui icon button" style="padding: 10px 5px;"><i class="share alternate icon"></i>共有</button><button id="investigator-${id}-export" class="ui icon button" style="padding: 10px 5px;"><i class="share icon"></i>出力</button><button id="investigator-${id}-delete" class="ui icon button" style="padding: 10px 5px;"><i class="trash alternate icon"></i>削除</button></div></div>`;
     return `<div id="investigator-${id}" class="ui left aligned column" style="margin: 0!important;"><div class="ui fluid inverted card" style="min-width: 285px;">${content}${extraContent}</div></div>`;
 }
@@ -135,6 +144,9 @@ window.onload = function () {
     initSigns();
     initAccount(account);
     initModal();
+    if (localStorage.mypage_tags) {
+        $("#tags").append(localStorage.mypage_tags);
+    }
     if (localStorage.mypage_investigators) {
         $("#investigators").append(localStorage.mypage_investigators);
     }
@@ -148,7 +160,9 @@ window.onload = function () {
         $(".ui.account-sign-in").show();
         $(".ui.account.modal").modal({ duration: 200 }).modal("show");
     });
-    $("#filter")[0].addEventListener("input", function (e) {
+    $("#tab-filter a").on("click", function () {
+        $("#tab-filter a").removeClass("active");
+        $(this).addClass("active");
         filterProfileCard();
     });
 
