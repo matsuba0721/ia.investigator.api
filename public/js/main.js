@@ -45,7 +45,10 @@ async function sha256(str) {
 }
 function toTags(str) {
     str = emptyBy(str, "");
-    return str.replaceAll("、", " ").replaceAll(",", " ").replaceAll("　", " ").split(" ");
+    str = str.split('、').join(' ');
+    str = str.split(',').join(' ');
+    str = str.split('　').join(' ');
+    return str.split(" ");
 }
 
 function initAccount(account) {

@@ -17,9 +17,7 @@ function linkView(e) {
         }
     }
 
-    var matches = path.id.match(/investigator-(\w+)-view/);
-    if (matches == null) return;
-    var id = parseInt(matches[1]);
+    var id  = path.id.replace("investigator-", "").replace("-view", "");
     window.location.href = "view?v=" + id;
 }
 started = false;
