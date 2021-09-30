@@ -6,16 +6,16 @@ function toProfileCard(id, profile) {
     return `<div id="investigator-${id}-view" class="card" style="cursor : pointer;">${content}</div>`;
 }
 function linkView(e) {
-    var path;
+    console.log(e);
+    console.log(e.path);
     for (var i = 0; i < e.path.length; i++) {
-        path = e.path[i];
-        if (path.id) {
+        var matches = e.path[i].id.match(/investigator-(\w+)-view/);
+        if (matches) {
+            var id = parseInt(matches[1]);
+            window.location.href = "view?v=" + id;
             break;
         }
     }
-
-    var id  = path.id.replace("investigator-", "").replace("-view", "");
-    window.location.href = "view?v=" + id;
 }
 account = getLoginAccount();
 
