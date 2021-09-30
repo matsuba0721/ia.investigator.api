@@ -6,10 +6,9 @@ function toProfileCard(id, profile) {
     return `<div id="investigator-${id}-view" class="card" style="cursor : pointer;">${content}</div>`;
 }
 function linkView(e) {
-    console.log(e);
-    console.log(e.path);
-    for (var i = 0; i < e.path.length; i++) {
-        var matches = e.path[i].id.match(/investigator-(\w+)-view/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    for (var i = 0; i < path.length; i++) {
+        var matches = path[i].id.match(/investigator-(\w+)-view/);
         if (matches) {
             var id = parseInt(matches[1]);
             window.location.href = "view?v=" + id;
@@ -41,7 +40,7 @@ window.onload = function () {
         for (var i = 0; i < investigators.length; i++) {
             var investigator = investigators[i];
             $("#investigators").append(toProfileCard(investigator.id, investigator.profile, `img?v=${investigator.id}`));
-            $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView);
+            $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView, true);
         }
         localStorage.index_investigators = $("#investigators")[0].innerHTML;
 
