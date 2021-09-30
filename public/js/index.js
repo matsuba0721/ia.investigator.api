@@ -1,7 +1,4 @@
 function accountChanged(account) {
-    if (started && account.id > 0) {
-        window.location.href = "sheet";
-    }
 }
 function toProfileCard(id, profile) {
     var list = `<div class="ui large inverted horizontal list meta"><div class="item"><div class="content"><div class="header">職業</div><div class="description">${profile.job}</div></div></div><div class="item"><div class="content"><div class="header">年齢</div><div class="ui center aligned description">${profile.age}</div></div></div><div class="item"><div class="content"><div class="header">性別</div><div class="ui center aligned description">${profile.gender}</div></div></div></div>`;
@@ -20,7 +17,6 @@ function linkView(e) {
     var id  = path.id.replace("investigator-", "").replace("-view", "");
     window.location.href = "view?v=" + id;
 }
-started = false;
 account = getLoginAccount();
 
 window.onload = function () {
@@ -28,7 +24,6 @@ window.onload = function () {
         if (account.id > 0) {
             window.location.href = "sheet";
         } else {
-            started = true;
             $(".ui.account-sign-up").hide();
             $(".ui.account-sign-in").show();
             $(".ui.account.modal").modal("show", { duration: 200 });
