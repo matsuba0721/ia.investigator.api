@@ -78,9 +78,9 @@ function filterProfileCard() {
     var tab = $("#tab-filter a.active")[0].text;
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (tab == "PC" && card.isNPC) {
+        if (tab == "PC" && (card.isNPC || card.isHidden)) {
             card.isDisplay = false;
-        } else if (tab == "NPC" && !card.isNPC) {
+        } else if (tab == "NPC" && (!card.isNPC || card.isHidden)) {
             card.isDisplay = false;
         } else if (tab == "非公開" && !card.isHidden) {
             card.isDisplay = false;
