@@ -86,8 +86,9 @@ function initRandamGenerateParameter() {
 
     ["str", "con", "pow", "dex", "app", "siz", "int", "edu", "luk"].forEach((param) => {
         $(`#${param}-from6-param`)[0].addEventListener("input", function (e) {
-            var prop = e.path[0].id.replace("-from6-param", "");
-            var value = e.path[0].value;
+            var path = e.path || (e.composedPath && e.composedPath());
+            var prop = path[0].id.replace("-from6-param", "");
+            var value = path[0].value;
             if (prop == "edu") {
                 if (value < 18) $(`#${prop}-from6-result`)[0].innerText = value * 5;
                 else if (value < 27) $(`#${prop}-from6-result`)[0].innerText = 90 + (value - 18);
@@ -386,7 +387,8 @@ function initProfile(profile) {
     );
 }
 function updateProfile(e) {
-    var matches = e.path[0].id.match(/profile-(\w+)/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/profile-(\w+)/);
     if (matches == null) return;
     var prop = matches[1];
     eval("investigator.profile." + prop + '="' + $("#profile-" + prop)[0].value + '"');
@@ -454,7 +456,8 @@ function initParameter(parameter) {
     });
 }
 function updateParameter(e) {
-    var prop = e.path[0].id.replace("param-", "").replace("-grow", "");
+    var path = e.path || (e.composedPath && e.composedPath());
+    var prop = path[0].id.replace("param-", "").replace("-grow", "");
     eval("investigator.parameter." + prop + "=" + emptyBy($("#param-" + prop)[0].value, "0"));
     eval("investigator.parameter." + prop + "Grow=" + emptyBy($("#param-" + prop + "-grow")[0].value, "0"));
     $("#param-" + prop + "-present")[0].value = eval("investigator.parameter." + prop + "+" + "investigator.parameter." + prop + "Grow");
@@ -522,7 +525,8 @@ function createSkill(category, name) {
     return skill;
 }
 function appendSkill(e) {
-    var matches = e.path[0].id.match(/append-skill-(\w+)/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/append-skill-(\w+)/);
     var skill = createSkill(matches[1]);
     initSkill(skill);
     investigator.skills.push(skill);
@@ -530,30 +534,32 @@ function appendSkill(e) {
     viewUpdate();
 }
 function appendSpecificSkill(e) {
-    console.log(e);
-    var matches = e.path[0].id.match(/append-skill-(\w+)/);
-    var skill = createSkill(matches[1], e.path[0].value);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/append-skill-(\w+)/);
+    var skill = createSkill(matches[1], path[0].value);
     initSkill(skill);
     investigator.skills.push(skill);
 
     viewUpdate();
 }
 function updateSkill(e) {
-    var matches = e.path[0].id.match(/skill-(\w+)-(\w+)/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/skill-(\w+)-(\w+)/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
     var prop = matches[2];
     var skill = investigator.skills.find((v) => v.id === id);
-    if (e.path[0].type == "text") {
+    if (path[0].type == "text") {
         eval("skill." + prop + '="' + $("#skill-" + id + "-" + prop)[0].value + '"');
-    } else if (e.path[0].type == "number") {
+    } else if (path[0].type == "number") {
         eval("skill." + prop + "=" + emptyBy($("#skill-" + id + "-" + prop)[0].value, "0"));
     }
 
     viewUpdate();
 }
 function deleteSkill(e) {
-    var matches = (e.path[0].id + e.path[1].id).trim().match(/skill-(\w+)-delete/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = (path[0].id + path[1].id).trim().match(/skill-(\w+)-delete/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
     var index;
@@ -625,11 +631,12 @@ function initWeapon(weapon) {
     $("#weapon-" + weapon.getFailureId())[0].addEventListener("input", updateWeapon);
     $("#weapon-" + weapon.id + "-delete")[0].addEventListener("click", deleteWeapon);
     $("#weapon-" + weapon.id + "-rate-skill-value")[0].addEventListener("change", function (e) {
-        var matches = e.path[0].id.match(/weapon-(\w+)-rate-skill-value/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/weapon-(\w+)-rate-skill-value/);
         if (matches == null) return;
         var id = parseInt(matches[1]);
 
-        matches = e.path[0].value.match(/(\d+)-\d+-(\d+)/);
+        matches = path[0].value.match(/(\d+)-\d+-(\d+)/);
         if (matches) investigator.weapons[id].rate = parseInt(matches[2]);
         investigator.weapons[id].rateSkillName = !matches ? "任意" : $("#weapon-" + weapon.id + "-rate-skill").dropdown("get text");
     });
@@ -653,21 +660,23 @@ function appendWeapon(e) {
     viewUpdate();
 }
 function updateWeapon(e) {
-    var matches = e.path[0].id.match(/weapon-(\w+)-(\w+)/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/weapon-(\w+)-(\w+)/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
     var prop = matches[2];
     var weapon = investigator.weapons.find((v) => v.id === id);
-    if (e.path[0].type == "text") {
+    if (path[0].type == "text") {
         eval("weapon." + prop + '="' + $("#weapon-" + id + "-" + prop)[0].value + '"');
-    } else if (e.path[0].type == "number") {
+    } else if (path[0].type == "number") {
         eval("weapon." + prop + "=" + emptyBy($("#weapon-" + id + "-" + prop)[0].value, "0"));
     }
 
     viewUpdate();
 }
 function deleteWeapon(e) {
-    var matches = (e.path[0].id + e.path[1].id).trim().match(/weapon-(\w+)-delete/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = (path[0].id + path[1].id).trim().match(/weapon-(\w+)-delete/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
     var index;
@@ -746,21 +755,23 @@ function appendEquip(e) {
     viewUpdate();
 }
 function updateEquip(e) {
-    var matches = e.path[0].id.match(/equip-(\w+)-(\w+)/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/equip-(\w+)-(\w+)/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
     var prop = matches[2];
     var equip = investigator.equips.find((v) => v.id === id);
-    if (e.path[0].type == "text") {
+    if (path[0].type == "text") {
         eval("equip." + prop + '="' + $("#equip-" + id + "-" + prop)[0].value + '"');
-    } else if (e.path[0].type == "number") {
+    } else if (path[0].type == "number") {
         eval("equip." + prop + "=" + emptyBy($("#equip-" + id + "-" + prop)[0].value, "0"));
     }
 
     viewUpdate();
 }
 function deleteEquip(e) {
-    var matches = (e.path[0].id + e.path[1].id).trim().match(/equip-(\w+)-delete/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = (path[0].id + path[1].id).trim().match(/equip-(\w+)-delete/);
     if (matches == null) return;
     var id = parseInt(matches[1]);
     var index;
@@ -797,7 +808,8 @@ function initMoney(money) {
     $("#money-assets")[0].addEventListener("input", updateMoney);
 }
 function updateMoney(e) {
-    var matches = e.path[0].id.match(/money-(\w+)/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/money-(\w+)/);
     if (matches == null) return;
     var prop = matches[1];
     eval("investigator.money." + prop + '="' + $("#money-" + prop)[0].value + '"');
@@ -893,7 +905,8 @@ function initBackstory(backstory) {
     });
 }
 function updateBackstory(e) {
-    var matches = e.path[0].id.match(/backstory-(\w+)/);
+    var path = e.path || (e.composedPath && e.composedPath());
+    var matches = path[0].id.match(/backstory-(\w+)/);
     if (matches == null) return;
     var prop = matches[1];
     var value = $("#backstory-" + prop)[0].value;
