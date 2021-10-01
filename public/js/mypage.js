@@ -102,40 +102,65 @@ function toProfileCard(id, isHidden, isNPC, profile) {
     return `<div id="investigator-${id}" class="ui left aligned column" style="margin: 0!important;"><div class="ui fluid inverted card" style="min-width: 285px;">${content}${extraContent}</div></div>`;
 }
 function linkEdit(e) {
-    var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-edit/);
-    if (matches == null) return;
-    var id = parseInt(matches[1]);
-    window.location.href = "sheet?v=" + id;
+    var path = e.path || (e.composedPath && e.composedPath());
+    for (var i = 0; i < path.length; i++) {
+        var matches = path[i].id.match(/investigator-(\w+)-edit/);
+        if (matches) {
+            var id = parseInt(matches[1]);
+            window.location.href = "sheet?v=" + id;
+            break;
+        }
+    }
 }
 function linkView(e) {
-    var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-view/);
-    if (matches == null) return;
-    var id = parseInt(matches[1]);
-    window.location.href = "view?v=" + id;
+    var path = e.path || (e.composedPath && e.composedPath());
+    for (var i = 0; i < path.length; i++) {
+        var matches = path[i].id.match(/investigator-(\w+)-view/);
+        if (matches) {
+            var id = parseInt(matches[1]);
+            window.location.href = "view?v=" + id;
+            break;
+        }
+    }
 }
 function exportInvestigator(e) {
-    var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-export/);
-    if (matches == null) return;
-    var id = parseInt(matches[1]);
-    getEditingInvestigator(account, id, function (newInvestigator) {
-        investigator = newInvestigator;
-        $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");
-        $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
-    });
+    var path = e.path || (e.composedPath && e.composedPath());
+    for (var i = 0; i < path.length; i++) {
+        var matches = path[i].id.match(/investigator-(\w+)-export/);
+        if (matches) {
+            var id = parseInt(matches[1]);
+            getEditingInvestigator(account, id, function (newInvestigator) {
+                investigator = newInvestigator;
+                $(".ui.tiny.export.modal").modal({ duration: 200 }).modal("show");
+                $("#investigator-export-chatpalette")[0].value = exportChatpalete(investigator, false);
+            });
+            break;
+        }
+    }
 }
 function getShareUrl(e) {
-    var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-share/);
-    if (matches == null) return;
-    var id = parseInt(matches[1]);
-    var uri = new URL(window.location.href);
-    writeClipboard(uri.origin + "/sns?v=" + id);
+    var path = e.path || (e.composedPath && e.composedPath());
+    for (var i = 0; i < path.length; i++) {
+        var matches = path[i].id.match(/investigator-(\w+)-share/);
+        if (matches) {
+            var id = parseInt(matches[1]);
+            var uri = new URL(window.location.href);
+            writeClipboard(uri.origin + "/sns?v=" + id);
+            break;
+        }
+    }
 }
 function deletetInvestigator(e) {
-    var matches = (e.path[0].id + e.path[1].id).trim().match(/investigator-(\w+)-delete/);
-    if (matches == null) return;
-    var id = parseInt(matches[1]);
-    deleteTargetInvestigatorId = id;
-    $(".ui.mini.delete.modal").modal({ duration: 200 }).modal("show");
+    var path = e.path || (e.composedPath && e.composedPath());
+    for (var i = 0; i < path.length; i++) {
+        var matches = path[i].id.match(/investigator-(\w+)-delete/);
+        if (matches) {
+            var id = parseInt(matches[1]);
+            deleteTargetInvestigatorId = id;
+            $(".ui.mini.delete.modal").modal({ duration: 200 }).modal("show");
+            break;
+        }
+    }
 }
 
 account = getLoginAccount();
