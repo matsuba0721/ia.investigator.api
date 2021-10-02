@@ -274,6 +274,7 @@ async function getInvestigatorSnsHtml(pool, id) {
     if (rows.length > 0) {
         var row = rows[0];
         profile.name = row.name ? row.name : "Unknown";
+        profile.kana = row.kana ? row.kana : "";
     }
     return `<!DOCTYPE html>
 <html>
