@@ -1,13 +1,24 @@
 function accountChanged(account) {
     getInvestigatorEditable(account, parseInt(getParam("v")), function (editable) {
         if (editable) {
-            $("#investigator-save-menu").show();
+            $("#investigator-save").prop("disabled", false);
             $("#upload-profile-image").prop("disabled", false);
         } else {
-            $("#investigator-save-menu").hide();
+            $("#investigator-save").prop("disabled", true);
             $("#upload-profile-image").prop("disabled", true);
         }
     });
+}
+async function saveLocalInvestigator(investigator) {
+    if (localInvestigators.length == 0) {
+        localInvestigators = localStorage.localInvestigators ? JSON.parse(localStorage.localInvestigators) : [];
+        localInvestigators.push(investigator);
+        if (localInvestigators.length > 11) {
+            localInvestigators = localInvestigators.slice(localInvestigators.length - 11, -1);
+        }
+    }
+
+    localStorage.localInvestigators = JSON.stringify(localInvestigators);
 }
 function initRandamGenerateParameter() {
     $("#randam-generate-parameter").on("click", function () {
@@ -156,7 +167,7 @@ function setRandamGeneratedParameter(tabName) {
     $("#param-hp-grow")[0].value = parameter.hpGrow;
     $("#param-mp-grow")[0].value = parameter.mpGrow;
 
-    viewUpdate();
+    viewUpdate(true);
     $(".ui.mini.generate.modal").modal({ duration: 200 }).modal("hide");
 }
 function initInitialSkills() {
@@ -276,19 +287,19 @@ function initInvestigator(investigator) {
         console.log(exp);
         $("#param-job-points")[0].value = eval(exp);
         eval("investigator.parameter.jobPoints=" + emptyBy($("#param-job-points")[0].value, "0"));
-        viewUpdate();
+        viewUpdate(true);
     });
     $("#param-job-points")[0].addEventListener("input", function (e) {
         eval("investigator.parameter.jobPoints=" + emptyBy($("#param-job-points")[0].value, "0"));
-        viewUpdate();
+        viewUpdate(true);
     });
     $("#param-job-points-correction")[0].addEventListener("input", function (e) {
         eval("investigator.parameter.jobPointsCorrection=" + emptyBy($("#param-job-points-correction")[0].value, "0"));
-        viewUpdate();
+        viewUpdate(true);
     });
     $("#param-interest-points-correction")[0].addEventListener("input", function (e) {
         eval("investigator.parameter.interestPointsCorrection=" + emptyBy($("#param-interest-points-correction")[0].value, "0"));
-        viewUpdate();
+        viewUpdate(true);
     });
 
     $("#append-skill-combat")[0].addEventListener("click", appendSkill);
@@ -393,7 +404,7 @@ function updateProfile(e) {
     var prop = matches[1];
     eval("investigator.profile." + prop + '="' + $("#profile-" + prop)[0].value + '"');
 
-    viewUpdate();
+    viewUpdate(true);
 }
 
 function initParameter(parameter) {
@@ -452,7 +463,7 @@ function initParameter(parameter) {
     $("#param-mp-grow")[0].addEventListener("input", updateParameter);
     $("#param-san")[0].addEventListener("input", function (e) {
         investigator.parameter.san = parseInt($("#param-san")[0].value);
-        viewUpdate();
+        viewUpdate(true);
     });
 }
 function updateParameter(e) {
@@ -462,7 +473,7 @@ function updateParameter(e) {
     eval("investigator.parameter." + prop + "Grow=" + emptyBy($("#param-" + prop + "-grow")[0].value, "0"));
     $("#param-" + prop + "-present")[0].value = eval("investigator.parameter." + prop + "+" + "investigator.parameter." + prop + "Grow");
 
-    viewUpdate();
+    viewUpdate(true);
 }
 
 function initSkill(skill) {
@@ -531,7 +542,7 @@ function appendSkill(e) {
     initSkill(skill);
     investigator.skills.push(skill);
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function appendSpecificSkill(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -540,7 +551,7 @@ function appendSpecificSkill(e) {
     initSkill(skill);
     investigator.skills.push(skill);
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function updateSkill(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -555,7 +566,7 @@ function updateSkill(e) {
         eval("skill." + prop + "=" + emptyBy($("#skill-" + id + "-" + prop)[0].value, "0"));
     }
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function deleteSkill(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -573,7 +584,7 @@ function deleteSkill(e) {
     $("#skill-" + investigator.skills[index].id + "-row").remove();
     investigator.skills.splice(index, 1);
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function ToSkillTr(skill) {
     var nameOptionShown = skill.subnameEditable || skill.subname;
@@ -631,8 +642,8 @@ function initWeapon(weapon) {
     $("#weapon-" + weapon.getFailureId())[0].addEventListener("input", updateWeapon);
     $("#weapon-" + weapon.id + "-delete")[0].addEventListener("click", deleteWeapon);
     $("#weapon-" + weapon.id + "-rate-skill-value")[0].addEventListener("change", function (e) {
-    var path = e.path || (e.composedPath && e.composedPath());
-    var matches = path[0].id.match(/weapon-(\w+)-rate-skill-value/);
+        var path = e.path || (e.composedPath && e.composedPath());
+        var matches = path[0].id.match(/weapon-(\w+)-rate-skill-value/);
         if (matches == null) return;
         var id = parseInt(matches[1]);
 
@@ -657,7 +668,7 @@ function appendWeapon(e) {
     initWeapon(weapon);
     investigator.weapons.push(weapon);
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function updateWeapon(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -672,7 +683,7 @@ function updateWeapon(e) {
         eval("weapon." + prop + "=" + emptyBy($("#weapon-" + id + "-" + prop)[0].value, "0"));
     }
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function deleteWeapon(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -691,7 +702,7 @@ function deleteWeapon(e) {
     $("#weapon-" + investigator.weapons[index].id + "-row-2").remove();
     investigator.weapons.splice(index, 1);
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function ToWeaponTr(weapon) {
     var nameEditableDisabledProp = weapon.nameEditable ? "" : " disabled";
@@ -752,7 +763,7 @@ function appendEquip(e) {
     initEquip(equip);
     investigator.equips.push(equip);
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function updateEquip(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -767,7 +778,7 @@ function updateEquip(e) {
         eval("equip." + prop + "=" + emptyBy($("#equip-" + id + "-" + prop)[0].value, "0"));
     }
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function deleteEquip(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -785,7 +796,7 @@ function deleteEquip(e) {
     $("#equip-" + investigator.equips[index].id + "-row").remove();
     investigator.equips.splice(index, 1);
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function ToEquipTr(equip) {
     var disabledProp = equip.editable ? "" : " disabled";
@@ -814,7 +825,7 @@ function updateMoney(e) {
     var prop = matches[1];
     eval("investigator.money." + prop + '="' + $("#money-" + prop)[0].value + '"');
 
-    viewUpdate();
+    viewUpdate(true);
 }
 
 function initBackstory(backstory) {
@@ -912,7 +923,7 @@ function updateBackstory(e) {
     var value = $("#backstory-" + prop)[0].value;
     eval("investigator.backstory." + prop + "= value;");
 
-    viewUpdate();
+    viewUpdate(true);
 }
 function getRandomRandomPersonalDescription() {
     var personalDescriptions = ["いかつい", "ずんぐり", "学者ふう", "童顔", "がっしりした", "だらしない", "輝かしい", "肉付きがいい", "かわいい", "だるそう", "筋肉質", "日焼けした", "きたならしい", "ばらのよう", "屈強", "不愛想", "きゃしゃ", "ハンサム", "若々しい", "不器用", "さえない", "ぶかっこう", "小肥り", "平凡", "しわくちゃ", "ぼんやりした", "上品", "魅力的", "スマート", "陰気", "青白い", "毛深い", "スリム", "汚い", "線の鋭い", "ひ弱"];
@@ -1225,7 +1236,7 @@ function getRandomMania() {
     investigator.backstory.phobiasAndManias += manias[dice(manias.length) - 1] + "\n";
     $("#backstory-phobiasAndManias")[0].value = investigator.backstory.phobiasAndManias;
 }
-function viewUpdate() {
+function viewUpdate(isSaveLocal) {
     $("#param-str-present")[0].value = investigator.parameter.str + investigator.parameter.strGrow;
     $("#param-con-present")[0].value = investigator.parameter.con + investigator.parameter.conGrow;
     $("#param-pow-present")[0].value = investigator.parameter.pow + investigator.parameter.powGrow;
@@ -1295,7 +1306,7 @@ function viewUpdate() {
             .dropdown({ values: weaponValues })
             .dropdown({
                 onChange: function (value, text, $selectedItem) {
-                    viewUpdate();
+                    viewUpdate(true);
                 },
             });
     }
@@ -1327,6 +1338,27 @@ function viewUpdate() {
     }
     usageJobPointsElement[0].innerText = `職P ${usageJobPoints}/${jobPoints}[${jobPoints - usageJobPoints}]`;
     usageInterestPointsElement[0].innerText = `興P ${usageInterestPoints}/${interestPoints}[${interestPoints - usageInterestPoints}]`;
+
+    console.log(isSaveLocal)
+    if (isSaveLocal) {
+        saveLocalInvestigator(investigator);
+    }
+}
+
+function toHistoryCard(index, investigator) {
+    var str = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">STR</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.str}</div></div></div>`;
+    var con = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">CON</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.con}</div></div></div>`;
+    var pow = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">POW</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.pow}</div></div></div>`;
+    var dex = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">DEX</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.dex}</div></div></div>`;
+    var app = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">APP</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.app}</div></div></div>`;
+    var siz = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">SIZ</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.siz}</div></div></div>`;
+    var int = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">INT</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.int}</div></div></div>`;
+    var edu = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">EDU</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.edu}</div></div></div>`;
+    var luk = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">幸運</div><div class="description" style="padding: 1px!important;margin: 1px;">${investigator.parameter.luk}</div></div></div>`;
+    var list = `<div class="ui large inverted horizontal list meta">${str}${con}${pow}${dex}${app}${siz}${int}${edu}${luk}</div>`;
+    var content = `<div class="content" style="padding: 5px;"><div class="header">${investigator.profile.name}</div>${list}</div>`;
+    var button = `<button id="history-investigator-${index}-load" class="ui fluid inverted positive basic button">読み込み</button>`;
+    return `<div class="ui left aligned column" style="margin: 0!important;"><div class="ui fluid inverted card">${content}${button}</div></div>`;
 }
 
 window.onload = function () {
@@ -1347,6 +1379,34 @@ window.onload = function () {
         $(".ui.account-sign-up").hide();
         $(".ui.account-sign-in").show();
         $(".ui.account.modal").modal({ duration: 200 }).modal("show");
+    });
+
+    $("#investigator-history")[0].addEventListener("click", function (e) {
+        if (localInvestigators.length == 0) {
+            localInvestigators = localStorage.localInvestigators ? JSON.parse(localStorage.localInvestigators) : [];
+        }
+        $("#history-investigators").empty();
+        for (var i = localInvestigators.length - 1; i >= 0; i--) {
+            var localInvestigator = localInvestigators[i];
+            if (localInvestigator === investigator) continue;
+            $("#history-investigators").append(toHistoryCard(i, localInvestigator));
+            $("#history-investigator-" + i + "-load")[0].addEventListener("click", function (e) {
+                var path = e.path || (e.composedPath && e.composedPath());
+                var matches = path[0].id.match(/history-investigator-(\w+)-load/);
+                if (matches == null) return;
+                var index = matches[1];
+                var id = investigator.id;
+                investigator = override(JSON.parse(JSON.stringify(localInvestigators[index])));
+                investigator.id = id;
+                if (localInvestigators.length > 6) {
+                    localInvestigators = localInvestigators.slice(localInvestigators.length - 6, -1);
+                }
+                localStorage.localInvestigators = JSON.stringify(localInvestigators);
+                initInvestigator(investigator);
+                $(".ui.history.modal").modal({ duration: 200 }).modal("hide");
+            });
+        }
+        $(".ui.history.modal").modal({ duration: 200 }).modal("show");
     });
 
     $("#investigator-share")[0].addEventListener("click", function (e) {
@@ -1374,12 +1434,13 @@ window.onload = function () {
     getEditingInvestigator(account, paramV ? paramV : 0, function (newInvestigator) {
         investigator = newInvestigator;
         initInvestigator(investigator);
-        viewUpdate();
+        viewUpdate(false);
     });
 };
 
 account = getLoginAccount();
 investigator = {};
+localInvestigators = [];
 var paramV = parseInt(getParam("v"));
 if (!paramV) {
     getNewInvestigator(account, function (newId) {

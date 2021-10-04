@@ -870,6 +870,12 @@
                     </div>
                 </div>
                 <div class="ui inverted right menu">
+                    <div id="investigator-history-menu" class="item">
+                        <button id="investigator-history" class="ui button" style="display: flex">
+                            <i class="history icon" style="width: 6px"></i>
+                            <div class="ui mobile hidden" style="padding-left: 10px">履歴</div>
+                        </button>
+                    </div>
                     <div id="investigator-view-menu" class="item">
                         <button id="investigator-view" class="ui button" style="display: flex">
                             <i class="eye icon" style="width: 6px"></i>
@@ -888,8 +894,8 @@
                             <div class="ui mobile hidden" style="padding-left: 10px">出力</div>
                         </button>
                     </div>
-                    <div id="investigator-save-menu" class="item" style="display: none">
-                        <button id="investigator-save" class="ui center aligned positive button" style="display: flex">
+                    <div id="investigator-save-menu" class="item">
+                        <button id="investigator-save" class="ui center aligned positive button" style="display: flex" disabled>
                             <i class="save icon" style="width: 3px"></i>
                             <div class="ui mobile hidden" style="padding-left: 10px">保存</div>
                         </button>
@@ -897,6 +903,15 @@
                 </div>
             </div>
         </footer>
+        <div class="ui mini history modal" style="min-width: 356px">
+            <div class="ui top inverted attached segment">
+                <i class="modal close icon" style="position: absolute; top: 8px; right: 4px"></i>
+                <p style="font-size: x-large">履歴</p>
+            </div>
+            <div class="ui inverted attached segment" style="height: 40em;overflow-y: scroll;">
+                <div id="history-investigators" class="ui one column doubling stackable grid"></div>
+            </div>
+        </div>
         <div class="ui mini generate modal" style="min-width: 356px">
             <div class="ui top inverted attached segment">
                 <i class="modal close icon" style="position: absolute; top: 8px; right: 4px"></i>
