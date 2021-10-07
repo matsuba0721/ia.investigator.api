@@ -43,6 +43,8 @@ function initInvestigator(newInvestigators) {
         filterProfileCard();
     });
 
+    filterProfileCard();
+    
     setTimeout(function () {
         for (var i = 0; i < investigators.length; i++) {
             var investigator = investigators[i];

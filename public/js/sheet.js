@@ -233,16 +233,19 @@ function initInvestigator(investigator) {
     initProfile(investigator.profile);
     initParameter(investigator.parameter);
 
+    $(".skill.accordion .content table tbody").empty();
     for (var i = 0; i < investigator.skills.length; i++) {
         investigator.skills[i].id = i;
         initSkill(investigator.skills[i]);
     }
 
+    $("#weapon-table").empty();
     for (var i = 0; i < investigator.weapons.length; i++) {
         investigator.weapons[i].id = i;
         initWeapon(investigator.weapons[i]);
     }
 
+    $("#equip-table").empty();
     for (var i = 0; i < investigator.equips.length; i++) {
         investigator.equips[i].id = i;
         initEquip(investigator.equips[i]);
@@ -1403,6 +1406,7 @@ window.onload = function () {
                 }
                 localStorage.localInvestigators = JSON.stringify(localInvestigators);
                 initInvestigator(investigator);
+                viewUpdate(false);
                 $(".ui.history.modal").modal({ duration: 200 }).modal("hide");
             });
         }
