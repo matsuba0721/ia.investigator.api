@@ -243,9 +243,9 @@ async function GetRows(result) {
 }
 
 async function getAccount(pool, username, password) {
-    var queryString = `SELECT id, token FROM IaAccounts WHERE name = '${username}' and password = '${password}' LIMIT 1 OFFSET 0;`;
-    console.log(queryString);
-    var result = await pool.query(queryString);
+    var queryString = `SELECT id, token FROM IaAccounts WHERE name = $1 and password = $2 LIMIT 1 OFFSET 0;`;
+    console.log(queryString, [username, password]);
+    var result = await pool.query(queryString, [username, password]);
     var rows = await GetRows(result);
     if (rows.length == 0) {
         return toResultObject(RES_ACCOUNT_NOTFOUND, { id: 0, name: username, token: "" });
@@ -255,9 +255,9 @@ async function getAccount(pool, username, password) {
 
 async function saveAccount(pool, username, password, email) {
     var token = await sha256(new Date().toUTCString());
-    var queryString = `INSERT INTO IaAccounts(name,password,email,token,createtimestamp,updatetimestamp) VALUES ('${username}', '${password}','${email}' , '${token}', now(), now()) RETURNING id;`;
-    console.log(queryString);
-    var result = await pool.query(queryString);
+    var queryString = `INSERT INTO IaAccounts(name,password,email,token,createtimestamp,updatetimestamp) VALUES ($1,$2,$3,$4, now(), now()) RETURNING id;`;
+    console.log(queryString, [username, password, email, token]);
+    var result = await pool.query(queryString, [username, password, email, token]);
     var rows = await GetRows(result);
     if (rows.length == 0) {
         return toResultObject(RES_ERROR, {});
@@ -267,9 +267,9 @@ async function saveAccount(pool, username, password, email) {
 
 async function getInvestigatorSnsHtml(pool, id) {
     var profile = { id: id, name: "Unknown" };
-    var queryString = `SELECT RTRIM(Name) AS Name, RTRIM(Kana) AS Kana FROM IaInvestigatorProfiles WHERE InvestigatorId = ${id} LIMIT 1 OFFSET 0;`;
-    console.log(queryString);
-    var result = await pool.query(queryString);
+    var queryString = `SELECT RTRIM(Name) AS Name, RTRIM(Kana) AS Kana FROM IaInvestigatorProfiles WHERE InvestigatorId = $1 LIMIT 1 OFFSET 0;`;
+    console.log(queryString, [id]);
+    var result = await pool.query(queryString, [id]);
     var rows = await GetRows(result);
     if (rows.length > 0) {
         var row = rows[0];
@@ -432,17 +432,17 @@ async function getNewInvestigator(pool, token) {
         return toResultObject(RES_OK, { id: 0 });
     }
 
-    var queryString = `SELECT Id FROM IaInvestigators WHERE AccountToken = '${token}' AND IsEmpty = 1 LIMIT 1 OFFSET 0;`;
-    console.log(queryString);
-    var result = await pool.query(queryString);
+    var queryString = `SELECT Id FROM IaInvestigators WHERE AccountToken = $1 AND IsEmpty = 1 LIMIT 1 OFFSET 0;`;
+    console.log(queryString, [token]);
+    var result = await pool.query(queryString, [token]);
     var rows = await GetRows(result);
     if (rows.length > 0) {
         return toResultObject(RES_OK, { id: rows[0].id });
     }
 
-    queryString = `INSERT INTO IaInvestigators(AccountToken,IsEmpty,createtimestamp,updatetimestamp) VALUES ('${token}', 1, now(), now()) RETURNING id;`;
-    console.log(queryString);
-    result = await pool.query(queryString);
+    queryString = `INSERT INTO IaInvestigators(AccountToken,IsEmpty,createtimestamp,updatetimestamp) VALUES ($1, 1, now(), now()) RETURNING id;`;
+    console.log(queryString, [token]);
+    result = await pool.query(queryString, [token]);
     var rows = await GetRows(result);
     if (rows.length == 0) {
         return toResultObject(RES_ERROR, {});
@@ -456,9 +456,9 @@ async function getInvestigatorEditable(pool, token, id) {
         return toResultObject(RES_OK, { editable: false });
     }
 
-    var queryString = `SELECT AccountToken FROM IaInvestigators WHERE id = ${id} LIMIT 1 OFFSET 0;`;
-    console.log(queryString);
-    var result = await pool.query(queryString);
+    var queryString = `SELECT AccountToken FROM IaInvestigators WHERE id = $1 LIMIT 1 OFFSET 0;`;
+    console.log(queryString, [id]);
+    var result = await pool.query(queryString, [id]);
     var rows = await GetRows(result);
     if (rows.length == 0) {
         return toResultObject(RES_OK, { editable: false });
@@ -471,9 +471,9 @@ async function getInvestigator(pool, id) {
     if (id == 0) {
         return toResultObject(RES_OK, getInitInvestigator(0));
     }
-    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, IaInvestigators.IsNPC, IaInvestigators.AccountToken AS Token, IaInvestigators.IsEmpty, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'height',RTRIM(IaInvestigatorProfiles.Height), 'weight',RTRIM(IaInvestigatorProfiles.Weight), 'origin',RTRIM(IaInvestigatorProfiles.Origin), 'hairColor',RTRIM(IaInvestigatorProfiles.HairColor), 'eyeColor',RTRIM(IaInvestigatorProfiles.EyeColor), 'skinColor',RTRIM(IaInvestigatorProfiles.SkinColor), 'image', IaInvestigatorProfileImages.Data) AS Profile, IaInvestigatorDetails.Parameter, IaInvestigatorDetails.Skills, IaInvestigatorDetails.Weapons, IaInvestigatorDetails.Equips, IaInvestigatorDetails.Money, IaInvestigatorDetails.Backstory, IaInvestigatorDetails.Memo FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) LEFT OUTER JOIN IaInvestigatorDetails ON (IaInvestigators.Id = IaInvestigatorDetails.InvestigatorId) WHERE IaInvestigators.Id = ${id} LIMIT 1 OFFSET 0;`;
-    console.log(queryString);
-    var result = await pool.query(queryString);
+    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, IaInvestigators.IsNPC, IaInvestigators.AccountToken AS Token, IaInvestigators.IsEmpty, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'height',RTRIM(IaInvestigatorProfiles.Height), 'weight',RTRIM(IaInvestigatorProfiles.Weight), 'origin',RTRIM(IaInvestigatorProfiles.Origin), 'hairColor',RTRIM(IaInvestigatorProfiles.HairColor), 'eyeColor',RTRIM(IaInvestigatorProfiles.EyeColor), 'skinColor',RTRIM(IaInvestigatorProfiles.SkinColor), 'image', IaInvestigatorProfileImages.Data) AS Profile, IaInvestigatorDetails.Parameter, IaInvestigatorDetails.Skills, IaInvestigatorDetails.Weapons, IaInvestigatorDetails.Equips, IaInvestigatorDetails.Money, IaInvestigatorDetails.Backstory, IaInvestigatorDetails.Memo FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) LEFT OUTER JOIN IaInvestigatorDetails ON (IaInvestigators.Id = IaInvestigatorDetails.InvestigatorId) WHERE IaInvestigators.Id = $1 LIMIT 1 OFFSET 0;`;
+    console.log(queryString, [id]);
+    var result = await pool.query(queryString, [id]);
     var rows = await GetRows(result);
     if (rows.length == 0) {
         return toResultObject(RES_ERROR, {});
@@ -484,8 +484,8 @@ async function getInvestigator(pool, id) {
     }
     return toResultObject(RES_OK, {
         id: row.id,
-        isHidden: (row.ishidden == 0 ? false : true),
-        isNPC: (row.isnpc == 0 ? false : true),
+        isHidden: row.ishidden == 0 ? false : true,
+        isNPC: row.isnpc == 0 ? false : true,
         profile: row.profile,
         parameter: JSON.parse(row.parameter),
         skills: JSON.parse(row.skills),
@@ -507,45 +507,45 @@ async function saveInvestigator(pool, token, investigator) {
     var memo = investigator.memo;
 
     var queryString;
-    queryString = `INSERT INTO IaInvestigatorProfiles(InvestigatorId,AccountToken,Name,Kana,Tag,Job,Age,Gender,Height,Weight,Origin,HairColor,EyeColor,SkinColor,CreateTimestamp, UpdateTimestamp) VALUES (${investigator.id},'${token}','${investigator.profile.name}','${investigator.profile.kana}','${investigator.profile.tag}','${investigator.profile.job}','${investigator.profile.age}','${investigator.profile.gender}','${investigator.profile.height}','${investigator.profile.weight}','${investigator.profile.origin}','${investigator.profile.hairColor}','${investigator.profile.eyeColor}','${investigator.profile.skinColor}',now(),now()) ON CONFLICT (InvestigatorId) DO UPDATE SET Name = '${investigator.profile.name}',Kana = '${investigator.profile.kana}',Tag = '${investigator.profile.tag}',Job = '${investigator.profile.job}',Age= '${investigator.profile.age}',Gender = '${investigator.profile.gender}',Height = '${investigator.profile.height}',Weight = '${investigator.profile.weight}',Origin = '${investigator.profile.origin}',HairColor = '${investigator.profile.hairColor}',EyeColor = '${investigator.profile.eyeColor}',SkinColor = '${investigator.profile.skinColor}',UpdateTimestamp = now() WHERE IaInvestigatorProfiles.InvestigatorId = ${investigator.id} AND IaInvestigatorProfiles.AccountToken = '${token}';`;
-    console.log(queryString.slice(0, 100));
-    await pool.query(queryString);
+    queryString = `INSERT INTO IaInvestigatorProfiles(InvestigatorId,AccountToken,Name,Kana,Tag,Job,Age,Gender,Height,Weight,Origin,HairColor,EyeColor,SkinColor,CreateTimestamp, UpdateTimestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,now(),now()) ON CONFLICT (InvestigatorId) DO UPDATE SET Name = $3,Kana = $4,Tag = $5,Job = $6,Age= $7,Gender = $8,Height = $9,Weight = $10,Origin = $11,HairColor = $12,EyeColor = $13,SkinColor = $14,UpdateTimestamp = now() WHERE IaInvestigatorProfiles.InvestigatorId = $1 AND IaInvestigatorProfiles.AccountToken = $2;`;
+    console.log(queryString, [investigator.id, token, investigator.profile.name, investigator.profile.kana, investigator.profile.tag, investigator.profile.job, investigator.profile.age, investigator.profile.gender, investigator.profile.height, investigator.profile.weight, investigator.profile.origin, investigator.profile.hairColor, investigator.profile.eyeColor, investigator.profile.skinColor]);
+    await pool.query(queryString, [investigator.id, token, investigator.profile.name, investigator.profile.kana, investigator.profile.tag, investigator.profile.job, investigator.profile.age, investigator.profile.gender, investigator.profile.height, investigator.profile.weight, investigator.profile.origin, investigator.profile.hairColor, investigator.profile.eyeColor, investigator.profile.skinColor]);
 
-    queryString = `INSERT INTO IaInvestigatorDetails(InvestigatorId,AccountToken,Parameter,Skills,Weapons,Equips,Money,Backstory,Memo) VALUES (${investigator.id},'${token}','${parameter}','${skills}','${weapons}','${equips}','${money}','${backstory}','${memo}') ON CONFLICT (InvestigatorId) DO UPDATE SET Parameter = '${parameter}', Skills = '${skills}', Weapons = '${weapons}', Equips = '${equips}', Money = '${money}', Backstory = '${backstory}', Memo = '${memo}' WHERE IaInvestigatorDetails.InvestigatorId = ${investigator.id} AND IaInvestigatorDetails.AccountToken = '${token}';`;
-    console.log(queryString.slice(0, 100));
-    await pool.query(queryString);
+    queryString = `INSERT INTO IaInvestigatorDetails(InvestigatorId,AccountToken,Parameter,Skills,Weapons,Equips,Money,Backstory,Memo) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (InvestigatorId) DO UPDATE SET Parameter = $3, Skills = $4, Weapons = $5, Equips = $6, Money = $7, Backstory = $8, Memo = $9 WHERE IaInvestigatorDetails.InvestigatorId = $1 AND IaInvestigatorDetails.AccountToken = $2;`;
+    console.log(queryString, [investigator.id, token]);
+    await pool.query(queryString, [investigator.id, token, parameter, skills, weapons, equips, money, backstory, memo]);
 
-    queryString = `UPDATE IaInvestigators SET IsEmpty = 0, IsHidden = ${investigator.isHidden ? 1 : 0}, IsNPC = ${investigator.isNPC ? 1 : 0} WHERE IaInvestigators.Id = ${investigator.id} AND IaInvestigators.AccountToken = '${token}'`;
-    console.log(queryString.slice(0, 100));
-    await pool.query(queryString);
+    queryString = `UPDATE IaInvestigators SET IsEmpty = 0, IsHidden = $3, IsNPC = $4 WHERE IaInvestigators.Id = $1 AND IaInvestigators.AccountToken = $2`;
+    console.log(queryString, [investigator.id, token, investigator.isHidden ? 1 : 0, investigator.isNPC ? 1 : 0]);
+    await pool.query(queryString, [investigator.id, token, investigator.isHidden ? 1 : 0, investigator.isNPC ? 1 : 0]);
 
     return toResultObject(RES_OK, { id: investigator.id });
 }
 async function deleteInvestigator(pool, token, id) {
     var queryString;
-    queryString = `DELETE FROM IaInvestigatorProfiles WHERE InvestigatorId = ${id} AND AccountToken = '${token}';`;
-    console.log(queryString);
-    await pool.query(queryString);
+    queryString = `DELETE FROM IaInvestigatorProfiles WHERE InvestigatorId = $1 AND AccountToken = $2;`;
+    console.log(queryString, [id, token]);
+    await pool.query(queryString, [id, token]);
 
-    queryString = `DELETE FROM IaInvestigatorProfileImages WHERE InvestigatorId = ${id} AND AccountToken = '${token}';`;
-    console.log(queryString);
-    await pool.query(queryString);
+    queryString = `DELETE FROM IaInvestigatorProfileImages WHERE InvestigatorId = $1 AND AccountToken = $2;`;
+    console.log(queryString, [id, token]);
+    await pool.query(queryString, [id, token]);
 
-    queryString = `DELETE FROM IaInvestigatorDetails WHERE InvestigatorId = ${id} AND AccountToken = '${token}';`;
-    console.log(queryString);
-    await pool.query(queryString);
+    queryString = `DELETE FROM IaInvestigatorDetails WHERE InvestigatorId = $1 AND AccountToken = $2;`;
+    console.log(queryString, [id, token]);
+    await pool.query(queryString, [id, token]);
 
-    queryString = `DELETE FROM IaInvestigators WHERE Id = ${id} AND AccountToken = '${token}';`;
-    console.log(queryString);
-    await pool.query(queryString);
+    queryString = `DELETE FROM IaInvestigators WHERE Id = $1 AND AccountToken = $2;`;
+    console.log(queryString, [id, token]);
+    await pool.query(queryString, [id, token]);
 
     return toResultObject(RES_OK, { id: id });
 }
 
 async function getInvestigatorProfileImage(pool, id) {
-    var queryString = `SELECT type, Data FROM IaInvestigatorProfileImages WHERE InvestigatorId = ${id} LIMIT 1 OFFSET 0;`;
-    console.log(queryString);
-    var result = await pool.query(queryString);
+    var queryString = `SELECT type, Data FROM IaInvestigatorProfileImages WHERE InvestigatorId = $1 LIMIT 1 OFFSET 0;`;
+    console.log(queryString, [id]);
+    var result = await pool.query(queryString, [id]);
     var rows = await GetRows(result);
     if (rows.length == 0) {
         return null;
@@ -555,19 +555,17 @@ async function getInvestigatorProfileImage(pool, id) {
 }
 
 async function saveInvestigatorProfileImage(pool, token, id, imgType, image) {
-    var queryString;
-    var hex = `decode('${image.toString("hex")}', 'hex')`;
-    queryString = `INSERT INTO IaInvestigatorProfileImages(InvestigatorId,AccountToken,type,Data) VALUES (${id},'${token}','${imgType}',${hex}) ON CONFLICT (InvestigatorId) DO UPDATE SET type ='${imgType}', Data = ${hex} WHERE IaInvestigatorProfileImages.InvestigatorId = ${id} AND IaInvestigatorProfileImages.AccountToken = '${token}';`;
-    console.log(queryString.slice(0, 500));
-    await pool.query(queryString);
+    var queryString = `INSERT INTO IaInvestigatorProfileImages(InvestigatorId,AccountToken,type,Data) VALUES ($1,$2,$3,$4) ON CONFLICT (InvestigatorId) DO UPDATE SET type =$3, Data = $4 WHERE IaInvestigatorProfileImages.InvestigatorId = $1 AND IaInvestigatorProfileImages.AccountToken = $2;`;
+    console.log(queryString, [id, token, imgType]);
+    await pool.query(queryString, [id, token, imgType, image]);
 
     return toResultObject(RES_OK, { id: id });
 }
 
 async function getUserInvestigators(pool, token) {
-    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, IaInvestigators.IsNPC, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'image', IaInvestigatorProfileImages.Data) AS Profile FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) WHERE IaInvestigators.AccountToken = '${token}' AND IaInvestigators.IsEmpty=0 ORDER BY IaInvestigatorProfiles.UpdateTimestamp DESC LIMIT 100 OFFSET 0;`;
-    console.log(queryString);
-    var result = await pool.query(queryString);
+    var queryString = `SELECT IaInvestigators.Id, IaInvestigators.IsHidden, IaInvestigators.IsNPC, json_build_object('name',RTRIM(IaInvestigatorProfiles.Name), 'kana',RTRIM(IaInvestigatorProfiles.Kana), 'tag',RTRIM(IaInvestigatorProfiles.Tag), 'job',RTRIM(IaInvestigatorProfiles.Job), 'age',RTRIM(IaInvestigatorProfiles.Age), 'gender',RTRIM(IaInvestigatorProfiles.Gender), 'image', IaInvestigatorProfileImages.Data) AS Profile FROM IaInvestigators LEFT OUTER JOIN IaInvestigatorProfiles ON (IaInvestigators.Id = IaInvestigatorProfiles.InvestigatorId) LEFT OUTER JOIN IaInvestigatorProfileImages ON (IaInvestigators.Id = IaInvestigatorProfileImages.InvestigatorId) WHERE IaInvestigators.AccountToken = $1 AND IaInvestigators.IsEmpty=0 ORDER BY IaInvestigatorProfiles.UpdateTimestamp DESC LIMIT 100 OFFSET 0;`;
+    console.log(queryString, [token]);
+    var result = await pool.query(queryString, [token]);
     var rows = await GetRows(result);
 
     var investigators = [];

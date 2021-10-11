@@ -287,7 +287,6 @@ function initInvestigator(investigator) {
             .replace("dex", investigator.parameter.dex + investigator.parameter.dexGrow)
             .replace("siz", investigator.parameter.siz + investigator.parameter.sizGrow)
             .replace("app", investigator.parameter.app + investigator.parameter.appGrow);
-        console.log(exp);
         $("#param-job-points")[0].value = eval(exp);
         eval("investigator.parameter.jobPoints=" + emptyBy($("#param-job-points")[0].value, "0"));
         viewUpdate(true);
@@ -1342,7 +1341,6 @@ function viewUpdate(isSaveLocal) {
     usageJobPointsElement[0].innerText = `職P ${usageJobPoints}/${jobPoints}[${jobPoints - usageJobPoints}]`;
     usageInterestPointsElement[0].innerText = `興P ${usageInterestPoints}/${interestPoints}[${interestPoints - usageInterestPoints}]`;
 
-    console.log(isSaveLocal)
     if (isSaveLocal) {
         saveLocalInvestigator(investigator);
     }

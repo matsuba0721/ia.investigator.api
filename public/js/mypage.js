@@ -220,5 +220,4 @@ window.onload = function () {
 
     $(".ui.pointing.menu .item").tab();
 
-    getUserInvestigators(account, initInvestigator);
 };

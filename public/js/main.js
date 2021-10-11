@@ -439,7 +439,7 @@ function signUp(username, password, passwordConfirm, hashedPassword, email, func
             return;
         }
         if (username.length > 16) {
-            notifyFailure("ユーザー名は6文字以下です。", "exclamation triangle");
+            notifyFailure("ユーザー名は16文字以下です。", "exclamation triangle");
             return;
         }
         if (password.length < 8 || password.length > 16) {
