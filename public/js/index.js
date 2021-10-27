@@ -44,4 +44,5 @@ window.onload = function () {
             }
         }, 10);
     });
+    $(".ui.dropdown").dropdown();
 };

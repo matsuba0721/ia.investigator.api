@@ -218,6 +218,7 @@ window.onload = function () {
         $(".ui.mini.delete.modal").modal({ duration: 200 }).modal("hide");
     });
 
+    $(".ui.dropdown").dropdown();
     $(".ui.pointing.menu .item").tab();
 
 };

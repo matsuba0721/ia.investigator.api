@@ -33,7 +33,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
         <script src="js/Semantic-UI-Alert.js"></script>
         <script src="js/main.js"></script>
-        <script src="js/index.js"></script>
+        <script src="js/tools.js"></script>
     </head>
     <body style="background: #272b30">
         <header class="ui fixed inverted menu">
@@ -59,54 +59,39 @@
                 </div>
             </div>
         </header>
-        <div class="pusher">
-            <div class="ui inverted vertical masthead center aligned segment" style="background-image: url('./images/bg.jpg'); background-size: cover; height: 300px">
-                <div class="ui text container" style="margin-top: 5em">
-                    <h1 class="ui inverted header">R'lyeh House</h1>
-                    <h2>Investigator Creation Service for Cthulhu Mythos TRPG</h2>
-                    <div id="start" class="ui huge positive button">Get Started <i class="right arrow icon"></i></div>
+        <div class="ui grid container" style="margin-top: 1em; padding-bottom: 5em">
+            <div class="sixteen wide column">
+                <div class="ui inverted attached segment">
+                    <p style="font-size: x-large">ログ集計</p>
                 </div>
-            </div>
-            <div class="ui vertical stripe quote inverted segment">
-                <div class="ui equal width stackable internally celled grid">
-                    <div class="center aligned row">
-                        <div class="column">
-                            <h3>"What the TRPG"</h3>
-                            <p>ダイスと会話で物語を紡ぐRPG</p>
-                        </div>
-                        <div class="column">
-                            <h3>"Cthulhu Mythos"</h3>
-                            <p>『あまりにも人智を凌駕した、広大で虚無的な恐怖の前では人間の価値観など何の価値もない』</p>
-                            <p>H.P.Lovecraft</p>
-                        </div>
-                        <div class="column">
-                            <h3>"What this Service"</h3>
-                            <p>探索者の作成と管理</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ui vertical inverted segment" style="background-color: transparent">
-                <div class="ui text container">
-                    <h3 class="ui inverted header">Updates</h3>
-                    <div class="ui floating icon message">
-                        <i class="upload icon"></i>
-                        <div class="content">
-                            <div class="header">Version 1.7β released!</div>
-                            <p>成長判定を行う<a href="/tools">ツール</a>を実装しました。</p>
+                <div class="ui inverted attached segment">
+                    <textarea id="ccfolia-log" class="ui textarea" rows="10"></textarea>
+                    <div class="ui inverted form">
+                        <div class="inline fields">
+                            <label>設定</label>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input id="make-ccfolia-log-success" type="checkbox" checked="checked" />
+                                    <label for="make-ccfolia-log-success" style="cursor: pointer">成功技能</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input id="make-ccfolia-log-unsuccess" type="checkbox" />
+                                    <label for="make-ccfolia-log-unsuccess" style="cursor: pointer">未成功技能</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input id="make-ccfolia-log-failure" type="checkbox" />
+                                    <label for="make-ccfolia-log-failure" style="cursor: pointer">失敗技能</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="ui floating icon message">
-                        <i class="upload icon"></i>
-                        <div class="content">
-                            <div class="header">Version 1.0β released!</div>
-                            <p>サービスを開始しました。</p>
-                        </div>
-                    </div>
-                    <div class="ui divider"></div>
-                    <h3 class="ui inverted header">Recently Created Investigators</h3>
-                    <div id="investigators" class="ui inverted cards"></div>
+                    <div id="make-ccfolia-log" class="ui fluid inverted blue basic button"><i class="chart bar outline icon"></i>集計する</div>
+                    <textarea id="ccfolia-log-summary" class="ui textarea" rows="20"></textarea>
+                    <div id="ccfolia-log-summary-copy" class="ui fluid inverted blue basic button"><i class="copy icon"></i>コピーする</div>
                 </div>
             </div>
         </div>

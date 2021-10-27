@@ -80,7 +80,13 @@ app.get("/sns", async function (request, response) {
         pool.end();
     }
 });
-
+app.get("/tools", async function (request, response) {
+    fs.readFile("./public/tools.html", "utf-8", function (err, data) {
+        response.writeHead(200, { "Content-Type": "text/html" });
+        response.write(data);
+        response.end();
+    });
+});
 app.post("/getAccount", async function (request, response) {
     var pool = getPool();
     try {

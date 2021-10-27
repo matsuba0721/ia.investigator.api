@@ -157,6 +157,7 @@ window.onload = function () {
         writeClipboard(JSON.stringify(ccfoliaInvestigator));
     });
 
+    $(".ui.dropdown").dropdown();
     $(".ui.accordion").accordion({ exclusive: false });
     $(".ui.blurring").dimmer("show");
     $(".ui.pointing.menu .item").tab();
