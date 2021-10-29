@@ -16,7 +16,7 @@ window.onload = function () {
             if (matches == null) continue;
             roll = {
                 name: matches[1],
-                command: matches[2],
+                command: matches[2].trimStart(),
                 result: matches[3],
             };
             var isExclude = false;
