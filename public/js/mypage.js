@@ -9,8 +9,6 @@ function initInvestigator(newInvestigators) {
     for (var i = 0; i < investigators.length; i++) {
         var investigator = investigators[i];
         $("#investigators").append(toProfileCard(investigator.id, investigator.isHidden, investigator.isNPC, investigator.profile));
-        $("#investigator-" + investigator.id + "-view")[0].addEventListener("click", linkView);
-        $("#investigator-" + investigator.id + "-edit")[0].addEventListener("click", linkEdit);
         $("#investigator-" + investigator.id + "-export")[0].addEventListener("click", exportInvestigator);
         $("#investigator-" + investigator.id + "-share")[0].addEventListener("click", getShareUrl);
         $("#investigator-" + investigator.id + "-delete")[0].addEventListener("click", deletetInvestigator);
@@ -100,30 +98,8 @@ function toProfileCard(id, isHidden, isNPC, profile) {
     var npclabel = isNPC ? `<div class="ui basic yellow label" style="width: 50px;padding: 0.5em;">NPC</div>` : "";
     var w = isHidden || isNPC ? 50 : 0;
     var content = `<div class="content" style="padding: 5px;"><div class="ui right floated labels" style="width: ${w}px;padding: 0;">${hiddenlabel}${npclabel}</div><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
-    var extraContent = `<div class="ui right aligned　extra content" style="padding: 5px;"><div class="ui buttons"><button id="investigator-${id}-edit" class="ui icon button" style="padding: 10px 5px;"><i class="edit outline icon"></i>編集</button><button id="investigator-${id}-view" class="ui icon button" style="padding: 10px 5px;"><i class="eye icon"></i>閲覧</button><button id="investigator-${id}-share" class="ui icon button" style="padding: 10px 5px;"><i class="share alternate icon"></i>共有</button><button id="investigator-${id}-export" class="ui icon button" style="padding: 10px 5px;"><i class="share icon"></i>出力</button><button id="investigator-${id}-delete" class="ui icon button" style="padding: 10px 5px;"><i class="trash alternate icon"></i>削除</button></div></div>`;
+    var extraContent = `<div class="ui right aligned　extra content" style="padding: 5px;"><div class="ui buttons"><a href="/sheet?v=${id}" class="ui icon button" style="padding: 10px 5px;"><i class="edit outline icon"></i>編集</a><a href="/view?v=${id}" class="ui icon button" style="padding: 10px 5px;"><i class="eye icon"></i>閲覧</a><button id="investigator-${id}-share" class="ui icon button" style="padding: 10px 5px;"><i class="share alternate icon"></i>共有</button><button id="investigator-${id}-export" class="ui icon button" style="padding: 10px 5px;"><i class="share icon"></i>出力</button><button id="investigator-${id}-delete" class="ui icon button" style="padding: 10px 5px;"><i class="trash alternate icon"></i>削除</button></div></div>`;
     return `<div id="investigator-${id}" class="ui left aligned column" style="margin: 0!important;"><div class="ui fluid inverted card" style="min-width: 285px;">${content}${extraContent}</div></div>`;
-}
-function linkEdit(e) {
-    var path = e.path || (e.composedPath && e.composedPath());
-    for (var i = 0; i < path.length; i++) {
-        var matches = path[i].id.match(/investigator-(\w+)-edit/);
-        if (matches) {
-            var id = parseInt(matches[1]);
-            window.location.href = "sheet?v=" + id;
-            break;
-        }
-    }
-}
-function linkView(e) {
-    var path = e.path || (e.composedPath && e.composedPath());
-    for (var i = 0; i < path.length; i++) {
-        var matches = path[i].id.match(/investigator-(\w+)-view/);
-        if (matches) {
-            var id = parseInt(matches[1]);
-            window.location.href = "view?v=" + id;
-            break;
-        }
-    }
 }
 function exportInvestigator(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -194,10 +170,6 @@ window.onload = function () {
         $("#tab-filter a").removeClass("active");
         $(this).addClass("active");
         filterProfileCard();
-    });
-
-    $("#link-sheet")[0].addEventListener("click", function (e) {
-        window.location.href = "sheet";
     });
 
     $("#investigator-export-commands-copy")[0].addEventListener("click", function (e) {
