@@ -12,16 +12,19 @@ window.onload = function () {
         for (var i = 0; i < lines.length; i++) {
             if (lines[i] == "") continue;
 
-            matches = lines[i].match(/\[.+\](.+):(.+)\(1D100.+\).+(ファンブル|失敗|レギュラー成功|ハード成功|イクストリーム成功|クリティカル)/);
+            matches = lines[i].match(/\[.+\](.+):(.+) (.+)\(1D100.+\).+＞ (.+)$/);
             if (matches == null) continue;
             roll = {
                 name: matches[1],
-                command: matches[2].trimStart(),
-                result: matches[3],
+                command: matches[2].trim().replace("CC-2","CC").replace("CC-1","CC").replace("CC1","CC").replace("CC2","CC").replace("h","").replace("e",""),
+                tag: matches[3].trim(),
+                result: matches[4],
+                getKey: function(){return this.command + " " + this.tag;}
             };
+            console.log(roll.result);
             var isExclude = false;
             for (var j = 0; j < excludeCommands.length; j++) {
-                if (roll.command.indexOf(excludeCommands[j]) > 0) {
+                if (roll.tag.indexOf(excludeCommands[j]) > 0) {
                     isExclude = true;
                     break;
                 }
@@ -31,8 +34,8 @@ window.onload = function () {
                 rolls[roll.name] = {};
             }
             user = rolls[roll.name];
-            if (!user[roll.command]) {
-                user[roll.command] = {
+            if (!user[roll.getKey()]) {
+                user[roll.getKey()] = {
                     fumble: false,
                     failure: false,
                     regularSuccess: false,
@@ -41,7 +44,7 @@ window.onload = function () {
                     critical: false,
                 };
             }
-            userCommand = user[roll.command];
+            userCommand = user[roll.getKey()];
             if (roll.result == "ファンブル") {
                 userCommand.fumble = true;
             } else if (roll.result == "失敗") {
@@ -54,10 +57,11 @@ window.onload = function () {
                 userCommand.extremeSuccess = true;
             } else if (roll.result == "クリティカル") {
                 userCommand.critical = true;
+            }else if (roll.result == "成功") {
+                userCommand.regularSuccess = true;
             }
         }
         var result = "";
-        console.log(rolls);
         for (userName in rolls) {
             var userRoll = rolls[userName];
             var successSkills = "";
@@ -66,23 +70,23 @@ window.onload = function () {
             for (userCommandName in userRoll) {
                 var userCommand = userRoll[userCommandName];
                 if (userCommand.critical) {
-                    successSkills += `${userCommandName}★クリティカル\n`;
+                    successSkills += `${userCommandName}★Critical\n`;
                 } else if (userCommand.extremeSuccess) {
-                    successSkills += `${userCommandName}◎イクストリーム成功\n`;
+                    successSkills += `${userCommandName}◎Extreme\n`;
                 } else if (userCommand.hardSuccess) {
-                    successSkills += `${userCommandName}○ハード成功\n`;
+                    successSkills += `${userCommandName}○Hard\n`;
                 } else if (userCommand.regularSuccess) {
-                    successSkills += `${userCommandName}○レギュラー成功\n`;
+                    successSkills += `${userCommandName}○Regular\n`;
                 } else if (userCommand.fumble) {
-                    unsuccessSkills += `${userCommandName}▲ファンブル\n`;
+                    unsuccessSkills += `${userCommandName}▲Fumble\n`;
                 } else if (userCommand.failure) {
-                    unsuccessSkills += `${userCommandName}△失敗\n`;
+                    unsuccessSkills += `${userCommandName}△Failure\n`;
                 }
 
                 if (userCommand.fumble) {
-                    failureSkills += `${userCommandName}▲ファンブル\n`;
+                    failureSkills += `${userCommandName}▲Fumble\n`;
                 } else if (userCommand.failure) {
-                    failureSkills += `${userCommandName}△失敗\n`;
+                    failureSkills += `${userCommandName}△Failure\n`;
                 }
             }
             result += `---${userName}---\n`;
