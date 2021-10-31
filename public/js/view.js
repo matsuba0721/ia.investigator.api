@@ -1,5 +1,10 @@
 function accountChanged(account) {}
 function initInvestigator(investigator) {
+    if(investigator.profile.name){
+        document.title = investigator.profile.name + " | R'lyeh House";
+    }else{
+        document.title = "新しい探索者 | R'lyeh House";
+    }
     var cthulhuSkill = investigator.skills[37];
 
     initProfile(investigator.profile);

@@ -115,4 +115,5 @@ window.onload = function () {
     initSigns();
     initAccount(account);
     $(".ui.dropdown").dropdown();
+    document.title = "ツール | R'lyeh House";
 };

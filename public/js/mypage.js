@@ -192,5 +192,5 @@ window.onload = function () {
 
     $(".ui.dropdown").dropdown();
     $(".ui.pointing.menu .item").tab();
-
+    document.title = "マイページ | R'lyeh House";
 };

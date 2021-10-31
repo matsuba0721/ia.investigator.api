@@ -1239,6 +1239,12 @@ function getRandomMania() {
     $("#backstory-phobiasAndManias")[0].value = investigator.backstory.phobiasAndManias;
 }
 function viewUpdate(isSaveLocal) {
+    if(investigator.profile.name){
+        document.title = investigator.profile.name + " | R'lyeh House";
+    }else{
+        document.title = "R'lyeh House";
+    }
+
     $("#param-str-present")[0].value = investigator.parameter.str + investigator.parameter.strGrow;
     $("#param-con-present")[0].value = investigator.parameter.con + investigator.parameter.conGrow;
     $("#param-pow-present")[0].value = investigator.parameter.pow + investigator.parameter.powGrow;
