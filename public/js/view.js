@@ -162,6 +162,10 @@ window.onload = function () {
         writeClipboard(JSON.stringify(ccfoliaInvestigator));
     });
 
+    $("#investigator-export-local-json")[0].addEventListener("click", function (e) {
+        download(`${investigator.id}-${investigator.profile.name}`,investigator)
+    });
+
     $(".ui.dropdown").dropdown();
     $(".ui.accordion").accordion({ exclusive: false });
     $(".ui.blurring").dimmer("show");

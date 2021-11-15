@@ -45,9 +45,9 @@ async function sha256(str) {
 }
 function toTags(str) {
     str = emptyBy(str, "");
-    str = str.split('、').join(' ');
-    str = str.split(',').join(' ');
-    str = str.split('　').join(' ');
+    str = str.split("、").join(" ");
+    str = str.split(",").join(" ");
+    str = str.split("　").join(" ");
     return str.split(" ");
 }
 
@@ -304,6 +304,17 @@ function writeClipboard(str) {
             notifyFailure("クリップボードのコピーに失敗しました。", "exclamation triangle");
         }
     }
+}
+function download(filename, data) {
+    const blob = new Blob([JSON.stringify(data)], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.download = filename + ".json";
+    a.href = url;
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
 }
 function override(investigator) {
     investigator.parameter.getIde = function () {

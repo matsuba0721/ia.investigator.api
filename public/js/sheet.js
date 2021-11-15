@@ -210,6 +210,10 @@ function initExport() {
         var ccfoliaInvestigator = getCcfoliaClipboardInvestigator(investigator);
         writeClipboard(JSON.stringify(ccfoliaInvestigator));
     });
+
+    $("#investigator-export-local-json")[0].addEventListener("click", function (e) {
+        download(`${investigator.id}-${investigator.profile.name}`,investigator)
+    });
 }
 function initDiceRoll() {
     $("#dice-roll-1x100")[0].addEventListener("click", function (e) {
