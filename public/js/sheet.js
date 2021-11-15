@@ -210,9 +210,8 @@ function initExport() {
         var ccfoliaInvestigator = getCcfoliaClipboardInvestigator(investigator);
         writeClipboard(JSON.stringify(ccfoliaInvestigator));
     });
-
     $("#investigator-export-local-json")[0].addEventListener("click", function (e) {
-        download(`${investigator.id}-${investigator.profile.name}`,investigator)
+        download(`${investigator.id}-${investigator.profile.name}`, investigator);
     });
 }
 function initDiceRoll() {
@@ -1243,9 +1242,9 @@ function getRandomMania() {
     $("#backstory-phobiasAndManias")[0].value = investigator.backstory.phobiasAndManias;
 }
 function viewUpdate(isSaveLocal) {
-    if(investigator.profile.name){
+    if (investigator.profile.name) {
         document.title = investigator.profile.name + " | R'lyeh House";
-    }else{
+    } else {
         document.title = "R'lyeh House";
     }
 
@@ -1392,6 +1391,26 @@ window.onload = function () {
         $(".ui.account.modal").modal({ duration: 200 }).modal("show");
     });
 
+    $("#local-download")[0].addEventListener("click", function (e) {
+        download(`${investigator.id}-${investigator.profile.name}`, investigator);
+    });
+
+    $("#local-upload")[0].addEventListener(
+        "change",
+        function (evt) {
+            var file = evt.target.files;
+            var reader = new FileReader();
+            reader.readAsText(file[0]);
+            reader.onload = function () {
+                var id = investigator.id;
+                investigator = override(JSON.parse(reader.result));
+                investigator.id = id;
+                initInvestigator(investigator);
+                viewUpdate(false);
+            };
+        },
+        false
+    );
     $("#investigator-history")[0].addEventListener("click", function (e) {
         if (localInvestigators.length == 0) {
             localInvestigators = localStorage.localInvestigators ? JSON.parse(localStorage.localInvestigators) : [];

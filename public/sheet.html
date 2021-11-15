@@ -25,7 +25,7 @@
                     R'lyeh House
                     <div class="inverted menu" style="background: #1b1c1d">
                         <a href="/" class="inverted item" style="background-color: #1b1c1d !important; color: whitesmoke !important">Top</a>
-                        <a href="/tools"class="inverted item" style="background-color: #1b1c1d !important; color: whitesmoke !important">Tools</a>
+                        <a href="/tools" class="inverted item" style="background-color: #1b1c1d !important; color: whitesmoke !important">Tools</a>
                     </div>
                 </div>
                 <div class="ui inverted right menu">
@@ -57,6 +57,13 @@
         <div class="ui main two column stackable grid container" style="margin-top: 0">
             <div class="column">
                 <div class="ui top inverted attached segment">
+                    <input id="local-upload" type="file" (change)="fileEvent($event)" class="inputfile" />
+                    <label for="local-upload" class="ui right floated icon button">
+                        <i class="cloud upload icon"></i>
+                    </label>
+                    <div id="local-download" class="ui right floated icon button">
+                        <i class="cloud download icon"></i>
+                    </div>
                     <p style="font-size: x-large">基本情報</p>
                 </div>
                 <div class="ui inverted center aligned attached segment">
@@ -465,9 +472,9 @@
                 <div class="ui inverted attached segment">
                     <div class="ui inverted accordion">
                         <div class="inline active title">
-                            <div class="ui checkbox" style="width: 100%;">
+                            <div class="ui checkbox" style="width: 100%">
                                 <input type="checkbox" id="backstory-key-personalDescription" />
-                                <label for="backstory-key-personalDescription" style="color: white;cursor: pointer;">容姿の描写</label>
+                                <label for="backstory-key-personalDescription" style="color: white; cursor: pointer">容姿の描写</label>
                             </div>
                         </div>
                         <div class="active content">
@@ -475,9 +482,9 @@
                             <div id="randam-generate-backstory-personalDescription" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <div class="ui checkbox" style="width: 100%;">
+                            <div class="ui checkbox" style="width: 100%">
                                 <input type="checkbox" id="backstory-key-ideologyOrBeliefs" />
-                                <label for="backstory-key-ideologyOrBeliefs" style="color: white;cursor: pointer;">イデオロギー／信念</label>
+                                <label for="backstory-key-ideologyOrBeliefs" style="color: white; cursor: pointer">イデオロギー／信念</label>
                             </div>
                         </div>
                         <div class="active content">
@@ -485,9 +492,9 @@
                             <div id="randam-generate-backstory-ideologyOrBeliefs" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <div class="ui checkbox" style="width: 100%;">
+                            <div class="ui checkbox" style="width: 100%">
                                 <input type="checkbox" id="backstory-key-significantPeople" />
-                                <label for="backstory-key-significantPeople" style="color: white;cursor: pointer;">重要な人々</label>
+                                <label for="backstory-key-significantPeople" style="color: white; cursor: pointer">重要な人々</label>
                             </div>
                         </div>
                         <div class="active content">
@@ -495,9 +502,9 @@
                             <div id="randam-generate-backstory-significantPeople" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <div class="ui checkbox" style="width: 100%;">
+                            <div class="ui checkbox" style="width: 100%">
                                 <input type="checkbox" id="backstory-key-meaningfulLocations" />
-                                <label for="backstory-key-meaningfulLocations" style="color: white;cursor: pointer;">意味のある場所</label>
+                                <label for="backstory-key-meaningfulLocations" style="color: white; cursor: pointer">意味のある場所</label>
                             </div>
                         </div>
                         <div class="active content">
@@ -505,9 +512,9 @@
                             <div id="randam-generate-backstory-meaningfulLocations" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <div class="ui checkbox" style="width: 100%;">
+                            <div class="ui checkbox" style="width: 100%">
                                 <input type="checkbox" id="backstory-key-treasuredPossessions" />
-                                <label for="backstory-key-treasuredPossessions" style="color: white;cursor: pointer;">秘蔵の品</label>
+                                <label for="backstory-key-treasuredPossessions" style="color: white; cursor: pointer">秘蔵の品</label>
                             </div>
                         </div>
                         <div class="active content">
@@ -515,9 +522,9 @@
                             <div id="randam-generate-backstory-treasuredPossessions" class="ui fluid inverted blue basic button"><i class="random icon"></i>ランダム</div>
                         </div>
                         <div class="active title">
-                            <div class="ui checkbox" style="width: 100%;">
+                            <div class="ui checkbox" style="width: 100%">
                                 <input type="checkbox" id="backstory-key-traits" />
-                                <label for="backstory-key-traits" style="color: white;cursor: pointer;">特徴</label>
+                                <label for="backstory-key-traits" style="color: white; cursor: pointer">特徴</label>
                             </div>
                         </div>
                         <div class="active content">
@@ -914,7 +921,7 @@
                 <i class="modal close icon" style="position: absolute; top: 8px; right: 4px"></i>
                 <p style="font-size: x-large">履歴</p>
             </div>
-            <div class="ui inverted attached segment" style="height: 40em;overflow-y: scroll;">
+            <div class="ui inverted attached segment" style="height: 40em; overflow-y: scroll">
                 <div id="history-investigators" class="ui one column doubling stackable grid"></div>
             </div>
         </div>
