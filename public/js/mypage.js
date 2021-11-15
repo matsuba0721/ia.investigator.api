@@ -42,13 +42,7 @@ function initInvestigator(newInvestigators) {
     });
 
     filterProfileCard();
-    
-    setTimeout(function () {
-        for (var i = 0; i < investigators.length; i++) {
-            var investigator = investigators[i];
-            $(`#profile-image-${investigator.id}`)[0].src = `img?v=${investigator.id}`;
-        }
-    }, 10);
+    lazyload();
 }
 function filterProfileCard() {
     var cards = [];
@@ -97,7 +91,7 @@ function toProfileCard(id, isHidden, isNPC, profile) {
     var hiddenlabel = isHidden ? `<div class="ui basic red label" style="width: 50px;padding: 0.5em;">非公開</div>` : "";
     var npclabel = isNPC ? `<div class="ui basic yellow label" style="width: 50px;padding: 0.5em;">NPC</div>` : "";
     var w = isHidden || isNPC ? 50 : 0;
-    var content = `<div class="content" style="padding: 5px;"><div class="ui right floated labels" style="width: ${w}px;padding: 0;">${hiddenlabel}${npclabel}</div><img id="profile-image-${id}" class="left floated tiny ui image" src="images/loading.gif" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
+    var content = `<div class="content" style="padding: 5px;"><div class="ui right floated labels" style="width: ${w}px;padding: 0;">${hiddenlabel}${npclabel}</div><img class="lazyload left floated tiny ui image" src="images/loading.gif" data-src="/img?v=${id}" /><div class="header">${profile.name}</div><div class="meta">${toTags(profile.tag).join(",")}</div>${list}</div>`;
     var extraContent = `<div class="ui right aligned　extra content" style="padding: 5px;"><div class="ui buttons"><a href="/sheet?v=${id}" class="ui icon button" style="padding: 10px 5px;"><i class="edit outline icon"></i>編集</a><a href="/view?v=${id}" class="ui icon button" style="padding: 10px 5px;"><i class="eye icon"></i>閲覧</a><button id="investigator-${id}-share" class="ui icon button" style="padding: 10px 5px;"><i class="share alternate icon"></i>共有</button><button id="investigator-${id}-export" class="ui icon button" style="padding: 10px 5px;"><i class="share icon"></i>出力</button><button id="investigator-${id}-delete" class="ui icon button" style="padding: 10px 5px;"><i class="trash alternate icon"></i>削除</button></div></div>`;
     return `<div id="investigator-${id}" class="ui left aligned column" style="margin: 0!important;"><div class="ui fluid inverted card" style="min-width: 285px;">${content}${extraContent}</div></div>`;
 }
