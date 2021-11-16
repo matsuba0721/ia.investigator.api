@@ -8,9 +8,6 @@ function accountChanged(account) {
             $("#upload-profile-image").prop("disabled", true);
         }
     });
-    getPreset(account, function (p) {
-        preset = p;
-    });
 }
 async function saveLocalInvestigator(investigator) {
     if (localInvestigators.length == 0) {
@@ -23,7 +20,7 @@ async function saveLocalInvestigator(investigator) {
 
     localStorage.localInvestigators = JSON.stringify(localInvestigators);
 }
-function setGeneratedParameter(parameter){
+function setGeneratedParameter(parameter) {
     $("#param-str")[0].value = parameter.str;
     $("#param-con")[0].value = parameter.con;
     $("#param-pow")[0].value = parameter.pow;
@@ -221,7 +218,7 @@ function initStockedParameters() {
 
             setGeneratedParameter(parameter);
             viewUpdate(true);
-            preset.parameters.splice(index, 1)
+            preset.parameters.splice(index, 1);
             savePreset(account, preset, function () {});
 
             $(".ui.generate.modal").modal({ duration: 200 }).modal("hide");
@@ -1556,6 +1553,9 @@ window.onload = function () {
         investigator = newInvestigator;
         initInvestigator(investigator);
         viewUpdate(false);
+        getPreset(account, function (p) {
+            preset = p;
+        });
     });
 };
 
