@@ -698,3 +698,51 @@ function getRecentlyCreatedInvestigators(func) {
         notifyFailure("キャラクターデータの読み込みに失敗しました。", "exclamation triangle");
     }
 }
+function getPreset(account, func) {
+    try {
+        var request = new XMLHttpRequest();
+        request.responseType = "json";
+        request.ontimeout = function () {
+            notifyFailure("プリセットの取得に失敗しました。", "exclamation triangle");
+        };
+        request.onload = function () {
+            var data = this.response;
+            if (data.code == 0) {
+                func(data.result.preset);
+            } else {
+                notifyFailure("プリセットの取得に失敗しました。", "exclamation triangle");
+            }
+        };
+
+        request.open("POST", "getPreset/", true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify({ id:account.id, token: account.token }));
+    } catch (err) {
+        console.log(err);
+        notifyFailure("プリセットの取得に失敗しました。", "exclamation triangle");
+    }
+}
+function savePreset(account, preset, func) {
+    try {
+        var request = new XMLHttpRequest();
+        request.responseType = "json";
+        request.ontimeout = function () {
+            notifyFailure("保存に失敗しました。", "exclamation triangle");
+        };
+        request.onload = function () {
+            var data = this.response;
+            if (data.code == 0) {
+                func();
+            } else {
+                notifyFailure("保存に失敗しました。", "exclamation triangle");
+            }
+        };
+
+        request.open("POST", "savePreset/", true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify({ id:account.id, token: account.token, preset: preset }));
+    } catch (err) {
+        console.log(err);
+        notifyFailure("保存に失敗しました。", "exclamation triangle");
+    }
+}

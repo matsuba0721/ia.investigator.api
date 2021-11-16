@@ -216,6 +216,30 @@ app.post("/getRecentlyCreatedInvestigators", async function (request, response) 
     }
 });
 
+app.post("/getPreset", async function (request, response) {
+    var pool = getPool();
+    try {
+        response.send(await getPreset(pool, request.body.id, request.body.token));
+    } catch (error) {
+        response.send(toResultObject(RES_ERROR, error));
+    } finally {
+        console.log("Disconnect");
+        pool.end();
+    }
+});
+
+app.post("/savePreset", async function (request, response) {
+    var pool = getPool();
+    try {
+        response.send(await savePreset(pool, request.body.id, request.body.token, request.body.preset));
+    } catch (error) {
+        response.send(toResultObject(RES_ERROR, error));
+    } finally {
+        console.log("Disconnect");
+        pool.end();
+    }
+});
+
 app.listen(app.get("port"), function () {
     console.log("Node app is running at localhost:" + app.get("port"));
 });
@@ -527,6 +551,7 @@ async function saveInvestigator(pool, token, investigator) {
 
     return toResultObject(RES_OK, { id: investigator.id });
 }
+
 async function deleteInvestigator(pool, token, id) {
     var queryString;
     queryString = `DELETE FROM IaInvestigatorProfiles WHERE InvestigatorId = $1 AND AccountToken = $2;`;
@@ -606,4 +631,39 @@ async function getRecentlyCreatedInvestigators(pool) {
     }
 
     return toResultObject(RES_OK, investigators);
+}
+
+async function getPreset(pool, id, token) {
+    var queryString = `SELECT IaAccountPresets.Parameters, IaAccountPresets.Jobs, IaAccountPresets.Weapons, IaAccountPresets.Equips FROM IaAccounts LEFT OUTER JOIN IaAccountPresets ON (IaAccounts.Id = IaAccountPresets.AccountId) WHERE IaAccounts.Id = $1 LIMIT 1 OFFSET 0;`;
+    console.log(queryString, [id]);
+    var result = await pool.query(queryString, [id]);
+    var rows = await GetRows(result);
+    if (rows.length == 0) {
+        return toResultObject(RES_ERROR, {});
+    }
+    var row = rows[0];
+    if (row.isempty == 1) {
+        return toResultObject(RES_OK, getInitInvestigator(row.id));
+    }
+    return toResultObject(RES_OK, {
+        preset: {
+            parameters: JSON.parse(row.parameters ?? "[]"),
+            jobs: JSON.parse(row.jobs ?? "[]"),
+            weapons: JSON.parse(row.weapons ?? "[]"),
+            equips: JSON.parse(row.equips ?? "[]"),
+        },
+    });
+}
+
+async function savePreset(pool, id, token, preset) {
+    var parameters = JSON.stringify(preset.parameters);
+    var jobs = JSON.stringify(preset.jobs);
+    var weapons = JSON.stringify(preset.weapons);
+    var equips = JSON.stringify(preset.equips);
+
+    var queryString = `INSERT INTO IaAccountPresets(AccountId,AccountToken,Parameters,Jobs,Weapons,Equips) VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (AccountId) DO UPDATE SET Parameters = $3,Jobs = $4,Weapons = $5,Equips = $6 WHERE IaAccountPresets.AccountId = $1 AND IaAccountPresets.AccountToken = $2;`;
+    console.log(queryString, [id, token, parameters, jobs, weapons, equips]);
+    await pool.query(queryString, [id, token, parameters, jobs, weapons, equips]);
+
+    return toResultObject(RES_OK, { id: id });
 }

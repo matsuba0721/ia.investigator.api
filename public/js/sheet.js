@@ -8,6 +8,9 @@ function accountChanged(account) {
             $("#upload-profile-image").prop("disabled", true);
         }
     });
+    getPreset(account, function (p) {
+        preset = p;
+    });
 }
 async function saveLocalInvestigator(investigator) {
     if (localInvestigators.length == 0) {
@@ -19,6 +22,31 @@ async function saveLocalInvestigator(investigator) {
     }
 
     localStorage.localInvestigators = JSON.stringify(localInvestigators);
+}
+function setGeneratedParameter(parameter){
+    $("#param-str")[0].value = parameter.str;
+    $("#param-con")[0].value = parameter.con;
+    $("#param-pow")[0].value = parameter.pow;
+    $("#param-dex")[0].value = parameter.dex;
+    $("#param-app")[0].value = parameter.app;
+    $("#param-siz")[0].value = parameter.siz;
+    $("#param-int")[0].value = parameter.int;
+    $("#param-edu")[0].value = parameter.edu;
+    $("#param-luk")[0].value = parameter.luk;
+    $("#param-san")[0].value = parameter.san;
+    $("#param-str-grow")[0].value = parameter.strGrow;
+    $("#param-con-grow")[0].value = parameter.conGrow;
+    $("#param-pow-grow")[0].value = parameter.powGrow;
+    $("#param-dex-grow")[0].value = parameter.dexGrow;
+    $("#param-app-grow")[0].value = parameter.appGrow;
+    $("#param-siz-grow")[0].value = parameter.sizGrow;
+    $("#param-int-grow")[0].value = parameter.intGrow;
+    $("#param-edu-grow")[0].value = parameter.eduGrow;
+    $("#param-luk-grow")[0].value = parameter.lukGrow;
+    $("#param-ide-grow")[0].value = parameter.ideGrow;
+    $("#param-knw-grow")[0].value = parameter.knwGrow;
+    $("#param-hp-grow")[0].value = parameter.hpGrow;
+    $("#param-mp-grow")[0].value = parameter.mpGrow;
 }
 function initRandamGenerateParameter() {
     $("#randam-generate-parameter").on("click", function () {
@@ -35,6 +63,7 @@ function initRandamGenerateParameter() {
             $(`#${param}-custom-dice-correction`)[0].value = 0;
             $(`#${param}-custom-result`)[0].innerText = "0";
         });
+        initStockedParameters();
         $(".ui.mini.generate.modal").modal({ duration: 200 }).modal("show");
     });
     $("#start-standard-generate-parametor").on("click", function () {
@@ -111,6 +140,10 @@ function initRandamGenerateParameter() {
             }
         });
     });
+    $("#stock-generate-parametor").on("click", function () {
+        stockRandamGeneratedParameter("standard");
+        initStockedParameters();
+    });
 }
 function setRandamGeneratedParameter(tabName) {
     var parameter = investigator.parameter;
@@ -143,32 +176,75 @@ function setRandamGeneratedParameter(tabName) {
         parameter.hpGrow = Math.ceil((parameter.con + parameter.siz) / 10) - parameter.getHp();
     }
 
-    $("#param-str")[0].value = parameter.str;
-    $("#param-con")[0].value = parameter.con;
-    $("#param-pow")[0].value = parameter.pow;
-    $("#param-dex")[0].value = parameter.dex;
-    $("#param-app")[0].value = parameter.app;
-    $("#param-siz")[0].value = parameter.siz;
-    $("#param-int")[0].value = parameter.int;
-    $("#param-edu")[0].value = parameter.edu;
-    $("#param-luk")[0].value = parameter.luk;
-    $("#param-san")[0].value = parameter.san;
-    $("#param-str-grow")[0].value = parameter.strGrow;
-    $("#param-con-grow")[0].value = parameter.conGrow;
-    $("#param-pow-grow")[0].value = parameter.powGrow;
-    $("#param-dex-grow")[0].value = parameter.dexGrow;
-    $("#param-app-grow")[0].value = parameter.appGrow;
-    $("#param-siz-grow")[0].value = parameter.sizGrow;
-    $("#param-int-grow")[0].value = parameter.intGrow;
-    $("#param-edu-grow")[0].value = parameter.eduGrow;
-    $("#param-luk-grow")[0].value = parameter.lukGrow;
-    $("#param-ide-grow")[0].value = parameter.ideGrow;
-    $("#param-knw-grow")[0].value = parameter.knwGrow;
-    $("#param-hp-grow")[0].value = parameter.hpGrow;
-    $("#param-mp-grow")[0].value = parameter.mpGrow;
-
+    setGeneratedParameter(parameter);
     viewUpdate(true);
     $(".ui.mini.generate.modal").modal({ duration: 200 }).modal("hide");
+}
+function initStockedParameters() {
+    $("#stocked-generate-parametors").empty();
+    var elements = "";
+    for (var i = preset.parameters.length - 1; i >= 0; i--) {
+        elements += toParametorCard(i, preset.parameters[i]);
+    }
+    $("#stocked-generate-parametors").append(elements);
+    for (var i = preset.parameters.length - 1; i >= 0; i--) {
+        $("#stocked-generate-parametor-" + i + "-load")[0].addEventListener("click", function (e) {
+            var path = e.path || (e.composedPath && e.composedPath());
+            var matches = path[0].id.match(/stocked-generate-parametor-(\w+)-load/);
+            if (matches == null) return;
+            var index = matches[1];
+            var parameter = investigator.parameter;
+            parameter.str = preset.parameters[index].str;
+            parameter.con = preset.parameters[index].con;
+            parameter.pow = preset.parameters[index].pow;
+            parameter.dex = preset.parameters[index].dex;
+            parameter.app = preset.parameters[index].app;
+            parameter.siz = preset.parameters[index].siz;
+            parameter.int = preset.parameters[index].int;
+            parameter.edu = preset.parameters[index].edu;
+            parameter.luk = preset.parameters[index].luk;
+            parameter.san = parameter.pow;
+
+            parameter.strGrow = 0;
+            parameter.conGrow = 0;
+            parameter.sizGrow = 0;
+            parameter.dexGrow = 0;
+            parameter.appGrow = 0;
+            parameter.intGrow = 0;
+            parameter.powGrow = 0;
+            parameter.eduGrow = 0;
+            parameter.lukGrow = 0;
+            parameter.ideGrow = 0;
+            parameter.knwGrow = 0;
+            parameter.hpGrow = 0;
+            parameter.mpGrow = 0;
+
+            setGeneratedParameter(parameter);
+            viewUpdate(true);
+            preset.parameters.splice(index, 1)
+            savePreset(account, preset, function () {});
+
+            $(".ui.generate.modal").modal({ duration: 200 }).modal("hide");
+        });
+    }
+}
+function stockRandamGeneratedParameter(tabName) {
+    var parameter = {
+        str: parseInt($(`#str-${tabName}-result`)[0].innerText),
+        con: parseInt($(`#con-${tabName}-result`)[0].innerText),
+        pow: parseInt($(`#pow-${tabName}-result`)[0].innerText),
+        dex: parseInt($(`#dex-${tabName}-result`)[0].innerText),
+        app: parseInt($(`#app-${tabName}-result`)[0].innerText),
+        siz: parseInt($(`#siz-${tabName}-result`)[0].innerText),
+        int: parseInt($(`#int-${tabName}-result`)[0].innerText),
+        edu: parseInt($(`#edu-${tabName}-result`)[0].innerText),
+        luk: parseInt($(`#luk-${tabName}-result`)[0].innerText),
+    };
+    preset.parameters.push(parameter);
+    if (preset.parameters.length > 30) {
+        preset.parameters = preset.parameters.slice(preset.parameters.length - 31, -1);
+    }
+    savePreset(account, preset, function () {});
 }
 function initInitialSkills() {
     $("#initial-skill-hide").on("click", function () {
@@ -1370,7 +1446,21 @@ function toHistoryCard(index, investigator) {
     var button = `<button id="history-investigator-${index}-load" class="ui fluid inverted positive basic button">読み込み</button>`;
     return `<div class="ui left aligned column" style="margin: 0!important;"><div class="ui fluid inverted card">${content}${button}</div></div>`;
 }
-
+function toParametorCard(index, parameter) {
+    var str = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">STR</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.str}</div></div></div>`;
+    var con = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">CON</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.con}</div></div></div>`;
+    var pow = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">POW</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.pow}</div></div></div>`;
+    var dex = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">DEX</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.dex}</div></div></div>`;
+    var app = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">APP</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.app}</div></div></div>`;
+    var siz = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">SIZ</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.siz}</div></div></div>`;
+    var int = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">INT</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.int}</div></div></div>`;
+    var edu = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">EDU</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.edu}</div></div></div>`;
+    var luk = `<div class="item" style="margin: 2px;"><div class="content"><div class="header">幸運</div><div class="description" style="padding: 1px!important;margin: 1px;">${parameter.luk}</div></div></div>`;
+    var list = `<div class="ui large inverted horizontal list meta">${str}${con}${pow}${dex}${app}${siz}${int}${edu}${luk}</div>`;
+    var content = `<div class="content" style="padding: 4px;">${list}</div>`;
+    var button = `<button id="stocked-generate-parametor-${index}-load" class="ui fluid inverted positive basic button">能力値にセットして削除</button>`;
+    return `<div class="ui left aligned column" style="margin: 0!important;padding: 14px 0px!important;"><div class="ui fluid inverted card">${content}${button}</div></div>`;
+}
 window.onload = function () {
     initSigns();
     initAccount(account);

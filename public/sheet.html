@@ -935,6 +935,7 @@
                     <a class="item active" data-tab="standard">基本</a>
                     <a class="item" data-tab="custom">カスタム</a>
                     <a class="item" data-tab="from6">6版から</a>
+                    <a class="item" data-tab="stock">ストック</a>
                 </div>
                 <div class="ui top attached tab inverted segment active" data-tab="standard">
                     <div class="ui container">
@@ -1054,6 +1055,10 @@
                     </table>
                     <div class="ui container">
                         <button id="set-standard-generate-parametor" class="ui fluid primary button">能力値にセット</button>
+                        <button id="stock-generate-parametor" class="ui fluid button">
+                            <i class="paperclip icon"></i>
+                            結果をストックする
+                        </button>
                     </div>
                 </div>
                 <div class="ui top attached tab inverted segment" data-tab="custom">
@@ -1268,7 +1273,9 @@
                         <button id="set-from6-generate-parametor" class="ui fluid primary button">能力値にセット</button>
                     </div>
                 </div>
-                <div class="ui bottom attached tab inverted segment" data-tab="ccfolia" style="border-top: 1px solid #555"></div>
+                <div class="ui top attached tab inverted segment" data-tab="stock" style="height: 40em; overflow-y: scroll">
+                    <div id="stocked-generate-parametors" class="ui one column doubling stackable grid"></div>
+                </div>
             </div>
         </div>
         <div class="ui tiny export modal">
