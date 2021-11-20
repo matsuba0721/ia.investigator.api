@@ -1344,7 +1344,7 @@ function viewUpdate(isSaveLocal) {
     $("#param-mov")[0].value = investigator.parameter.getMov(investigator.profile.age);
 
     var jobPoints = investigator.parameter.jobPoints + investigator.parameter.jobPointsCorrection;
-    $("#param-job-points-present")[0].value = investigator.parameter.jobPoints;
+    $("#param-job-points-present")[0].value = jobPoints;
 
     var interestPoints = investigator.parameter.getInterestPoint() + investigator.parameter.interestPointsCorrection;
     $("#param-interest-points")[0].value = investigator.parameter.getInterestPoint();
