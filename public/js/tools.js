@@ -16,7 +16,7 @@ window.onload = function () {
             if (matches == null) continue;
             roll = {
                 name: matches[1],
-                command: matches[2].trim().replace("CC-2","CC").replace("CC-1","CC").replace("CC1","CC").replace("CC2","CC").replace("h","").replace("e",""),
+                command: matches[2].trim().replace("CC-","CC").replace("CC+","CC").replace("CC1","CC").replace("CC2","CC").replace("h","").replace("e",""),
                 tag: matches[3].trim(),
                 result: matches[4],
                 getKey: function(){return this.command + " " + this.tag;}
