@@ -50,6 +50,14 @@ function toTags(str) {
     str = str.split("　").join(" ");
     return str.split(" ");
 }
+function firstOrDefault(func, array) {
+    for (var index = 0; index < array.length; index++) {
+        var element = array[index];
+        if (func(element)) {
+            return element;
+        }
+    }
+}
 
 function initAccount(account) {
     $("#account-name")[0].innerText = account.name;
@@ -716,7 +724,7 @@ function getPreset(account, func) {
 
         request.open("POST", "getPreset/", true);
         request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify({ id:account.id, token: account.token }));
+        request.send(JSON.stringify({ id: account.id, token: account.token }));
     } catch (err) {
         console.log(err);
         notifyFailure("プリセットの取得に失敗しました。", "exclamation triangle");
@@ -740,7 +748,7 @@ function savePreset(account, preset, func) {
 
         request.open("POST", "savePreset/", true);
         request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify({ id:account.id, token: account.token, preset: preset }));
+        request.send(JSON.stringify({ id: account.id, token: account.token, preset: preset }));
     } catch (err) {
         console.log(err);
         notifyFailure("保存に失敗しました。", "exclamation triangle");

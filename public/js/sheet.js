@@ -554,7 +554,7 @@ function updateParameter(e) {
     viewUpdate(true);
 }
 
-function initSkill(skill) {
+function initSkill(skill, i) {
     skill.getFullname = function () {
         return this.subname ? `${this.name}(${this.subname})` : this.name;
     };
@@ -586,7 +586,11 @@ function initSkill(skill) {
         return this.id + "-delete";
     };
 
-    $("#skill-" + skill.category + "-table").append(ToSkillTr(skill));
+    if (i) {
+        $("#skill-" + i + "-row").after(ToSkillTr(skill));
+    } else {
+        $("#skill-" + skill.category + "-table").append(ToSkillTr(skill));
+    }
     $("#skill-" + skill.getNameId())[0].addEventListener("input", updateSkill);
     $("#skill-" + skill.getSubnameId())[0].addEventListener("input", updateSkill);
     $("#skill-" + skill.getInitId())[0].addEventListener("input", updateSkill);
@@ -617,8 +621,13 @@ function appendSkill(e) {
     var path = e.path || (e.composedPath && e.composedPath());
     var matches = path[0].id.match(/append-skill-(\w+)/);
     var skill = createSkill(matches[1]);
-    initSkill(skill);
-    investigator.skills.push(skill);
+    for (var i = investigator.skills.length - 1; i >= 0; i--) {
+        if (investigator.skills[i].category == matches[1]) {
+            initSkill(skill, investigator.skills[i].id);
+            investigator.skills.splice(i + 1, 0, skill);
+            break;
+        }
+    }
 
     viewUpdate(true);
 }
@@ -626,8 +635,13 @@ function appendSpecificSkill(e) {
     var path = e.path || (e.composedPath && e.composedPath());
     var matches = path[0].id.match(/append-skill-(\w+)/);
     var skill = createSkill(matches[1], path[0].value);
-    initSkill(skill);
-    investigator.skills.push(skill);
+    for (var i = investigator.skills.length - 1; i >= 0; i--) {
+        if (investigator.skills[i].category == matches[1] && investigator.skills[i].name == path[0].value) {
+            initSkill(skill, investigator.skills[i].id);
+            investigator.skills.splice(i + 1, 0, skill);
+            break;
+        }
+    }
 
     viewUpdate(true);
 }
@@ -1350,11 +1364,17 @@ function viewUpdate(isSaveLocal) {
     $("#param-interest-points")[0].value = investigator.parameter.getInterestPoint();
     $("#param-interest-points-present")[0].value = interestPoints;
 
+    var avoidanceSkill = firstOrDefault(function (e) {
+        return e.name == "回避";
+    }, investigator.skills);
     investigator.skills[0].init = Math.floor((investigator.parameter.dex + investigator.parameter.dexGrow) / 2);
-    $("#skill-0-init")[0].value = investigator.skills[0].init;
+    $("#skill-" + avoidanceSkill.id + "-init")[0].value = investigator.skills[avoidanceSkill.id].init;
 
-    investigator.skills[44].init = investigator.parameter.edu + investigator.parameter.eduGrow;
-    $("#skill-44-init")[0].value = investigator.skills[44].init;
+    var nativeSkill = firstOrDefault(function (e) {
+        return e.name == "母国語";
+    }, investigator.skills);
+    nativeSkill.init = investigator.parameter.edu + investigator.parameter.eduGrow;
+    $("#skill-" + nativeSkill.id + "-init")[0].value = investigator.skills[nativeSkill.id].init;
 
     var usageJobPoints = 0;
     var usageInterestPoints = 0;
@@ -1400,7 +1420,9 @@ function viewUpdate(isSaveLocal) {
         $("#equip-" + equip.getTotalPriceId())[0].value = equip.price * equip.quantity;
     }
 
-    var cthulhuSkill = investigator.skills[37];
+    var cthulhuSkill = firstOrDefault(function (e) {
+        return e.name == "クトゥルフ神話";
+    }, investigator.skills);
     var cthulhuSkillPoint = cthulhuSkill.init + cthulhuSkill.job + cthulhuSkill.interest + cthulhuSkill.grow + cthulhuSkill.other;
     $("#param-san-limit")[0].innerText = `/${99 - cthulhuSkillPoint}`;
 
