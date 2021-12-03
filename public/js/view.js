@@ -5,7 +5,9 @@ function initInvestigator(investigator) {
     }else{
         document.title = "新しい探索者 | R'lyeh House";
     }
-    var cthulhuSkill = investigator.skills[37];
+    var cthulhuSkill = firstOrDefault(function (e) {
+        return e.name == "クトゥルフ神話";
+    }, investigator.skills);
 
     initProfile(investigator.profile);
     initParameter(investigator.parameter, cthulhuSkill, investigator.profile.age);
