@@ -634,6 +634,16 @@ async function getRecentlyCreatedInvestigators(pool) {
 }
 
 async function getPreset(pool, id, token) {
+    if (id == 0) {
+        return toResultObject(RES_OK, {
+            preset: {
+                parameters: [],
+                jobs: [],
+                weapons: [],
+                equips: [],
+            },
+        });
+    }
     var queryString = `SELECT IaAccountPresets.Parameters, IaAccountPresets.Jobs, IaAccountPresets.Weapons, IaAccountPresets.Equips FROM IaAccounts LEFT OUTER JOIN IaAccountPresets ON (IaAccounts.Id = IaAccountPresets.AccountId) WHERE IaAccounts.Id = $1 LIMIT 1 OFFSET 0;`;
     console.log(queryString, [id]);
     var result = await pool.query(queryString, [id]);
@@ -656,6 +666,10 @@ async function getPreset(pool, id, token) {
 }
 
 async function savePreset(pool, id, token, preset) {
+    if (id == 0) {
+        return toResultObject(RES_OK, { id: id });
+    }
+
     var parameters = JSON.stringify(preset.parameters);
     var jobs = JSON.stringify(preset.jobs);
     var weapons = JSON.stringify(preset.weapons);
