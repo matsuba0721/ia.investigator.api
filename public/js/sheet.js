@@ -9,6 +9,142 @@ function accountChanged(account) {
         }
     });
 }
+
+function initEvent(){
+    $("#param-job-points-calculate")[0].addEventListener("click", function (e) {
+        var jobPointsCalculation = $("#param-job-points-calculation")[0].value;
+        var exp = emptyBy(jobPointsCalculation, "0")
+            .replaceAll("×", "*")
+            .toLowerCase()
+            .replace("edu", investigator.parameter.edu + investigator.parameter.eduGrow)
+            .replace("str", investigator.parameter.str + investigator.parameter.strGrow)
+            .replace("con", investigator.parameter.con + investigator.parameter.conGrow)
+            .replace("pow", investigator.parameter.pow + investigator.parameter.powGrow)
+            .replace("dex", investigator.parameter.dex + investigator.parameter.dexGrow)
+            .replace("siz", investigator.parameter.siz + investigator.parameter.sizGrow)
+            .replace("app", investigator.parameter.app + investigator.parameter.appGrow);
+        $("#param-job-points")[0].value = eval(exp);
+        eval("investigator.parameter.jobPoints=" + emptyBy($("#param-job-points")[0].value, "0"));
+        viewUpdate(true);
+    });
+    $("#param-job-points")[0].addEventListener("input", function (e) {
+        eval("investigator.parameter.jobPoints=" + emptyBy($("#param-job-points")[0].value, "0"));
+        viewUpdate(true);
+    });
+    $("#param-job-points-correction")[0].addEventListener("input", function (e) {
+        eval("investigator.parameter.jobPointsCorrection=" + emptyBy($("#param-job-points-correction")[0].value, "0"));
+        viewUpdate(true);
+    });
+    $("#param-interest-points-correction")[0].addEventListener("input", function (e) {
+        eval("investigator.parameter.interestPointsCorrection=" + emptyBy($("#param-interest-points-correction")[0].value, "0"));
+        viewUpdate(true);
+    });
+
+    $("#append-skill-combat")[0].addEventListener("click", appendSkill);
+    $("#append-skill-survey")[0].addEventListener("click", appendSkill);
+    $("#append-skill-personal")[0].addEventListener("click", appendSkill);
+    $("#append-skill-conduct")[0].addEventListener("click", appendSkill);
+    $("#append-skill-transfer")[0].addEventListener("click", appendSkill);
+    $("#append-skill-knowledge")[0].addEventListener("click", appendSkill);
+    $("#append-skill-uncommon")[0].addEventListener("click", appendSkill);
+
+    $("#append-skill-combat-malee")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-combat-firearms")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-conduct-arts")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-conduct-survival")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-transfer-drive")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-transfer-control")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-knowledge-folklore")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-knowledge-science")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-knowledge-native")[0].addEventListener("click", appendSpecificSkill);
+    $("#append-skill-knowledge-language")[0].addEventListener("click", appendSpecificSkill);
+
+    $("#append-weapon")[0].addEventListener("click", appendWeapon);
+    $("#append-equip")[0].addEventListener("click", appendEquip);
+
+    $("#memo")[0].addEventListener("input", function (e) {
+        investigator.memo = $("#memo")[0].value;
+    });
+    $("#isHidden")[0].addEventListener("change", function (e) {
+        investigator.isHidden = $("#isHidden")[0].checked;
+    });
+    $("#isNPC")[0].addEventListener("change", function (e) {
+        investigator.isNPC = $("#isNPC")[0].checked;
+    });
+    
+    $("#profile-name")[0].addEventListener("input", updateProfile);
+    $("#profile-kana")[0].addEventListener("input", updateProfile);
+    $("#profile-tag")[0].addEventListener("input", updateProfile);
+    $("#profile-job")[0].addEventListener("input", updateProfile);
+    $("#profile-age")[0].addEventListener("input", updateProfile);
+    $("#profile-gender")[0].addEventListener("input", updateProfile);
+    $("#profile-height")[0].addEventListener("input", updateProfile);
+    $("#profile-weight")[0].addEventListener("input", updateProfile);
+    $("#profile-origin")[0].addEventListener("input", updateProfile);
+    $("#profile-hairColor")[0].addEventListener("input", updateProfile);
+    $("#profile-eyeColor")[0].addEventListener("input", updateProfile);
+    $("#profile-skinColor")[0].addEventListener("input", updateProfile);
+
+    $("#upload-profile-image")[0].addEventListener(
+        "change",
+        function (evt) {
+            var file = evt.target.files;
+            var reader = new FileReader();
+            var imgReader = new Image();
+            var imgHeight = 300;
+            reader.readAsDataURL(file[0]);
+            reader.onload = function () {
+                imgReader.onload = () => {
+                    const imgType = imgReader.src.substring(5, imgReader.src.indexOf(";"));
+                    const imgWidth = imgReader.width * (imgHeight / imgReader.height);
+                    const canvas = document.createElement("canvas");
+                    canvas.width = imgWidth;
+                    canvas.height = imgHeight;
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(imgReader, 0, 0, imgWidth, imgHeight);
+                    $("#profile-image")[0].src = "images/loading.gif";
+                    saveInvestigatorProfileImage(account, investigator.id, canvas.toDataURL(imgType), function () {
+                        $("#profile-image")[0].src = canvas.toDataURL(imgType);
+                    });
+                };
+                imgReader.src = reader.result;
+            };
+        },
+        false
+    );
+
+    $("#param-str")[0].addEventListener("input", updateParameter);
+    $("#param-str-grow")[0].addEventListener("input", updateParameter);
+    $("#param-con")[0].addEventListener("input", updateParameter);
+    $("#param-con-grow")[0].addEventListener("input", updateParameter);
+    $("#param-pow")[0].addEventListener("input", updateParameter);
+    $("#param-pow-grow")[0].addEventListener("input", updateParameter);
+    $("#param-dex")[0].addEventListener("input", updateParameter);
+    $("#param-dex-grow")[0].addEventListener("input", updateParameter);
+    $("#param-app")[0].addEventListener("input", updateParameter);
+    $("#param-app-grow")[0].addEventListener("input", updateParameter);
+    $("#param-siz")[0].addEventListener("input", updateParameter);
+    $("#param-siz-grow")[0].addEventListener("input", updateParameter);
+    $("#param-int")[0].addEventListener("input", updateParameter);
+    $("#param-int-grow")[0].addEventListener("input", updateParameter);
+    $("#param-edu")[0].addEventListener("input", updateParameter);
+    $("#param-edu-grow")[0].addEventListener("input", updateParameter);
+    $("#param-luk")[0].addEventListener("input", updateParameter);
+    $("#param-luk-grow")[0].addEventListener("input", updateParameter);
+    $("#param-ide")[0].addEventListener("input", updateParameter);
+    $("#param-ide-grow")[0].addEventListener("input", updateParameter);
+    $("#param-knw")[0].addEventListener("input", updateParameter);
+    $("#param-knw-grow")[0].addEventListener("input", updateParameter);
+    $("#param-hp")[0].addEventListener("input", updateParameter);
+    $("#param-hp-grow")[0].addEventListener("input", updateParameter);
+    $("#param-mp")[0].addEventListener("input", updateParameter);
+    $("#param-mp-grow")[0].addEventListener("input", updateParameter);
+    $("#param-san")[0].addEventListener("input", function (e) {
+        investigator.parameter.san = parseInt($("#param-san")[0].value);
+        viewUpdate(true);
+    });
+
+}
 async function saveLocalInvestigator(investigator) {
     if (localInvestigators.length == 0) {
         localInvestigators = localStorage.localInvestigators ? JSON.parse(localStorage.localInvestigators) : [];
@@ -351,74 +487,13 @@ function initInvestigator(investigator) {
 
     $("#profile-image")[0].src = investigator.getProfileImagePath();
 
-    $("#param-job-points-calculate")[0].addEventListener("click", function (e) {
-        var jobPointsCalculation = $("#param-job-points-calculation")[0].value;
-        var exp = emptyBy(jobPointsCalculation, "0")
-            .replaceAll("×", "*")
-            .toLowerCase()
-            .replace("edu", investigator.parameter.edu + investigator.parameter.eduGrow)
-            .replace("str", investigator.parameter.str + investigator.parameter.strGrow)
-            .replace("con", investigator.parameter.con + investigator.parameter.conGrow)
-            .replace("pow", investigator.parameter.pow + investigator.parameter.powGrow)
-            .replace("dex", investigator.parameter.dex + investigator.parameter.dexGrow)
-            .replace("siz", investigator.parameter.siz + investigator.parameter.sizGrow)
-            .replace("app", investigator.parameter.app + investigator.parameter.appGrow);
-        $("#param-job-points")[0].value = eval(exp);
-        eval("investigator.parameter.jobPoints=" + emptyBy($("#param-job-points")[0].value, "0"));
-        viewUpdate(true);
-    });
-    $("#param-job-points")[0].addEventListener("input", function (e) {
-        eval("investigator.parameter.jobPoints=" + emptyBy($("#param-job-points")[0].value, "0"));
-        viewUpdate(true);
-    });
-    $("#param-job-points-correction")[0].addEventListener("input", function (e) {
-        eval("investigator.parameter.jobPointsCorrection=" + emptyBy($("#param-job-points-correction")[0].value, "0"));
-        viewUpdate(true);
-    });
-    $("#param-interest-points-correction")[0].addEventListener("input", function (e) {
-        eval("investigator.parameter.interestPointsCorrection=" + emptyBy($("#param-interest-points-correction")[0].value, "0"));
-        viewUpdate(true);
-    });
-
-    $("#append-skill-combat")[0].addEventListener("click", appendSkill);
-    $("#append-skill-survey")[0].addEventListener("click", appendSkill);
-    $("#append-skill-personal")[0].addEventListener("click", appendSkill);
-    $("#append-skill-conduct")[0].addEventListener("click", appendSkill);
-    $("#append-skill-transfer")[0].addEventListener("click", appendSkill);
-    $("#append-skill-knowledge")[0].addEventListener("click", appendSkill);
-    $("#append-skill-uncommon")[0].addEventListener("click", appendSkill);
-
-    $("#append-skill-combat-malee")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-combat-firearms")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-conduct-arts")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-conduct-survival")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-transfer-drive")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-transfer-control")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-knowledge-folklore")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-knowledge-science")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-knowledge-native")[0].addEventListener("click", appendSpecificSkill);
-    $("#append-skill-knowledge-language")[0].addEventListener("click", appendSpecificSkill);
-
-    $("#append-weapon")[0].addEventListener("click", appendWeapon);
-
-    $("#append-equip")[0].addEventListener("click", appendEquip);
-
     initMoney(investigator.money);
     initBackstory(investigator.backstory);
 
     $("#memo")[0].value = investigator.memo;
-    $("#memo")[0].addEventListener("input", function (e) {
-        investigator.memo = $("#memo")[0].value;
-    });
 
     $("#isHidden")[0].checked = investigator.isHidden;
-    $("#isHidden")[0].addEventListener("change", function (e) {
-        investigator.isHidden = $("#isHidden")[0].checked;
-    });
     $("#isNPC")[0].checked = investigator.isNPC;
-    $("#isNPC")[0].addEventListener("change", function (e) {
-        investigator.isNPC = $("#isNPC")[0].checked;
-    });
 }
 function initProfile(profile) {
     $("#profile-name")[0].value = profile.name;
@@ -433,47 +508,6 @@ function initProfile(profile) {
     $("#profile-hairColor")[0].value = profile.hairColor;
     $("#profile-eyeColor")[0].value = profile.eyeColor;
     $("#profile-skinColor")[0].value = profile.skinColor;
-
-    $("#profile-name")[0].addEventListener("input", updateProfile);
-    $("#profile-kana")[0].addEventListener("input", updateProfile);
-    $("#profile-tag")[0].addEventListener("input", updateProfile);
-    $("#profile-job")[0].addEventListener("input", updateProfile);
-    $("#profile-age")[0].addEventListener("input", updateProfile);
-    $("#profile-gender")[0].addEventListener("input", updateProfile);
-    $("#profile-height")[0].addEventListener("input", updateProfile);
-    $("#profile-weight")[0].addEventListener("input", updateProfile);
-    $("#profile-origin")[0].addEventListener("input", updateProfile);
-    $("#profile-hairColor")[0].addEventListener("input", updateProfile);
-    $("#profile-eyeColor")[0].addEventListener("input", updateProfile);
-    $("#profile-skinColor")[0].addEventListener("input", updateProfile);
-
-    $("#upload-profile-image")[0].addEventListener(
-        "change",
-        function (evt) {
-            var file = evt.target.files;
-            var reader = new FileReader();
-            var imgReader = new Image();
-            var imgHeight = 300;
-            reader.readAsDataURL(file[0]);
-            reader.onload = function () {
-                imgReader.onload = () => {
-                    const imgType = imgReader.src.substring(5, imgReader.src.indexOf(";"));
-                    const imgWidth = imgReader.width * (imgHeight / imgReader.height);
-                    const canvas = document.createElement("canvas");
-                    canvas.width = imgWidth;
-                    canvas.height = imgHeight;
-                    const ctx = canvas.getContext("2d");
-                    ctx.drawImage(imgReader, 0, 0, imgWidth, imgHeight);
-                    $("#profile-image")[0].src = "images/loading.gif";
-                    saveInvestigatorProfileImage(account, investigator.id, canvas.toDataURL(imgType), function () {
-                        $("#profile-image")[0].src = canvas.toDataURL(imgType);
-                    });
-                };
-                imgReader.src = reader.result;
-            };
-        },
-        false
-    );
 }
 function updateProfile(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -513,36 +547,73 @@ function initParameter(parameter) {
     $("#param-job-points-correction")[0].value = parameter.jobPointsCorrection;
     $("#param-interest-points-correction")[0].value = parameter.interestPointsCorrection;
 
-    $("#param-str")[0].addEventListener("input", updateParameter);
-    $("#param-str-grow")[0].addEventListener("input", updateParameter);
-    $("#param-con")[0].addEventListener("input", updateParameter);
-    $("#param-con-grow")[0].addEventListener("input", updateParameter);
-    $("#param-pow")[0].addEventListener("input", updateParameter);
-    $("#param-pow-grow")[0].addEventListener("input", updateParameter);
-    $("#param-dex")[0].addEventListener("input", updateParameter);
-    $("#param-dex-grow")[0].addEventListener("input", updateParameter);
-    $("#param-app")[0].addEventListener("input", updateParameter);
-    $("#param-app-grow")[0].addEventListener("input", updateParameter);
-    $("#param-siz")[0].addEventListener("input", updateParameter);
-    $("#param-siz-grow")[0].addEventListener("input", updateParameter);
-    $("#param-int")[0].addEventListener("input", updateParameter);
-    $("#param-int-grow")[0].addEventListener("input", updateParameter);
-    $("#param-edu")[0].addEventListener("input", updateParameter);
-    $("#param-edu-grow")[0].addEventListener("input", updateParameter);
-    $("#param-luk")[0].addEventListener("input", updateParameter);
-    $("#param-luk-grow")[0].addEventListener("input", updateParameter);
-    $("#param-ide")[0].addEventListener("input", updateParameter);
-    $("#param-ide-grow")[0].addEventListener("input", updateParameter);
-    $("#param-knw")[0].addEventListener("input", updateParameter);
-    $("#param-knw-grow")[0].addEventListener("input", updateParameter);
-    $("#param-hp")[0].addEventListener("input", updateParameter);
-    $("#param-hp-grow")[0].addEventListener("input", updateParameter);
-    $("#param-mp")[0].addEventListener("input", updateParameter);
-    $("#param-mp-grow")[0].addEventListener("input", updateParameter);
-    $("#param-san")[0].addEventListener("input", function (e) {
-        investigator.parameter.san = parseInt($("#param-san")[0].value);
-        viewUpdate(true);
+    $("#money-pocket")[0].addEventListener("input", updateMoney);
+    $("#money-cash")[0].addEventListener("input", updateMoney);
+    $("#money-assets")[0].addEventListener("input", updateMoney);
+
+    $("#backstory-personalDescription")[0].addEventListener("input", updateBackstory);
+    $("#backstory-ideologyOrBeliefs")[0].addEventListener("input", updateBackstory);
+    $("#backstory-significantPeople")[0].addEventListener("input", updateBackstory);
+    $("#backstory-meaningfulLocations")[0].addEventListener("input", updateBackstory);
+    $("#backstory-treasuredPossessions")[0].addEventListener("input", updateBackstory);
+    $("#backstory-traits")[0].addEventListener("input", updateBackstory);
+    $("#backstory-injuriesAndScars")[0].addEventListener("input", updateBackstory);
+    $("#backstory-phobiasAndManias")[0].addEventListener("input", updateBackstory);
+    $("#backstory-spellsAndArtifacts")[0].addEventListener("input", updateBackstory);
+    $("#backstory-encounters")[0].addEventListener("input", updateBackstory);
+
+    $("#backstory-key-personalDescription")[0].addEventListener("change", function (e) {
+        investigator.backstory.personalDescriptionkeyed = $("#backstory-key-personalDescription")[0].checked;
     });
+    $("#backstory-key-ideologyOrBeliefs")[0].addEventListener("change", function (e) {
+        investigator.backstory.ideologyOrBeliefskeyed = $("#backstory-key-ideologyOrBeliefs")[0].checked;
+    });
+    $("#backstory-key-significantPeople")[0].addEventListener("change", function (e) {
+        investigator.backstory.significantPeoplekeyed = $("#backstory-key-significantPeople")[0].checked;
+    });
+    $("#backstory-key-meaningfulLocations")[0].addEventListener("change", function (e) {
+        investigator.backstory.meaningfulLocationskeyed = $("#backstory-key-meaningfulLocations")[0].checked;
+    });
+    $("#backstory-key-treasuredPossessions")[0].addEventListener("change", function (e) {
+        investigator.backstory.treasuredPossessionskeyed = $("#backstory-key-treasuredPossessions")[0].checked;
+    });
+    $("#backstory-key-traits")[0].addEventListener("change", function (e) {
+        investigator.backstory.traitskeyed = $("#backstory-key-traits")[0].checked;
+    });
+
+    $("#randam-generate-backstory").on("click", function () {
+        getRandomRandomPersonalDescription();
+        getRandomIdeologyOrBeliefs();
+        getRandomSignificantPeople();
+        getRandomMeaningfulLocations();
+        gatRandomTreasuredPossessions();
+        getRandomTraits();
+    });
+    $("#randam-generate-backstory-personalDescription").on("click", function () {
+        getRandomRandomPersonalDescription();
+    });
+    $("#randam-generate-backstory-ideologyOrBeliefs").on("click", function () {
+        getRandomIdeologyOrBeliefs();
+    });
+    $("#randam-generate-backstory-significantPeople").on("click", function () {
+        getRandomSignificantPeople();
+    });
+    $("#randam-generate-backstory-meaningfulLocations").on("click", function () {
+        getRandomMeaningfulLocations();
+    });
+    $("#randam-generate-backstory-treasuredPossessions").on("click", function () {
+        gatRandomTreasuredPossessions();
+    });
+    $("#randam-generate-backstory-traits").on("click", function () {
+        getRandomTraits();
+    });
+    $("#append-backstory-phobia").on("click", function () {
+        getRandomPhobia();
+    });
+    $("#append-backstory-mania").on("click", function () {
+        getRandomMania();
+    });
+
 }
 function updateParameter(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -905,10 +976,6 @@ function initMoney(money) {
     $("#money-pocket")[0].value = money.pocket;
     $("#money-cash")[0].value = money.cash;
     $("#money-assets")[0].value = money.assets;
-
-    $("#money-pocket")[0].addEventListener("input", updateMoney);
-    $("#money-cash")[0].addEventListener("input", updateMoney);
-    $("#money-assets")[0].addEventListener("input", updateMoney);
 }
 function updateMoney(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -931,81 +998,18 @@ function initBackstory(backstory) {
     $("#backstory-phobiasAndManias")[0].value = backstory.phobiasAndManias;
     $("#backstory-spellsAndArtifacts")[0].value = backstory.spellsAndArtifacts;
     $("#backstory-encounters")[0].value = backstory.encounters;
-
-    $("#backstory-personalDescription")[0].addEventListener("input", updateBackstory);
-    $("#backstory-ideologyOrBeliefs")[0].addEventListener("input", updateBackstory);
-    $("#backstory-significantPeople")[0].addEventListener("input", updateBackstory);
-    $("#backstory-meaningfulLocations")[0].addEventListener("input", updateBackstory);
-    $("#backstory-treasuredPossessions")[0].addEventListener("input", updateBackstory);
-    $("#backstory-traits")[0].addEventListener("input", updateBackstory);
-    $("#backstory-injuriesAndScars")[0].addEventListener("input", updateBackstory);
-    $("#backstory-phobiasAndManias")[0].addEventListener("input", updateBackstory);
-    $("#backstory-spellsAndArtifacts")[0].addEventListener("input", updateBackstory);
-    $("#backstory-encounters")[0].addEventListener("input", updateBackstory);
-
     if (!backstory.personalDescriptionkeyed) backstory.personalDescriptionkeyed = false;
     $("#backstory-key-personalDescription")[0].checked = backstory.personalDescriptionkeyed;
-    $("#backstory-key-personalDescription")[0].addEventListener("change", function (e) {
-        investigator.backstory.personalDescriptionkeyed = $("#backstory-key-personalDescription")[0].checked;
-    });
     if (!backstory.ideologyOrBeliefskeyed) backstory.ideologyOrBeliefskeyed = false;
     $("#backstory-key-ideologyOrBeliefs")[0].checked = backstory.ideologyOrBeliefskeyed;
-    $("#backstory-key-ideologyOrBeliefs")[0].addEventListener("change", function (e) {
-        investigator.backstory.ideologyOrBeliefskeyed = $("#backstory-key-ideologyOrBeliefs")[0].checked;
-    });
     if (!backstory.significantPeoplekeyed) backstory.significantPeoplekeyed = false;
     $("#backstory-key-significantPeople")[0].checked = backstory.significantPeoplekeyed;
-    $("#backstory-key-significantPeople")[0].addEventListener("change", function (e) {
-        investigator.backstory.significantPeoplekeyed = $("#backstory-key-significantPeople")[0].checked;
-    });
     if (!backstory.meaningfulLocationskeyed) backstory.meaningfulLocationskeyed = false;
     $("#backstory-key-meaningfulLocations")[0].checked = backstory.meaningfulLocationskeyed;
-    $("#backstory-key-meaningfulLocations")[0].addEventListener("change", function (e) {
-        investigator.backstory.meaningfulLocationskeyed = $("#backstory-key-meaningfulLocations")[0].checked;
-    });
     if (!backstory.treasuredPossessionskeyed) backstory.treasuredPossessionskeyed = false;
     $("#backstory-key-treasuredPossessions")[0].checked = backstory.treasuredPossessionskeyed;
-    $("#backstory-key-treasuredPossessions")[0].addEventListener("change", function (e) {
-        investigator.backstory.treasuredPossessionskeyed = $("#backstory-key-treasuredPossessions")[0].checked;
-    });
     if (!backstory.traitskeyed) backstory.traitskeyed = false;
     $("#backstory-key-traits")[0].checked = backstory.traitskeyed;
-    $("#backstory-key-traits")[0].addEventListener("change", function (e) {
-        investigator.backstory.traitskeyed = $("#backstory-key-traits")[0].checked;
-    });
-
-    $("#randam-generate-backstory").on("click", function () {
-        getRandomRandomPersonalDescription();
-        getRandomIdeologyOrBeliefs();
-        getRandomSignificantPeople();
-        getRandomMeaningfulLocations();
-        gatRandomTreasuredPossessions();
-        getRandomTraits();
-    });
-    $("#randam-generate-backstory-personalDescription").on("click", function () {
-        getRandomRandomPersonalDescription();
-    });
-    $("#randam-generate-backstory-ideologyOrBeliefs").on("click", function () {
-        getRandomIdeologyOrBeliefs();
-    });
-    $("#randam-generate-backstory-significantPeople").on("click", function () {
-        getRandomSignificantPeople();
-    });
-    $("#randam-generate-backstory-meaningfulLocations").on("click", function () {
-        getRandomMeaningfulLocations();
-    });
-    $("#randam-generate-backstory-treasuredPossessions").on("click", function () {
-        gatRandomTreasuredPossessions();
-    });
-    $("#randam-generate-backstory-traits").on("click", function () {
-        getRandomTraits();
-    });
-    $("#append-backstory-phobia").on("click", function () {
-        getRandomPhobia();
-    });
-    $("#append-backstory-mania").on("click", function () {
-        getRandomMania();
-    });
 }
 function updateBackstory(e) {
     var path = e.path || (e.composedPath && e.composedPath());
@@ -1574,6 +1578,7 @@ window.onload = function () {
     getEditingInvestigator(account, paramV ? paramV : 0, function (newInvestigator) {
         investigator = newInvestigator;
         initInvestigator(investigator);
+        initEvent();
         viewUpdate(false);
         getPreset(account, function (p) {
             preset = p;
