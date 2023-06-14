@@ -160,6 +160,11 @@ window.onload = function () {
         $(".ui.account-sign-in").show();
         $(".ui.account.modal").modal({ duration: 200 }).modal("show");
     });
+
+    $("#donation-request-close").on("click", function () {
+        $("#donation-request").hide();
+    });
+    
     $("#tab-filter a").on("click", function () {
         $("#tab-filter a").removeClass("active");
         $(this).addClass("active");
