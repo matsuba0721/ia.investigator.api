@@ -63,10 +63,12 @@ function initAccount(account) {
     $("#account-name")[0].innerText = account.name;
     if (account.id == 0) {
         $("#account-recommendation").show();
+        $("#donation-request").hide();
         $("#account-sign-out").hide();
         $("#account-sign-in").show();
     } else {
         $("#account-recommendation").hide();
+        $("#donation-request").show();
         $("#account-sign-in").hide();
         $("#account-sign-out").show();
     }

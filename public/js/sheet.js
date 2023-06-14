@@ -1504,6 +1504,10 @@ window.onload = function () {
         $(".ui.account.modal").modal({ duration: 200 }).modal("show");
     });
 
+    $("#donation-request-close").on("click", function () {
+        $("#donation-request").hide();
+    });
+
     $("#local-download")[0].addEventListener("click", function (e) {
         download(`${investigator.id}-${investigator.profile.name}`, investigator);
     });
