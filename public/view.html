@@ -202,13 +202,15 @@
                                 </div>
                                 <div class="ui divider"></div>
                                     <div class="ui inverted pointing secondary menu">
-                                        <a class="item active" data-tab="open">公開メモ</a>
-                                        <a class="item secret-data" data-tab="secret" style="pointer-events: none;"><i class="lock icon secret-data-icon"></i>秘匿メモ</a>
+                                        <a class="item active" data-tab="open" style="padding: 11px;"><i class="lock open icon"></i>公開メモ</a>
+                                        <a class="item" data-tab="secret" style="padding: 11px;"><i class="lock icon"></i>秘匿メモ</a>
+                                        <a class="item" data-tab="other" style="padding: 11px;"><i class="pencil alternate icon"></i>その他</a>
                                     </div>
                                     <div id="memo-open" class="ui top attached tab inverted segment active" data-tab="open" style="padding: 0.4em 1em;background-color: #ffffff08; height: 8em; overflow-y: scroll; resize: vertical;">
                                     </div>
-                                    <div class="ui top attached tab inverted segment" data-tab="secret" style="height: 40em; overflow-y: scroll">
-                                        <div id="memo-secret" class="inverted description" style="color: white; background-color: #ffffff08; margin: 0; height: 8em; overflow-y: scroll;resize: vertical;"></div>
+                                    <div id="memo-secret" class="ui top attached tab inverted segment" data-tab="secret" style="padding: 0.4em 1em;background-color: #ffffff08; height: 8em; overflow-y: scroll; resize: vertical;">
+                                    </div>
+                                    <div id="memo-other" class="ui top attached tab inverted segment" data-tab="other" style="padding: 0.4em 1em;background-color: #ffffff08; height: 8em; overflow-y: scroll; resize: vertical;">
                                     </div>
                                 <div id="money" class="ui inverted extra">支出レベル 現金 資産</div>
                             </div>
@@ -337,13 +339,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="ui divider"></div>
-                    <div class="ui content" style="text-align: -webkit-right;">
-                        <input id="memo-secret-key" class="no-spin" type="password" placeholder="password" tabindex="-1" style="height: 2em;margin-top: 0.4em;padding: 0.4em 1px;background-color: #656d75;color: whitesmoke;">
-                        <div id="randam-generate-parameter" class="ui right floated red button" style="margin-top: 0.4em;padding: 0.6em;">
-                            秘匿閲覧
                         </div>
                     </div>
                 </div>

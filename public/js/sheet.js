@@ -62,8 +62,14 @@ function initEvent(){
     $("#append-weapon")[0].addEventListener("click", appendWeapon);
     $("#append-equip")[0].addEventListener("click", appendEquip);
 
-    $("#memo")[0].addEventListener("input", function (e) {
-        investigator.memo.open = $("#memo")[0].value;
+    $("#memo-open")[0].addEventListener("input", function (e) {
+        investigator.memo.open = $("#memo-open")[0].value;
+    });
+    $("#memo-secret")[0].addEventListener("input", function (e) {
+        investigator.memo.secret = $("#memo-secret")[0].value;
+    });
+    $("#memo-other")[0].addEventListener("input", function (e) {
+        investigator.memo.other = $("#memo-other")[0].value;
     });
     $("#isHidden")[0].addEventListener("change", function (e) {
         investigator.isHidden = $("#isHidden")[0].checked;
@@ -490,7 +496,9 @@ function initInvestigator(investigator) {
     initMoney(investigator.money);
     initBackstory(investigator.backstory);
 
-    $("#memo")[0].value = investigator.memo.open;
+    $("#memo-open")[0].value = investigator.memo.open;
+    $("#memo-secret")[0].value = investigator.memo.secret;
+    $("#memo-other")[0].value = investigator.memo.other;
 
     $("#isHidden")[0].checked = investigator.isHidden;
     $("#isNPC")[0].checked = investigator.isNPC;
