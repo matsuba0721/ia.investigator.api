@@ -295,3 +295,7 @@ div.ui.center.aligned {
         display: none;
     }
 }
+
+::placeholder {
+    color: darkgray;
+}
