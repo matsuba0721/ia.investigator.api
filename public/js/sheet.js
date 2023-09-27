@@ -63,7 +63,7 @@ function initEvent(){
     $("#append-equip")[0].addEventListener("click", appendEquip);
 
     $("#memo")[0].addEventListener("input", function (e) {
-        investigator.memo = $("#memo")[0].value;
+        investigator.memo.open = $("#memo")[0].value;
     });
     $("#isHidden")[0].addEventListener("change", function (e) {
         investigator.isHidden = $("#isHidden")[0].checked;
@@ -490,7 +490,7 @@ function initInvestigator(investigator) {
     initMoney(investigator.money);
     initBackstory(investigator.backstory);
 
-    $("#memo")[0].value = investigator.memo;
+    $("#memo")[0].value = investigator.memo.open;
 
     $("#isHidden")[0].checked = investigator.isHidden;
     $("#isNPC")[0].checked = investigator.isNPC;

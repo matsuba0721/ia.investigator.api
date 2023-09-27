@@ -62,7 +62,7 @@ function initInvestigator(investigator) {
     }
     $("#money")[0].innerText = `支出レベル:${investigator.money.pocket} 現金:${investigator.money.cash} 資産:${investigator.money.assets}`;
     initBackstory(investigator.backstory);
-    $("#memo")[0].innerText = investigator.memo;
+    $("#memo")[0].innerText = investigator.memo.open;
 }
 function initProfile(profile) {
     $("#profile-name")[0].innerText = profile.name;

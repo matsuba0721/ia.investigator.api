@@ -570,7 +570,6 @@ function getEditingInvestigator(account, investigatorId, func) {
             var data = this.response;
             if (data.code == 0) {
                 var investigator = data.result;
-                investigator.memo = emptyBy(data.result.memo, "").replaceAll("\\n", "\n");
                 func(override(investigator));
             } else {
                 notifyFailure("キャラクターデータの読み込みに失敗しました。", "exclamation triangle");
