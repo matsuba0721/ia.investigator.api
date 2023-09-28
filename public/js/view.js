@@ -62,9 +62,13 @@ function initInvestigator(investigator) {
     }
     $("#money")[0].innerText = `支出レベル:${investigator.money.pocket} 現金:${investigator.money.cash} 資産:${investigator.money.assets}`;
     initBackstory(investigator.backstory);
-    $("#memo-open")[0].innerText = investigator.memo.open;
-    $("#memo-secret")[0].innerText = investigator.memo.secret;
-    $("#memo-other")[0].innerText = investigator.memo.other;
+    marked.use({
+        breaks: true,
+        gfm: true,
+    });
+    $("#memo-open")[0].innerHTML = marked.parse(investigator.memo.open);
+    $("#memo-secret")[0].innerHTML = marked.parse(investigator.memo.secret);
+    $("#memo-other")[0].innerHTML = marked.parse(investigator.memo.other);
 }
 function initProfile(profile) {
     $("#profile-name")[0].innerText = profile.name;

@@ -1583,6 +1583,7 @@ window.onload = function () {
 
     $(".ui.dropdown").dropdown();
     $(".ui.skill.accordion").accordion({ exclusive: false });
+    $(".ui.help.accordion").accordion({ exclusive: false });
     $(".ui.pointing.menu .item").tab();
     $(".ui.rating").rating();
 
