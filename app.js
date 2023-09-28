@@ -307,7 +307,6 @@ async function getInvestigatorSnsHtml(pool, id, key) {
         profile.kana = row.kana ? row.kana : "";
     }
     var keyCode = typeof key === "undefined" ? "": "&key="+key
-    console.log(keyCode);
 
     return `<!DOCTYPE html>
 <html>
