@@ -68,7 +68,7 @@ app.get("/img", async function (request, response) {
 app.get("/sns", async function (request, response) {
     var pool = getPool();
     try {
-        var data = await getInvestigatorSnsHtml(pool, request.query.v);
+        var data = await getInvestigatorSnsHtml(pool, request.query.v, request.query.key);
         response.writeHead(200, { "Content-Type": "text/html" });
         response.write(data);
         response.end();
@@ -295,7 +295,7 @@ async function saveAccount(pool, username, password, email) {
     return toResultObject(0, { id: rows[0].id, name: username, token: token });
 }
 
-async function getInvestigatorSnsHtml(pool, id) {
+async function getInvestigatorSnsHtml(pool, id, key) {
     var profile = { id: id, name: "Unknown" };
     var queryString = `SELECT RTRIM(Name) AS Name, RTRIM(Kana) AS Kana FROM IaInvestigatorProfiles WHERE InvestigatorId = $1 LIMIT 1 OFFSET 0;`;
     console.log(queryString, [id]);
@@ -306,6 +306,9 @@ async function getInvestigatorSnsHtml(pool, id) {
         profile.name = row.name ? row.name : "Unknown";
         profile.kana = row.kana ? row.kana : "";
     }
+    var keyCode = typeof key === "undefined" ? "": "&key="+key
+    console.log(keyCode);
+
     return `<!DOCTYPE html>
 <html>
     <head>
@@ -332,7 +335,7 @@ async function getInvestigatorSnsHtml(pool, id) {
     </head>
     <body>
         <script>
-            location.href = '/view?v=${id}';
+            location.href = '/view?v=${id}${keyCode}';
         </script>
     </body>
 </html>`;
