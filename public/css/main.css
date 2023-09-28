@@ -296,10 +296,6 @@ div.ui.center.aligned {
     }
 }
 
-::placeholder {
-    color: darkgray;
-}
-
 .help table{
     border-collapse: collapse;
     border: none;

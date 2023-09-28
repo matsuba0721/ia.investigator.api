@@ -453,7 +453,7 @@ function getInitInvestigator(id) {
         equips: [],
         money: { pocket: "", cash: "", assets: "" },
         backstory: { personalDescription: "", ideologyOrBeliefs: "", significantPeople: "", meaningfulLocations: "", treasuredPossessions: "", traits: "", injuriesAndScars: "", phobiasAndManias: "", spellsAndArtifacts: "", encounters: "" },
-        memo: {"open":"","secret":"","secretKey":""},
+        memo: {"open":"","secret":"","other":""},
     };
 }
 
