@@ -295,3 +295,22 @@ div.ui.center.aligned {
         display: none;
     }
 }
+
+.help table{
+    border-collapse: collapse;
+    border: none;
+}
+.help  td,.help  th{
+    border: none;
+    border-left: 1px solid #333;
+    border-top: 1px solid #333;
+    padding: 0.5em;
+}
+.help td:first-child, .help th:first-child{
+    border-left:none;
+    padding: 0.5em;
+}
+.help tr:first-child td,.help tr:first-child th{
+    border-top:none;
+    padding: 0.5em;
+}

@@ -453,7 +453,7 @@ function getInitInvestigator(id) {
         equips: [],
         money: { pocket: "", cash: "", assets: "" },
         backstory: { personalDescription: "", ideologyOrBeliefs: "", significantPeople: "", meaningfulLocations: "", treasuredPossessions: "", traits: "", injuriesAndScars: "", phobiasAndManias: "", spellsAndArtifacts: "", encounters: "" },
-        memo: "",
+        memo: {"open":"","secret":"","other":""},
     };
 }
 
@@ -523,7 +523,7 @@ async function getInvestigator(pool, id) {
         equips: JSON.parse(row.equips),
         money: JSON.parse(row.money),
         backstory: JSON.parse(row.backstory),
-        memo: row.memo,
+        memo: JSON.parse(row.memo),
     });
 }
 
@@ -534,7 +534,7 @@ async function saveInvestigator(pool, token, investigator) {
     var equips = JSON.stringify(investigator.equips);
     var money = JSON.stringify(investigator.money);
     var backstory = JSON.stringify(investigator.backstory);
-    var memo = investigator.memo;
+    var memo = JSON.stringify(investigator.memo);
 
     var queryString;
     queryString = `INSERT INTO IaInvestigatorProfiles(InvestigatorId,AccountToken,Name,Kana,Tag,Job,Age,Gender,Height,Weight,Origin,HairColor,EyeColor,SkinColor,CreateTimestamp, UpdateTimestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,now(),now()) ON CONFLICT (InvestigatorId) DO UPDATE SET Name = $3,Kana = $4,Tag = $5,Job = $6,Age= $7,Gender = $8,Height = $9,Weight = $10,Origin = $11,HairColor = $12,EyeColor = $13,SkinColor = $14,UpdateTimestamp = now() WHERE IaInvestigatorProfiles.InvestigatorId = $1 AND IaInvestigatorProfiles.AccountToken = $2;`;

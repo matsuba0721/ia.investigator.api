@@ -580,7 +580,104 @@
                     <p style="font-size: x-large">メモ</p>
                 </div>
                 <div class="ui inverted attached segment">
-                    <textarea id="memo" class="ui textarea" rows="10"></textarea>
+                    <div class="ui inverted accordion">
+                        <div class="active title">
+                            <i class="lock open icon"></i>
+                            公開情報
+                        </div>
+                        <div class="active content">
+                            <textarea id="memo-open" class="ui textarea" rows="5"></textarea>
+                        </div>
+                        <div class="active title">
+                            <i class="lock icon"></i>
+                            秘匿情報
+                        </div>
+                        <div class="active content">
+                            <textarea id="memo-secret" class="ui textarea" rows="5"></textarea>
+                        </div>
+                        <div class="active title">
+                            <i class="pencil alternate icon"></i>
+                            その他
+                        </div>
+                        <div class="active content">
+                            <textarea id="memo-other" class="ui textarea" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="ui inverted help accordion field">
+                        <div class="title">
+                            <i class="icon question circle"></i>
+                            テキスト装飾
+                        </div>
+                        <div class="content field">
+                            <table class="">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50%;display: none;"></th>
+                                        <th style="width: 50%;display: none;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td># 見出し</td>
+                                        <td><h1>見出し</h1></td>
+                                    </tr>
+                                    <tr>
+                                        <td>## 見出し</td>
+                                        <td><h2>見出し</h2></td>
+                                    </tr>
+                                    <tr>
+                                        <td>**テキスト**</td>
+                                        <td><p><strong>テキスト</strong></p></td>
+                                    </tr>
+                                    <tr>
+                                        <td>~~テキスト~~</td>
+                                        <td><p><del>テキスト</del></p></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            - 項目1<br>
+                                            - 項目2
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>項目1</li>
+                                                <li>項目2</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            1.  項目1<br>
+                                            2.  項目2
+                                        </td>
+                                        <td>
+                                            <ol>
+                                                <li>項目1</li>
+                                                <li>項目2</li>
+                                            </ol>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>> これは段落のサンプル文章です。</td>
+                                        <td>
+                                            <blockquote>
+                                                <p>これは段落のサンプル文章です。</p>
+                                            </blockquote>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>[リンク]からトップページに<br><br>[リンク]:https://ia-investigator.herokuapp.com/</td>
+                                        <td><p><a href="https://ia-investigator.herokuapp.com/">リンク</a>からトップページに</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td>```<br>コードブロック<br>```</td>
+                                        <td><pre><code>コードブロック
+                                        </code></pre></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class="ui top inverted attached segment" style="margin-top: 28px">
                     <p style="font-size: x-large">設定</p>

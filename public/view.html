@@ -13,6 +13,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         <script src="js/Semantic-UI-Alert.js"></script>
         <script src="js/main.js"></script>
         <script src="js/view.js"></script>
@@ -201,7 +202,17 @@
                                     </div>
                                 </div>
                                 <div class="ui divider"></div>
-                                <div id="memo" class="inverted description" style="color: white; background-color: #ffffff08; margin: 0; height: 8em; overflow-y: scroll;resize: vertical;"></div>
+                                    <div class="ui inverted pointing secondary menu">
+                                        <a class="item active" data-tab="open" style="padding: 11px;"><i class="lock open icon"></i>公開メモ</a>
+                                        <a class="item" data-tab="secret" style="padding: 11px;"><i class="lock icon"></i>秘匿メモ</a>
+                                        <a class="item" data-tab="other" style="padding: 11px;"><i class="pencil alternate icon"></i>その他</a>
+                                    </div>
+                                    <div id="memo-open" class="ui top attached tab inverted segment active" data-tab="open" style="padding: 0.4em 1em;background-color: #ffffff08; height: 8em; overflow-y: scroll; resize: vertical;">
+                                    </div>
+                                    <div id="memo-secret" class="ui top attached tab inverted segment" data-tab="secret" style="padding: 0.4em 1em;background-color: #ffffff08; height: 8em; overflow-y: scroll; resize: vertical;">
+                                    </div>
+                                    <div id="memo-other" class="ui top attached tab inverted segment" data-tab="other" style="padding: 0.4em 1em;background-color: #ffffff08; height: 8em; overflow-y: scroll; resize: vertical;">
+                                    </div>
                                 <div id="money" class="ui inverted extra">支出レベル 現金 資産</div>
                             </div>
                         </div>
