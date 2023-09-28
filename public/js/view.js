@@ -1,4 +1,12 @@
-function accountChanged(account) {}
+function accountChanged(account) {
+    getInvestigatorEditable(account, parseInt(getParam("v")), function (editable) {
+        if (editable) {
+            $("#investigator-edit").prop("disabled", false);
+        } else {
+            $("#investigator-edit").prop("disabled", true);
+        }
+    });
+}
 function initInvestigator(investigator) {
     if(investigator.profile.name){
         document.title = investigator.profile.name + " | R'lyeh House";
