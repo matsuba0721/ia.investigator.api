@@ -1,10 +1,33 @@
-function accountChanged(account) {}
+function accountChanged(account) {
+    getInvestigatorEditable(account, parseInt(getParam("v")), function (editable) {
+        if (editable) {
+            $("#investigator-edit").prop("disabled", false);
+            $(".secret-data").each(function (index, element) {
+                element.style.pointerEvents = 'all'
+            });
+        } else {
+            $("#investigator-edit").prop("disabled", true);
+            $(".secret-data").each(function (index, element) {
+                element.style.pointerEvents = 'none'
+            });
+        }
+    });
+}
 function initInvestigator(investigator) {
     if(investigator.profile.name){
         document.title = investigator.profile.name + " | R'lyeh House";
     }else{
         document.title = "新しい探索者 | R'lyeh House";
     }
+
+    sha256(investigator.id.toString()).then((hashedKey) => {
+        if(hashedKey == getParam("key") || !investigator.isHidden){
+            $(".secret-data").each(function (index, element) {
+                element.style.pointerEvents = 'all'
+            });
+        }
+    });
+
     var cthulhuSkill = firstOrDefault(function (e) {
         return e.name == "クトゥルフ神話";
     }, investigator.skills);

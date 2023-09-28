@@ -73,6 +73,21 @@ function initEvent(){
     });
     $("#isHidden")[0].addEventListener("change", function (e) {
         investigator.isHidden = $("#isHidden")[0].checked;
+        if ( investigator.isHidden ) {
+        sha256(investigator.id.toString()).then((hashedKey) => {
+            $("#isHidden-url")[0].style.display = 'block'
+                var uri = new URL(window.location.href);
+                $("#unlock-url")[0].value = uri.origin + "/sns?v=" + getParam("v") + "&key=" + hashedKey;
+            });
+        } else {
+            $("#isHidden-url")[0].style.display = 'none'
+        }
+    });
+    $("#unlock-url-shere")[0].addEventListener("click", function (e) {
+        sha256(investigator.id.toString()).then((hashedKey) => {
+            var uri = new URL(window.location.href);
+            writeClipboard(uri.origin + "/sns?v=" + getParam("v") + "&key=" + hashedKey);
+        });
     });
     $("#isNPC")[0].addEventListener("change", function (e) {
         investigator.isNPC = $("#isNPC")[0].checked;
@@ -501,6 +516,15 @@ function initInvestigator(investigator) {
     $("#memo-other")[0].value = investigator.memo.other;
 
     $("#isHidden")[0].checked = investigator.isHidden;
+    if ( investigator.isHidden ) {
+        sha256(investigator.id.toString()).then((hashedKey) => {
+            $("#isHidden-url")[0].style.display = 'block'
+                var uri = new URL(window.location.href);
+                $("#unlock-url")[0].value = uri.origin + "/sns?v=" + getParam("v") + "&key=" + hashedKey;
+            });
+        } else {
+            $("#isHidden-url")[0].style.display = 'none'
+        }
     $("#isNPC")[0].checked = investigator.isNPC;
 }
 function initProfile(profile) {

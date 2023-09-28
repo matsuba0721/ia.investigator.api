@@ -204,7 +204,7 @@
                                 <div class="ui divider"></div>
                                     <div class="ui inverted pointing secondary menu">
                                         <a class="item active" data-tab="open" style="padding: 11px;"><i class="lock open icon"></i>公開メモ</a>
-                                        <a class="item" data-tab="secret" style="padding: 11px;"><i class="lock icon"></i>秘匿メモ</a>
+                                        <a class="item secret-data" data-tab="secret" style="padding: 11px;pointer-events:none"><i class="lock icon"></i>秘匿メモ</a>
                                         <a class="item" data-tab="other" style="padding: 11px;"><i class="pencil alternate icon"></i>その他</a>
                                     </div>
                                     <div id="memo-open" class="ui top attached tab inverted segment active" data-tab="open" style="padding: 0.4em 1em;background-color: #ffffff08; height: 8em; overflow-y: scroll; resize: vertical;">
@@ -308,8 +308,8 @@
                                         </div>
                                     </div>
                                     <div class="ui blurring inverted segment" style="padding-top: 0; padding-left: 0">
-                                        <div class="ui dimmer" style="background-color: transparent">
-                                            <h2 class="ui inverted header">Confidentials</h2>
+                                        <div class="ui dimmer secret-data" style="background-color: transparent;pointer-events: none">
+                                            <h3 class="ui inverted header"><i class="lock icon"></i>Confidentials</h3>
                                         </div>
                                         <div class="ui inverted list">
                                             <div class="item">
@@ -349,7 +349,7 @@
             <div class="ui container">
                 <div class="ui inverted right menu">
                     <div class="item">
-                        <button id="investigator-edit" class="ui button" style="display: flex">
+                        <button id="investigator-edit" class="ui button" style="display: flex" disabled>
                             <i class="edit outline icon" style="width: 6px"></i>
                             <div class="ui mobile hidden" style="padding-left: 10px">編集</div>
                         </button>
