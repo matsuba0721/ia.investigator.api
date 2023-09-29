@@ -165,6 +165,10 @@ function checkSecretKey(investigator){
             $(".secret-data").each(function (index, element) {
                 element.style.pointerEvents = 'all'
             });
+        } else {
+            $(".secret-data").each(function (index, element) {
+                element.style.pointerEvents = 'none'
+            });
         }
     });
 }
