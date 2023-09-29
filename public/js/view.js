@@ -1,24 +1,17 @@
 function accountChanged(account) {
-    console.log("accountChanged");
     getInvestigatorEditable(account, parseInt(getParam("v")), function (editable) {
-    console.log("getInvestigatorEditable");
-    console.log(editable);
         if (editable) {
-            console.log("getInvestigatorEditable.true");
             $("#investigator-edit").prop("disabled", false);
             $(".secret-data").each(function (index, element) {
                 element.style.pointerEvents = 'all'
             });
         } else {
-            console.log("getInvestigatorEditable.false");
             $("#investigator-edit").prop("disabled", true);
-            $(".secret-data").each(function (index, element) {
-                element.style.pointerEvents = 'none'
-            });
+            if(!(typeof a === "undefined")){
+                checkSecretKey(investigator);
+            }
         }
-    console.log("getInvestigatorEditable.end");
     });
-    console.log("accountChanged.end");
 }
 function initInvestigator(investigator) {
     if(investigator.profile.name){
@@ -27,13 +20,7 @@ function initInvestigator(investigator) {
         document.title = "新しい探索者 | R'lyeh House";
     }
 
-    sha256(investigator.id.toString()).then((hashedKey) => {
-        if(hashedKey == getParam("key") || !investigator.isHidden){
-            $(".secret-data").each(function (index, element) {
-                element.style.pointerEvents = 'all'
-            });
-        }
-    });
+    checkSecretKey(investigator);
 
     var cthulhuSkill = firstOrDefault(function (e) {
         return e.name == "クトゥルフ神話";
@@ -172,10 +159,17 @@ function initBackstory(backstory) {
     $("#backstory-spellsAndArtifacts")[0].innerText = backstory.spellsAndArtifacts;
     $("#backstory-encounters")[0].innerText = backstory.encounters;
 }
+function checkSecretKey(investigator){
+    sha256(investigator.id.toString()).then((hashedKey) => {
+        if(hashedKey == getParam("key") || !investigator.isHidden){
+            $(".secret-data").each(function (index, element) {
+                element.style.pointerEvents = 'all'
+            });
+        }
+    });
+}
 
 window.onload = function () {
-    console.log("onload");
-
     initSigns();
     initAccount(account);
     initModal();
@@ -210,18 +204,13 @@ window.onload = function () {
     $(".ui.accordion").accordion({ exclusive: false });
     $(".ui.blurring").dimmer("show");
     $(".ui.pointing.menu .item").tab();
-
-    console.log("onload.end");
-
 };
 
 account = getLoginAccount();
 var paramV = parseInt(getParam("v"));
 if (paramV) {
     getEditingInvestigator(account, parseInt(getParam("v")), function (newInvestigator) {
-        console.log("getEditingInvestigator");
         investigator = newInvestigator;
         initInvestigator(investigator);
-        console.log("getEditingInvestigator.end");
     });
 }
