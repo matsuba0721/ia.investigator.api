@@ -2,12 +2,15 @@ function accountChanged(account) {
     console.log("accountChanged");
     getInvestigatorEditable(account, parseInt(getParam("v")), function (editable) {
     console.log("getInvestigatorEditable");
+    console.log(editable);
         if (editable) {
+            console.log("getInvestigatorEditable.true");
             $("#investigator-edit").prop("disabled", false);
             $(".secret-data").each(function (index, element) {
                 element.style.pointerEvents = 'all'
             });
         } else {
+            console.log("getInvestigatorEditable.false");
             $("#investigator-edit").prop("disabled", true);
             $(".secret-data").each(function (index, element) {
                 element.style.pointerEvents = 'none'
