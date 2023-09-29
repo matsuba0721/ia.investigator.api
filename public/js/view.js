@@ -13,7 +13,9 @@ function accountChanged(account) {
                 element.style.pointerEvents = 'none'
             });
         }
+    console.log("getInvestigatorEditable.end");
     });
+    console.log("accountChanged.end");
 }
 function initInvestigator(investigator) {
     if(investigator.profile.name){
@@ -205,6 +207,9 @@ window.onload = function () {
     $(".ui.accordion").accordion({ exclusive: false });
     $(".ui.blurring").dimmer("show");
     $(".ui.pointing.menu .item").tab();
+
+    console.log("onload.end");
+
 };
 
 account = getLoginAccount();
@@ -214,5 +219,6 @@ if (paramV) {
         console.log("getEditingInvestigator");
         investigator = newInvestigator;
         initInvestigator(investigator);
+        console.log("getEditingInvestigator.end");
     });
 }
