@@ -314,3 +314,7 @@ div.ui.center.aligned {
     border-top:none;
     padding: 0.5em;
 }
+
+.secret-data {
+    pointer-events: none;
+}
