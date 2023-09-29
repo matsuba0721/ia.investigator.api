@@ -1,5 +1,7 @@
 function accountChanged(account) {
+    console.log("accountChanged");
     getInvestigatorEditable(account, parseInt(getParam("v")), function (editable) {
+    console.log("getInvestigatorEditable");
         if (editable) {
             $("#investigator-edit").prop("disabled", false);
             $(".secret-data").each(function (index, element) {
@@ -167,6 +169,8 @@ function initBackstory(backstory) {
 }
 
 window.onload = function () {
+    console.log("onload");
+
     initSigns();
     initAccount(account);
     initModal();
@@ -207,6 +211,7 @@ account = getLoginAccount();
 var paramV = parseInt(getParam("v"));
 if (paramV) {
     getEditingInvestigator(account, parseInt(getParam("v")), function (newInvestigator) {
+        console.log("getEditingInvestigator");
         investigator = newInvestigator;
         initInvestigator(investigator);
     });
