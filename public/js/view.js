@@ -20,7 +20,13 @@ function initInvestigator(investigator) {
         document.title = "新しい探索者 | R'lyeh House";
     }
 
-    checkSecretKey(investigator);
+    sha256(investigator.id.toString()).then((hashedKey) => {
+        if(hashedKey == getParam("key") || !investigator.isHidden){
+            $(".secret-data").each(function (index, element) {
+                element.style.pointerEvents = 'all'
+            });
+        }
+    });
 
     var cthulhuSkill = firstOrDefault(function (e) {
         return e.name == "クトゥルフ神話";
